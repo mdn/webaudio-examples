@@ -50,13 +50,13 @@ ajaxRequest.open('GET', '../audio/concert-crowd.ogg', true);
 ajaxRequest.responseType = 'arraybuffer';
 ajaxRequest.send();
 
-var concertHallSound, concertHallBuffer;
+var soundSource, concertHallBuffer;
 
 ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
-  concertHallSound = audioCtx.createBufferSource();
+  soundSource = audioCtx.createBufferSource();
   concertHallBuffer = audioCtx.createBuffer(audioData, true);
-  concertHallSound.buffer = concertHallBuffer;
+  soundSource.buffer = concertHallBuffer;
 }
 
 // set up canvas context for visualizer
