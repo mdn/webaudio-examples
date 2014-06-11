@@ -1,0 +1,35 @@
+{
+  "version": "0.1",
+  "name": "Voice-change-o-matic",
+  "description": "A sample MDN app that uses getUserMedia to grab an audio stream, which is then passed to the Web Audio API to apply effects to the audio and create visualizations.",
+  "launch_path": "/index.html",
+  "icons": {
+    "60": "app-icons/icon-60.png",
+    "128": "app-icons/icon-128.png"
+  },
+  "developer": {
+    "name": "Chris Mills",
+    "url": "https://developer.mozila.org"
+  },
+  "locales": {
+    "es": {
+      "description": "A sample MDN app that uses getUserMedia to grab an audio stream, which is then passed to the Web Audio API to apply effects to the audio and create visualizations.",
+      "developer": {
+        "url": "https://developer.mozila.org"
+      }
+    },
+    "it": {
+      "description": "A sample MDN app that uses getUserMedia to grab an audio stream, which is then passed to the Web Audio API to apply effects to the audio and create visualizations.",
+      "developer": {
+        "url": "https://developer.mozila.org"
+      }
+    }
+  },
+  "default_locale": "en",
+  "permissions": {
+    "audio-capture": {
+      "description": "Required to capture audio via getUserMedia"
+    }
+  },
+  "orientation" : "portrait"
+}

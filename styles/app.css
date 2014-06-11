@@ -1,0 +1,204 @@
+/* || General layout rules for narrow screens */
+
+html {
+	height: 100%;
+	font-family: 'Righteous', cursive;
+	font-size: 10px;
+	background-color: black;
+}
+
+body {
+	width: 100%;
+	height: inherit;
+	background-color: #999;
+	background-image: url(../images/pattern.png);
+}
+
+h1, h2, label {
+  font-size: 3rem;
+  font-family: 'Nova Square', cursive;
+  text-align: center;
+  color: black;
+  text-shadow: -1px -1px 1px #aaa,
+               0px 1px 1px rgba(255,255,255,0.5),
+               1px 1px 2px rgba(255,255,255,0.7),
+               0px 0px 2px rgba(255,255,255,0.4);
+  margin: 0;
+}
+
+h1 {
+  font-size: 3.5rem;
+  padding-top: 1.2rem;
+}
+
+.wrapper {
+	height: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+/* || main UI sections */
+
+header {
+  height: 120px;
+}
+
+canvas {
+  width: 100%;
+  height: 100px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-bottom: -3px;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
+              0 3px 4px rgba(0,0,0,0.7);
+}
+
+.controls {
+  background-color: rgba(0,0,0,0.1);
+  height: calc(100% - 225px);
+}
+
+/* || select element styling */
+
+.controls div {
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.controls label, .controls select {
+  display: block;
+  margin: 0 auto;
+}
+
+.controls label {
+  width: 100%;
+  text-align: center;
+  line-height: 3rem;
+  padding: 1rem 0;
+}
+
+.controls select {
+  width: 80%;
+  font-size: 2rem;
+}
+
+/* || button styling */
+
+button, form a {    
+    background: #0088cc;
+    background: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%); 
+    text-shadow: 1px 1px 1px black;  
+    text-align: center;
+    color: white;
+    border: none;
+    width: 90%;
+    margin: 1rem auto 0.5rem;
+    max-width: 80%;
+    font-size: 1.6rem; 
+    line-height: 3rem;
+    padding: .5rem; 
+    display: block;
+}
+
+button:hover, button:focus, form a:hover, form a:focus {
+	box-shadow: inset 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+button:active, form a:active {
+	box-shadow: inset 2px 2px 3px rgba(0,0,0,0.7);
+}
+
+/* || Checkbox hack to control information box display */
+
+label[for="toggle"] {
+	font-family: 'NotoColorEmoji';
+	font-size: 3rem;
+	position: absolute;
+	top: 4px;
+	right: 5px;
+	z-index: 5;
+	cursor: pointer;
+}
+
+input[type=checkbox] {
+   position: absolute;
+   top: -100px;
+}
+
+aside {
+   position: fixed;
+   top: 0;
+   left: 0;
+   padding-top: 1.5rem;
+   text-shadow: 1px 1px 1px black;  
+   width: 100%;
+   height: 100%;
+   transform: translateX(100%);
+   transition: 0.6s all;
+   background-color: #999;
+	background-image: linear-gradient(to top right, rgba(0,0,0,0), rgba(0,0,0,0.5));
+}
+
+aside p, aside li {
+	font-size: 1.6rem;
+	line-height: 1.3;
+	padding: 0rem 2rem 1rem;
+	color: white;
+}
+
+aside li {
+  padding-left: 10px;
+}
+
+
+/* Toggled State of information box */
+
+input[type=checkbox]:checked ~ aside {
+  transform: translateX(0);
+}
+
+/* || Link styles */
+
+a {
+  color: #aaa;	
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+@media (min-width: 481px) {
+  /*CSS for medium width screens*/
+
+  /* || Basic layout changes for the main control buttons */
+
+}
+
+@media all and (min-width: 800px) {
+  /*CSS for wide screens*/
+
+  h1 {
+    font-size: 5rem;
+    padding-top: 2.5rem;
+  }
+
+  aside {
+   top: 0;
+   left: 100%;
+   text-shadow: 1px 1px 1px black;  
+   width: 480px;
+   transform: translateX(0);
+   border-left: 2px solid black;
+  }
+
+  /* Toggled State of information box */
+
+  input[type=checkbox]:checked ~ aside {
+    transform: translateX(-480px);
+  }
+
+}
+
+@media (min-width: 1100px) {
+  /*CSS for really wide screens*/
+}
