@@ -50,8 +50,7 @@ if (navigator.getUserMedia) {
          analyser.connect(distortion);
          distortion.connect(gainNode);
          gainNode.connect(audioCtx.destination);
-         gainNode.gain.value = 0;
-
+        
       	 visualize(stream);
          voiceChange();
 
