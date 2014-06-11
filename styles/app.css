@@ -85,8 +85,8 @@ canvas {
 /* || button styling */
 
 button, form a {    
-    background: #0088cc;
-    background: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%); 
+    background-color: #0088cc;
+    background-image: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%); 
     text-shadow: 1px 1px 1px black;  
     text-align: center;
     color: white;
@@ -106,6 +106,11 @@ button:hover, button:focus, form a:hover, form a:focus {
 
 button:active, form a:active {
 	box-shadow: inset 2px 2px 3px rgba(0,0,0,0.7);
+}
+
+a#activated {
+  background-color: #fff;
+  background-image: linear-gradient(to bottom,  #f00 0%,#a06 100%);
 }
 
 /* || Checkbox hack to control information box display */
