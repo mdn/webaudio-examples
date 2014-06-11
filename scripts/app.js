@@ -55,7 +55,7 @@ var soundSource, concertHallBuffer;
 ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
   soundSource = audioCtx.createBufferSource();
-  concertHallBuffer = audioCtx.createBuffer(audioData, true, 44000);
+  concertHallBuffer = audioCtx.createBuffer(audioData, true);
   soundSource.buffer = concertHallBuffer;
 }
 
