@@ -45,17 +45,24 @@ function makeDistortionCurve(amount) {
 
 // grab audio track via XHR for convolver node
 
+var soundSource, concertHallBuffer;
+
 ajaxRequest = new XMLHttpRequest();
 ajaxRequest.open('GET', '../audio/concert-crowd.ogg', true);
 ajaxRequest.responseType = 'arraybuffer';
 ajaxRequest.send();
 
-var concertHallBuffer;
-
 ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
+
   soundSource = audioCtx.createBufferSource();
   concertHallBuffer = audioCtx.createBuffer(audioData, true);
+
+  soundSource.buffer = concertHallBuffer;
+
+  soundSource.connect(audioCtx.destination);
+
+  soundSource.noteOn(audioCtx.currentTime);
 }
 
 // set up canvas context for visualizer
