@@ -62,9 +62,9 @@ ajaxRequest.onload = function() {
   soundSource = audioCtx.createBufferSource();
   soundSource.buffer = concertHallBuffer;
 
-  soundSource.connect(audioCtx.destination);
-  soundSource.loop = true;
-  soundSource.start();
+  //soundSource.connect(audioCtx.destination);
+  //soundSource.loop = true;
+  //soundSource.start();
 }
 
 ajaxRequest.send();
@@ -175,6 +175,7 @@ function visualize(stream) {
 function voiceChange() {
   distortion.curve = new Float32Array;
   biquadFilter.gain.value = 0;
+  convolver.buffer = new AudioBufferSourceNode();
 
   var voiceSetting = voiceSelect.value;
   console.log(voiceSetting);
