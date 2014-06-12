@@ -50,21 +50,24 @@ var soundSource, concertHallBuffer;
 ajaxRequest = new XMLHttpRequest();
 ajaxRequest.open('GET', 'http://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg', true);
 ajaxRequest.responseType = 'arraybuffer';
-ajaxRequest.send();
+
 
 ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
 
-  soundSource = audioCtx.createBufferSource();
-  concertHallBuffer = audioCtx.createBuffer(audioData, true);
+  audioCtx.decodeAudioData(audioData, function(buffer) {
+      concertHallBuffer = buffer;
+    }, onError);
 
+  soundSource = audioCtx.createBufferSource();
   soundSource.buffer = concertHallBuffer;
 
   soundSource.connect(audioCtx.destination);
   soundSource.loop = true;
-
   soundSource.start();
 }
+
+ajaxRequest.send();
 
 // set up canvas context for visualizer
 
