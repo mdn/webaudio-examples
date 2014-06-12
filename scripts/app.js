@@ -175,7 +175,7 @@ function visualize(stream) {
 function voiceChange() {
   distortion.curve = new Float32Array;
   biquadFilter.gain.value = 0;
-  convolver.buffer = null;
+  convolver.buffer = undefined;
 
   var voiceSetting = voiceSelect.value;
   console.log(voiceSetting);
