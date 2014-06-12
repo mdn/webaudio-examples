@@ -57,7 +57,7 @@ ajaxRequest.onload = function() {
 
   audioCtx.decodeAudioData(audioData, function(buffer) {
       concertHallBuffer = buffer;
-    }, onError);
+    }, console.log("Error with decoding audio data"));
 
   soundSource = audioCtx.createBufferSource();
   soundSource.buffer = concertHallBuffer;
