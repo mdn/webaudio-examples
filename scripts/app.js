@@ -61,8 +61,9 @@ ajaxRequest.onload = function() {
   soundSource.buffer = concertHallBuffer;
 
   soundSource.connect(audioCtx.destination);
+  soundSource.loop = true;
 
-  soundSource.noteOn(audioCtx.currentTime);
+  soundSource.start();
 }
 
 // set up canvas context for visualizer
