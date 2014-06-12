@@ -56,7 +56,6 @@ ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
   soundSource = audioCtx.createBufferSource();
   concertHallBuffer = audioCtx.createBuffer(audioData, true);
-  convolver.buffer = concertHallBuffer;
 }
 
 // set up canvas context for visualizer
@@ -172,7 +171,7 @@ function voiceChange() {
   if(voiceSetting == "distortion") {
     distortion.curve = makeDistortionCurve(400);
   } else if(voiceSetting == "convolver") {
-    convolver.buffer = concertHallSound;
+    convolver.buffer = concertHallBuffer;
   } else if(voiceSetting == "biquad") {
     biquadFilter.type = "lowshelf";
     biquadFilter.frequency.value = 1000;
