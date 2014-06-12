@@ -50,13 +50,13 @@ ajaxRequest.open('GET', '../audio/concert-crowd.ogg', true);
 ajaxRequest.responseType = 'arraybuffer';
 ajaxRequest.send();
 
-var soundSource, concertHallBuffer;
+var concertHallBuffer;
 
 ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
   soundSource = audioCtx.createBufferSource();
   concertHallBuffer = audioCtx.createBuffer(audioData, true);
-  soundSource.buffer = concertHallBuffer;
+  convolver.buffer = concertHallBuffer;
 }
 
 // set up canvas context for visualizer
@@ -164,7 +164,6 @@ function visualize(stream) {
 
 function voiceChange() {
   distortion.curve = new Float32Array;
-  convolver.buffer = undefined;
   biquadFilter.gain.value = 0;
 
   var voiceSetting = voiceSelect.value;
