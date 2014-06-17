@@ -71,3 +71,10 @@ button:active {
   top: 6px;
   left: 5px;
 }
+
+body > p {
+  position: absolute;
+  font-size: 1.4rem;
+  top: 70px;
+  left: 5px;
+}
