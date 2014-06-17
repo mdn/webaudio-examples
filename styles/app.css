@@ -2,14 +2,28 @@
 
 html {
   font-size: 10px;
+  height: 100%;
+}
+
+body {
+	width: 100%;
+	height: inherit;
+}
+
+canvas {
+  display: block;
 }
 
 /* header styling */
 
 h1 {
   position: absolute;
-  top: 0;
+  bottom: 10px;
   right: 15px;
+  font-size: 3rem;
+  margin: 0;
+  color: white;
+  text-shadow: 0 0 10px rgba(0,0,0,0.3) ;
 }
 
 /* button styling */
@@ -49,11 +63,11 @@ button:active {
 }
 
 .mute {
-  top: 40px;
+  top: 41px;
   left: 5px;
 }
 
 .clear {
-  top: 5px;
+  top: 6px;
   left: 5px;
 }
