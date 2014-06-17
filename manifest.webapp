@@ -1,0 +1,32 @@
+{
+  "version": "0.1",
+  "name": "Violent Theremin",
+  "description": "A sample MDN app that uses Web Audio API to generate an audio tone, the pitch and volume of which is varied by the movement of the mouse and control keys. It also uses HTML5 Canvas to generate some visualizations.",
+  "launch_path": "/index.html",
+  "icons": {
+    "60": "app-icons/icon-60.png",
+    "128": "app-icons/icon-128.png"
+  },
+  "developer": {
+    "name": "Chris Mills",
+    "url": "https://developer.mozila.org"
+  },
+  "locales": {
+    "es": {
+      "description": "A sample MDN app that uses Web Audio API to generate an audio tone, the pitch and volume of which is varied by the movement of the mouse and control keys. It also uses HTML5 Canvas to generate some visualizations.",
+      "developer": {
+        "url": "https://developer.mozila.org"
+      }
+    },
+    "it": {
+      "description": "A sample MDN app that uses Web Audio API to generate an audio tone, the pitch and volume of which is varied by the movement of the mouse and control keys. It also uses HTML5 Canvas to generate some visualizations.",
+      "developer": {
+        "url": "https://developer.mozila.org"
+      }
+    }
+  },
+  "default_locale": "en",
+  "permissions": {
+  },
+  "orientation":"landscape"
+}
