@@ -127,6 +127,7 @@ function visualize() {
   if(visualSetting == "sinewave") {
     analyser.fftSize = 2048;
     var bufferLength = analyser.frequencyBinCount;
+    console.log(bufferLength);
     var dataArray = new Uint8Array(bufferLength);
 
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
