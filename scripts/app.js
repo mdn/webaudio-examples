@@ -102,7 +102,7 @@ if (navigator.getUserMedia) {
          convolver.connect(gainNode);
          gainNode.connect(audioCtx.destination);
 
-      	 visualize(stream);
+      	 visualize();
          voiceChange();
 
       },
@@ -116,7 +116,7 @@ if (navigator.getUserMedia) {
    console.log('getUserMedia not supported on your browser!');
 }
 
-function visualize(stream) {
+function visualize() {
   WIDTH = canvas.width;
   HEIGHT = canvas.height;
 
@@ -234,7 +234,7 @@ function voiceChange() {
 
 visualSelect.onchange = function() {
   window.cancelAnimationFrame(drawVisual);
-  visualize(stream);
+  visualize();
 }
 
 voiceSelect.onchange = function() {
