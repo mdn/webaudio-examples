@@ -1,3 +1,8 @@
+// get a reference to the install button
+var button = document.getElementById('install-btn');
+
+if(navigator.mozApps) {
+
 var manifest_url = location.href + 'manifest.webapp';
 
 function install(ev) {
@@ -15,8 +20,7 @@ function install(ev) {
   };
 };
 
-// get a reference to the button and call install() on click if the app isn't already installed. If it is, hide the button.
-var button = document.getElementById('install-btn');
+//call install() on click if the app isn't already installed. If it is, hide the button.
 
 var installCheck = navigator.mozApps.checkInstalled(manifest_url);
 
@@ -27,3 +31,7 @@ installCheck.onsuccess = function() {
     button.addEventListener('click', install, false);
   };
 };
+
+} else {
+  button.style.display = "none";
+}
