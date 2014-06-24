@@ -48,7 +48,9 @@ function makeDistortionCurve(amount) {
 var soundSource, concertHallBuffer;
 
 ajaxRequest = new XMLHttpRequest();
+
 ajaxRequest.open('GET', 'http://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg', true);
+
 ajaxRequest.responseType = 'arraybuffer';
 
 
@@ -57,10 +59,9 @@ ajaxRequest.onload = function() {
 
   audioCtx.decodeAudioData(audioData, function(buffer) {
       concertHallBuffer = buffer;
+      soundSource = audioCtx.createBufferSource();
+      soundSource.buffer = concertHallBuffer;
     }, function(e){"Error with decoding audio data" + e.err});
-
-  soundSource = audioCtx.createBufferSource();
-  soundSource.buffer = concertHallBuffer;
 
   //soundSource.connect(audioCtx.destination);
   //soundSource.loop = true;
