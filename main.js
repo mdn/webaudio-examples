@@ -14,17 +14,21 @@ var stop = document.querySelector('.stop');
 
 var boomBox = document.querySelector('.boom-box');
 
-// set up panner position information
+var listenerData = document.querySelector('.listener-data');
+var pannerData = document.querySelector('.panner-data');
+
+// set up listener and panner position information
 
 var xPos = window.innerWidth/2;
 var yPos = window.innerHeight/2;
 var zPos = 300;
 
-listener.setPosition(xPos,yPos,0);
+listener.setPosition(xPos,yPos,300);
+listenerData.innerHTML = 'Listener data: X ' + xPos + ' Y ' + yPos + ' Z ' + 300;
 
 function positionPanner() {
   panner.setPosition(xPos,yPos,zPos);
-  console.log("hi");
+  pannerData.innerHTML = 'Panner data: X ' + xPos + ' Y ' + yPos + ' Z ' + zPos;
 }
 
 // use XHR to load an audio track, and
@@ -95,7 +99,7 @@ var zoomOutLoop
 
 function moveRight() {
   boomX += -10;
-  xPos += -10;
+  xPos += -2;
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   positionPanner();
   rightLoop = requestAnimationFrame(moveRight);
@@ -104,7 +108,7 @@ function moveRight() {
 
 function moveLeft() {
   boomX += 10;
-  xPos += 10;
+  xPos += 2;
   positionPanner();
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   leftLoop = requestAnimationFrame(moveLeft);
@@ -113,7 +117,7 @@ function moveLeft() {
 
 function zoomIn() {
   boomZoom += 0.05;
-  zPos += 20;
+  zPos += 1;
 
   if(boomZoom > 10) {
     boomZoom = 10;
@@ -127,7 +131,7 @@ function zoomIn() {
 
 function zoomOut() {
   boomZoom += -0.05;
-  zPos += -20;
+  zPos += -1;
   
   if(boomZoom <= 0) {
     boomZoom = 0.05;

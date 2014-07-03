@@ -133,3 +133,19 @@ button:active {
 	from { transform: scaleY(1); }
 	to { transform: scaleY(1.07);}
 }
+
+/* position data outputs */
+
+.listener-data, .panner-data {
+  width: 200px;
+  position: absolute;
+  right: 2px;
+}
+
+.listener-data {
+  top: 2px;
+}
+
+.panner-data {
+  top: 30px;
+}
