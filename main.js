@@ -20,7 +20,7 @@ var xPos = window.innerWidth/2;
 var yPos = window.innerHeight/2;
 var zPos = 300;
 
-listener.setPosition(xPos,yPos,300);
+listener.setPosition(xPos,yPos,0);
 
 function positionPanner() {
   panner.setPosition(xPos,yPos,zPos);
