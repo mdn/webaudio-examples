@@ -117,6 +117,8 @@ button:active {
 	height: 180px;
 	background: url(icons/boom.svg) no-repeat;
 	background-size: 100% 100%;
+
+  transform: scale(0.25);
 }
 
 .pulse-wrapper {

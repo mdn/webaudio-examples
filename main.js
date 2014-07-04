@@ -2,7 +2,9 @@
 
 // define variables
 
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContext();
+
 var panner = audioCtx.createPanner();
 var listener = audioCtx.listener;
 var source;
@@ -18,10 +20,17 @@ var listenerData = document.querySelector('.listener-data');
 var pannerData = document.querySelector('.panner-data');
 
 // set up listener and panner position information
+var WIDTH = window.innerWidth;
+var HEIGHT = window.innerHeight;
 
-var xPos = window.innerWidth/2;
-var yPos = window.innerHeight/2;
-var zPos = 300;
+var xPos = WIDTH/2;
+var yPos = HEIGHT/2;
+var zPos = 295;
+
+leftBound = (-xPos) + 50;
+rightBound = xPos - 50;
+
+xIterator = WIDTH/150;
 
 listener.setPosition(xPos,yPos,300);
 listenerData.innerHTML = 'Listener data: X ' + xPos + ' Y ' + yPos + ' Z ' + 300;
@@ -91,15 +100,20 @@ var zoomOutButton = document.querySelector('.zoom-out');
 
 var boomX = 0;
 var boomY = 0;
-var boomZoom = 1;
-
+var boomZoom = 0.25;
 
 var zoomInLoop;
 var zoomOutLoop
 
 function moveRight() {
-  boomX += -10;
-  xPos += -2;
+  boomX += -xIterator;
+  xPos += -0.066;
+
+  if(boomX <= leftBound) {
+    boomX = leftBound;
+    xPos = (WIDTH/2) - 10;
+  }
+
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   positionPanner();
   rightLoop = requestAnimationFrame(moveRight);
@@ -107,8 +121,14 @@ function moveRight() {
 }
 
 function moveLeft() {
-  boomX += 10;
-  xPos += 2;
+  boomX += xIterator;
+  xPos += 0.066;
+
+  if(boomX > rightBound) {
+    boomX = rightBound;
+    xPos = (WIDTH/2) + 10;
+  }
+
   positionPanner();
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   leftLoop = requestAnimationFrame(moveLeft);
@@ -117,10 +137,11 @@ function moveLeft() {
 
 function zoomIn() {
   boomZoom += 0.05;
-  zPos += 1;
+  zPos += 0.066;
 
-  if(boomZoom > 10) {
-    boomZoom = 10;
+  if(boomZoom > 4) {
+    boomZoom = 4;
+    zPos = 299.9;
   }
   
   positionPanner();
@@ -131,10 +152,11 @@ function zoomIn() {
 
 function zoomOut() {
   boomZoom += -0.05;
-  zPos += -1;
+  zPos += -0.066;
   
-  if(boomZoom <= 0) {
-    boomZoom = 0.05;
+  if(boomZoom <= 0.25) {
+    boomZoom = 0.25;
+    zPos = 295;
   }
   
   positionPanner();
