@@ -111,7 +111,7 @@ function moveRight() {
 
   if(boomX <= leftBound) {
     boomX = leftBound;
-    xPos = (WIDTH/2) - 10;
+    xPos = (WIDTH/2) - 5;
   }
 
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
@@ -126,7 +126,7 @@ function moveLeft() {
 
   if(boomX > rightBound) {
     boomX = rightBound;
-    xPos = (WIDTH/2) + 10;
+    xPos = (WIDTH/2) + 5;
   }
 
   positionPanner();
