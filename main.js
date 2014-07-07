@@ -9,8 +9,6 @@ var panner = audioCtx.createPanner();
 var listener = audioCtx.listener;
 var source;
 
-var pre = document.querySelector('pre');
-var myScript = document.querySelector('script');
 var play = document.querySelector('.play');
 var stop = document.querySelector('.stop');
 
@@ -32,9 +30,11 @@ rightBound = xPos - 50;
 
 xIterator = WIDTH/150;
 
+// listener will always be in the same place for this demo
 listener.setPosition(xPos,yPos,300);
 listenerData.innerHTML = 'Listener data: X ' + xPos + ' Y ' + yPos + ' Z ' + 300;
 
+// panner will move as the boombox graphic moves around on the screen
 function positionPanner() {
   panner.setPosition(xPos,yPos,zPos);
   pannerData.innerHTML = 'Panner data: X ' + xPos + ' Y ' + yPos + ' Z ' + zPos;
@@ -113,7 +113,8 @@ function moveRight() {
     boomX = leftBound;
     xPos = (WIDTH/2) - 5;
   }
-
+  
+  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   positionPanner();
   rightLoop = requestAnimationFrame(moveRight);
@@ -130,6 +131,7 @@ function moveLeft() {
   }
 
   positionPanner();
+  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   leftLoop = requestAnimationFrame(moveLeft);
   return leftLoop;
@@ -145,6 +147,7 @@ function zoomIn() {
   }
   
   positionPanner();
+  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   zoomInLoop = requestAnimationFrame(zoomIn);
   return zoomInLoop;
@@ -160,10 +163,14 @@ function zoomOut() {
   }
   
   positionPanner();
+  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   zoomOutLoop = requestAnimationFrame(zoomOut);
   return zoomOutLoop;
 }
+
+// In each of the cases below, onmousedown runs the functions above
+// onmouseup cancels the resulting requestAnimationFrames.
 
 leftButton.onmousedown = moveLeft;
 leftButton.onmouseup = function () {

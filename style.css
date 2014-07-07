@@ -118,18 +118,26 @@ button:active {
 	background: url(icons/boom.svg) no-repeat;
 	background-size: 100% 100%;
 
+  -webkit-transform: scale(0.25);
   transform: scale(0.25);
 }
 
 .pulse-wrapper {
+  -webkit-transform-origin: center;
   transform-origin: center;
 }
 
 .pulsate {
+  -webkit-animation: pulse 0.5s linear infinite alternate;
   animation: pulse 0.5s linear infinite alternate;
 }
 
 /* animation class for boom box pulsating */
+
+@-webkit-keyframes pulse {
+  from { -webkit-transform: scaleY(1); }
+  to { -webkit-transform: scaleY(1.07);}
+}
 
 @keyframes pulse {
 	from { transform: scaleY(1); }
