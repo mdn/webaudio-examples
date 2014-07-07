@@ -102,9 +102,6 @@ var boomX = 0;
 var boomY = 0;
 var boomZoom = 0.25;
 
-var zoomInLoop;
-var zoomOutLoop
-
 function moveRight() {
   boomX += -xIterator;
   xPos += -0.066;
