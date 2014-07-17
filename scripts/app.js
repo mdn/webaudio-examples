@@ -56,15 +56,15 @@ function updatePage(e) {
 var mute = document.querySelector('.mute');
 
 mute.onclick = function() {
-  if(mute.id == "") {
+  if(mute.getAttribute('data-muted') === 'false') {
     gainNode.disconnect(audioCtx.destination);
-    mute.id = "activated";
+    mute.setAttribute('data-muted', 'true');
     mute.innerHTML = "Unmute";
   } else {
     gainNode.connect(audioCtx.destination);
-    mute.id = "";    
+    mute.setAttribute('data-muted', 'false');
     mute.innerHTML = "Mute";
-  }
+  };
 }
 
 
