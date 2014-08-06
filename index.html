@@ -28,7 +28,8 @@
       <button class="exp-ramp-plus">Exponential ramp gain to 1 in 2 seconds</button>
       <button class="exp-ramp-minus">Exponential ramp gain to 0 in 2 seconds</button><br>
       <button class="at-time-plus">Target at time 1 in 1s</button>
-      <button class="at-time-minus">Target at time 0 in 1s</button>
+      <button class="at-time-minus">Target at time 0 in 1s</button><br>
+      <button class="value-curve">Value curve</button>
     </div>
     <pre></pre>
   </body>
@@ -52,6 +53,7 @@ var expRampPlus = document.querySelector('.exp-ramp-plus');
 var expRampMinus = document.querySelector('.exp-ramp-minus');
 var atTimePlus = document.querySelector('.at-time-plus');
 var atTimeMinus = document.querySelector('.at-time-minus');
+var valueCurve = document.querySelector('.value-curve');
 
 // Create a MediaElementAudioSourceNode
 // Feed the HTMLMediaElement into it
@@ -106,6 +108,22 @@ atTimePlus.onclick = function() {
 atTimeMinus.onclick = function() {
   currGain = 0;
   gainNode.gain.setTargetAtTime(0, audioCtx.currentTime + 1, 0.5);
+}
+
+var waveArray = new Float32Array(9);
+waveArray[0] = 0.5;
+waveArray[1] = 1;
+waveArray[2] = 0.5;
+waveArray[3] = 0;
+waveArray[4] = 0.5;
+waveArray[5] = 1;
+waveArray[6] = 0.5;
+waveArray[7] = 0;
+waveArray[8] = 0.5;
+
+valueCurve.onclick = function() {
+  gainNode.gain.setValueCurveAtTime(waveArray, audioCtx.currentTime, 2);
+
 }
 
   </script>
