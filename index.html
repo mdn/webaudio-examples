@@ -24,7 +24,9 @@
       <button class="set-target-at-time-plus">Set gain +0.25 in 1 second</button>
       <button class="set-target-at-time-minus">Set gain -0.25 in 1 second</button><br>
       <button class="linear-ramp-plus">Linear ramp gain to 1 in 2 seconds</button>
-      <button class="linear-ramp-minus">Linear ramp gain to 0 in 2 seconds</button>
+      <button class="linear-ramp-minus">Linear ramp gain to 0 in 2 seconds</button><br>
+      <button class="exp-ramp-plus">Exponential ramp gain to 1 in 2 seconds</button>
+      <button class="exp-ramp-minus">Exponential ramp gain to 0 in 2 seconds</button>
     </div>
     <pre></pre>
   </body>
@@ -44,6 +46,8 @@ var targetAtTimePlus = document.querySelector('.set-target-at-time-plus');
 var targetAtTimeMinus = document.querySelector('.set-target-at-time-minus');
 var linearRampPlus = document.querySelector('.linear-ramp-plus');
 var linearRampMinus = document.querySelector('.linear-ramp-minus');
+var expRampPlus = document.querySelector('.exp-ramp-plus');
+var expRampMinus = document.querySelector('.exp-ramp-minus');
 
 // Create a MediaElementAudioSourceNode
 // Feed the HTMLMediaElement into it
@@ -78,6 +82,16 @@ linearRampPlus.onclick = function() {
 linearRampMinus.onclick = function() {
   currGain = 0;
   gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
+}
+
+expRampPlus.onclick = function() {
+  currGain = 1.0;
+  gainNode.gain.exponentialRampToValueAtTime(1.0, audioCtx.currentTime + 2);
+}
+
+expRampMinus.onclick = function() {
+  currGain = 0.01;
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
 }
 
   </script>
