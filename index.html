@@ -21,8 +21,10 @@
       <p>Browser too old to support HTML5 audio? How depressing!</p>
     </audio>
     <div class="button-bar">
-      <button class="set-target-at-time-plus">set gain +0.25 in 1 second</button>
-      <button class="set-target-at-time-minus">set gain -0.25 in 1 second</button>
+      <button class="set-target-at-time-plus">Set gain +0.25 in 1 second</button>
+      <button class="set-target-at-time-minus">Set gain -0.25 in 1 second</button><br>
+      <button class="linear-ramp-plus">Linear ramp gain to 1 in 2 seconds</button>
+      <button class="linear-ramp-minus">Linear ramp gain to 0 in 2 seconds</button>
     </div>
     <pre></pre>
   </body>
@@ -40,6 +42,8 @@ pre.innerHTML = myScript.innerHTML;
 
 var targetAtTimePlus = document.querySelector('.set-target-at-time-plus');
 var targetAtTimeMinus = document.querySelector('.set-target-at-time-minus');
+var linearRampPlus = document.querySelector('.linear-ramp-plus');
+var linearRampMinus = document.querySelector('.linear-ramp-minus');
 
 // Create a MediaElementAudioSourceNode
 // Feed the HTMLMediaElement into it
@@ -64,6 +68,16 @@ targetAtTimePlus.onclick = function() {
 targetAtTimeMinus.onclick = function() {
   currGain -= 0.25;
   gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+}
+
+linearRampPlus.onclick = function() {
+  currGain = 1.0;
+  gainNode.gain.linearRampToValueAtTime(1.0, audioCtx.currentTime + 2);
+}
+
+linearRampMinus.onclick = function() {
+  currGain = 0;
+  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
 }
 
   </script>
