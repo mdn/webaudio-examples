@@ -63,7 +63,7 @@ targetAtTimePlus.onclick = function() {
 
 targetAtTimeMinus.onclick = function() {
   currGain -= 0.25;
-  gainNode.gain.setValueAtTime(currGain - 0.25, audioCtx.currentTime + 1);
+  gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
 }
 
   </script>
