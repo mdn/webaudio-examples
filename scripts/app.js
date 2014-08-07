@@ -23,7 +23,7 @@ var initialVol = 0.5;
 
 // set options for the oscillator
 
-oscillator.type = 1; // square wave
+oscillator.type = 'square';
 oscillator.frequency.value = initialFreq; // value in hertz
 oscillator.start();
 
