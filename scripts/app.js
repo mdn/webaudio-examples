@@ -25,7 +25,12 @@ var initialVol = 0.5;
 
 oscillator.type = 'square';
 oscillator.frequency.value = initialFreq; // value in hertz
+oscillator.detune.value = 100; // value in cents
 oscillator.start();
+
+oscillator.onended = function() {
+  console.log('Your tone has now stopped playing!');
+}
 
 gainNode.gain.value = initialVol;
 
