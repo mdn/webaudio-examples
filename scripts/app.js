@@ -16,10 +16,10 @@ var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
 var maxFreq = 6000;
-var maxVol = 1;
+var maxVol = 0.02;
 
 var initialFreq = 3000;
-var initialVol = 0.5;
+var initialVol = 0.001;
 
 // set options for the oscillator
 
