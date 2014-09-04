@@ -18,6 +18,10 @@
 
     <button class="play">Play</button>
     <button class="stop">Stop</button>
+
+    <h2>Set playback rate</h2>
+    <input class="playback-rate-control" type="range" min="0.25" max="3" step="0.05" value="1">
+    <span class="playback-rate-value">1.0</span>
    
     <pre></pre>
   </body>
@@ -33,6 +37,10 @@ var pre = document.querySelector('pre');
 var myScript = document.querySelector('script');
 var play = document.querySelector('.play');
 var stop = document.querySelector('.stop');
+
+var playbackControl = document.querySelector('.playback-rate-control');
+var playbackValue = document.querySelector('.playback-rate-value');
+playbackControl.setAttribute('disabled', 'disabled');
 
 // use XHR to load an audio track, and
 // decodeAudioData to decode it and stick it in a buffer.
@@ -53,7 +61,7 @@ function getData() {
     audioCtx.decodeAudioData(audioData, function(buffer) {
         myBuffer = buffer;
         source.buffer = myBuffer;
-
+        source.playbackRate.value = playbackControl.value;
         source.connect(audioCtx.destination);
         source.loop = true;
       },
@@ -65,15 +73,24 @@ function getData() {
   request.send();
 }
 
-// wire up buttons to stop and play audio
+// wire up buttons to stop and play audio, and range slider control
 
 play.onclick = function() {
   getData();
   source.start(0);
+  play.setAttribute('disabled', 'disabled');
+  playbackControl.removeAttribute('disabled');
 }
 
 stop.onclick = function() {
   source.stop(0);
+  play.removeAttribute('disabled');
+  playbackControl.setAttribute('disabled', 'disabled');
+}
+
+playbackControl.oninput = function() {
+  source.playbackRate.value = playbackControl.value;
+  playbackValue.innerHTML = playbackControl.value;
 }
 
 
