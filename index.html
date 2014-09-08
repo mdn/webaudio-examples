@@ -107,7 +107,6 @@ if (navigator.getUserMedia) {
           }
 
           function calcFrequencyResponse() {
-            freqResponseOutput.innerHTML = '';
             biquadFilter.getFrequencyResponse(myFrequencyArray,magResponseOutput,phaseResponseOutput);
 
             for(i = 0; i <= myFrequencyArray.length-1;i++){
