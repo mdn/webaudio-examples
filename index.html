@@ -19,7 +19,12 @@
     </video>
     <br>
     <input type="range" min="1" max="40">
+    
     <pre></pre>
+
+    <p>Biquad filter frequency response for: </p>
+    <ul class="freq-response-output">
+    </ul>
   </body>
 <script>
 // fork getUserMedia for multiple browser versions, for those
@@ -38,11 +43,24 @@ var pre = document.querySelector('pre');
 var video = document.querySelector('video');
 var myScript = document.querySelector('script');
 var range = document.querySelector('input');
+var freqResponseOutput = document.querySelector('.freq-response-output');
 
 // Create variables to store mouse pointer Y coordinate
 // and HEIGHT of screen
 var CurY;
 var HEIGHT = window.innerHeight;
+
+// create float32 arrays for getFrequencyResponse
+
+var myFrequencyArray = new Float32Array(5);
+myFrequencyArray[0] = 1000;
+myFrequencyArray[1] = 2000;
+myFrequencyArray[2] = 3000;
+myFrequencyArray[3] = 4000;
+myFrequencyArray[4] = 5000;
+
+var magResponseOutput = new Float32Array(5);
+var phaseResponseOutput = new Float32Array(5);
 
 // getUserMedia block - grab stream
 // put it into a MediaStreamAudioSourceNode
@@ -87,6 +105,19 @@ if (navigator.getUserMedia) {
           range.oninput = function() {
               biquadFilter.gain.value = range.value;
           }
+
+          function calcFrequencyResponse() {
+            freqResponseOutput.innerHTML = '';
+            biquadFilter.getFrequencyResponse(myFrequencyArray,magResponseOutput,phaseResponseOutput);
+
+            for(i = 0; i <= myFrequencyArray.length-1;i++){
+              var listItem = document.createElement('li');
+              listItem.innerHTML = '<strong>' + myFrequencyArray[i] + 'Hz</strong>: Magnitude ' + magResponseOutput[i] + ', Phase ' + phaseResponseOutput[i] + ' radians.';
+              freqResponseOutput.appendChild(listItem);
+            }
+          }
+
+          calcFrequencyResponse()
 
       },
 
