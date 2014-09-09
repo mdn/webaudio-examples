@@ -21,6 +21,9 @@ var mute = document.querySelector('.mute');
 //set up the different audio nodes we will use for the app
 
 var analyser = audioCtx.createAnalyser();
+analyser.minDecibels = -90;
+analyser.maxDecibels = -10;
+
 var distortion = audioCtx.createWaveShaper();
 var gainNode = audioCtx.createGain();
 var biquadFilter = audioCtx.createBiquadFilter();
