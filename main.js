@@ -7,6 +7,10 @@ var audioCtx = new AudioContext();
 
 var panner = audioCtx.createPanner();
 var listener = audioCtx.listener;
+listener.dopplerFactor = 1;
+listener.speedOfSound = 343.3;
+listener.setOrientation(0,0,-1,0,1,0);
+
 var source;
 
 var play = document.querySelector('.play');
@@ -28,6 +32,9 @@ var zPos = 295;
 leftBound = (-xPos) + 50;
 rightBound = xPos - 50;
 
+var xVel = 0;
+var zVel = 0;
+
 xIterator = WIDTH/150;
 
 // listener will always be in the same place for this demo
@@ -37,6 +44,7 @@ listenerData.innerHTML = 'Listener data: X ' + xPos + ' Y ' + yPos + ' Z ' + 300
 // panner will move as the boombox graphic moves around on the screen
 function positionPanner() {
   panner.setPosition(xPos,yPos,zPos);
+  panner.setVelocity(xVel,0,zVel);
   pannerData.innerHTML = 'Panner data: X ' + xPos + ' Y ' + yPos + ' Z ' + zPos;
 }
 
@@ -105,6 +113,7 @@ var boomZoom = 0.25;
 function moveRight() {
   boomX += -xIterator;
   xPos += -0.066;
+  xVel = 17;
 
   if(boomX <= leftBound) {
     boomX = leftBound;
@@ -121,6 +130,7 @@ function moveRight() {
 function moveLeft() {
   boomX += xIterator;
   xPos += 0.066;
+  xVel = -17;
 
   if(boomX > rightBound) {
     boomX = rightBound;
@@ -137,6 +147,7 @@ function moveLeft() {
 function zoomIn() {
   boomZoom += 0.05;
   zPos += 0.066;
+  zVel = 17;
 
   if(boomZoom > 4) {
     boomZoom = 4;
@@ -153,6 +164,7 @@ function zoomIn() {
 function zoomOut() {
   boomZoom += -0.05;
   zPos += -0.066;
+  zVel = -17;
   
   if(boomZoom <= 0.25) {
     boomZoom = 0.25;
@@ -172,19 +184,27 @@ function zoomOut() {
 leftButton.onmousedown = moveLeft;
 leftButton.onmouseup = function () {
   window.cancelAnimationFrame(leftLoop);
+  xVel = 0;
+  panner.setVelocity(0,0,0);
 }
 
 rightButton.onmousedown = moveRight;
 rightButton.onmouseup = function () {
   window.cancelAnimationFrame(rightLoop);
+  xVel = 0;
+  panner.setVelocity(0,0,0);
 }
 
 zoomInButton.onmousedown = zoomIn;
 zoomInButton.onmouseup = function () {
   window.cancelAnimationFrame(zoomInLoop);
+  zVel = 0;
+  panner.setVelocity(0,0,0);
 }
 
 zoomOutButton.onmousedown = zoomOut;
 zoomOutButton.onmouseup = function () {
   window.cancelAnimationFrame(zoomOutLoop);
+  zVel = 0;
+  panner.setVelocity(0,0,0);
 }
