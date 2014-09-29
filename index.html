@@ -97,7 +97,7 @@ expRampPlus.onclick = function() {
 
 expRampMinus.onclick = function() {
   currGain = 0;
-  gainNode.gain.exponentialRampToValueAtTime(0, audioCtx.currentTime + 2);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
 }
 
 atTimePlus.onclick = function() {
