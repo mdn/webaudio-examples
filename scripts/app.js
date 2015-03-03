@@ -26,7 +26,7 @@ var initialVol = 0.001;
 oscillator.type = 'square';
 oscillator.frequency.value = initialFreq; // value in hertz
 oscillator.detune.value = 100; // value in cents
-oscillator.start();
+oscillator.start(0);
 
 oscillator.onended = function() {
   console.log('Your tone has now stopped playing!');
