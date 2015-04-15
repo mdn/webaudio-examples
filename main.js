@@ -6,10 +6,23 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioCtx = new AudioContext();
 
 var panner = audioCtx.createPanner();
+panner.panningModel = 'HRTF';
+panner.distanceModel = 'inverse';
+panner.refDistance = 1;
+panner.maxDistance = 10000;
+panner.rolloffFactor = 1;
+panner.coneInnerAngle = 360;
+panner.coneOuterAngle = 0;
+panner.coneOuterGain = 0;
+panner.setOrientation(1,0,0);
+
 var listener = audioCtx.listener;
 listener.dopplerFactor = 1;
 listener.speedOfSound = 343.3;
 listener.setOrientation(0,0,-1,0,1,0);
+
+// Note that the above three features have been deprecated
+// in recent versions of the spec (mid April 2015 onwards)
 
 var source;
 
@@ -32,6 +45,7 @@ var zPos = 295;
 leftBound = (-xPos) + 50;
 rightBound = xPos - 50;
 
+// Only x and z velocity needed, as the listener only moves left and right and in and out in this example. Never up and down.
 var xVel = 0;
 var zVel = 0;
 
