@@ -60,36 +60,44 @@
     oscillator.start(0);
 
     gainNode.gain.value = 0.1;
+
+    // report the state of the audio context to the
+    // console, when it changes
+
+    audioCtx.onstatechange = function() {
+      console.log(audioCtx.state);
+    }
   }
+
+  // suspend/resume the audiocontext
 
   susresBtn.onclick = function() {
     if(audioCtx.state === 'running') {
       audioCtx.suspend().then(function() {
-        console.log(audioCtx.state);
         susresBtn.textContent = 'Resume context';
       });
     } else if(audioCtx.state === 'suspended') {
       audioCtx.resume().then(function() {
-        console.log(audioCtx.state);
         susresBtn.textContent = 'Suspend context';
       });  
     }
   }
 
+  // close the audiocontext
+
   stopBtn.onclick = function() {
     audioCtx.close().then(function() {
-      console.log(audioCtx.state);
-      audioCtx = null;
       startBtn.removeAttribute('disabled');
       susresBtn.setAttribute('disabled','disabled');
       stopBtn.setAttribute('disabled','disabled');
-      timeDisplay.textContent = 'Current context time: No context exists.'
     });
   }
 
   function displayTime() {
-    if(audioCtx) {
+    if(audioCtx && audioCtx.state !== 'closed') {
       timeDisplay.textContent = 'Current context time: ' + audioCtx.currentTime.toFixed(3);
+    } else {
+      timeDisplay.textContent = 'Current context time: No context exists.'
     }
     requestAnimationFrame(displayTime);
   }
