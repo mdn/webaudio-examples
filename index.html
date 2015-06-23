@@ -32,7 +32,7 @@ var channels = 2;
 // sample rate of the AudioContext
 var frameCount = audioCtx.sampleRate * 2.0;
 
-var myArrayBuffer = audioCtx.createBuffer(2, frameCount, audioCtx.sampleRate);
+var myArrayBuffer = audioCtx.createBuffer(channels, frameCount, audioCtx.sampleRate);
 
 button.onclick = function() {
   // Fill the buffer with white noise;
