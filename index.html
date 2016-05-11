@@ -36,28 +36,17 @@
 
       function getData() {
         request = new XMLHttpRequest();
-
         request.open('GET', 'viper.ogg', true);
-
         request.responseType = 'arraybuffer';
-
-
         request.onload = function() {
           var audioData = request.response;
 
           audioCtx.decodeAudioData(audioData, function(buffer) {
           myBuffer = buffer;   
-          
-
-
           source.buffer = myBuffer;
-          
         },
-
           function(e){"Error with decoding audio data" + e.err});
-
         }
-
         request.send();
       }
 
@@ -93,7 +82,8 @@
         scriptNode.connect(audioCtx.destination);
         source.start();
       }
-
+      
+      // When the buffer source stops playing, disconnect everything
       source.onended = function() {
         source.disconnect(scriptNode);
         scriptNode.disconnect(audioCtx.destination);
