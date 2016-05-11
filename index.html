@@ -66,7 +66,7 @@ function getData() {
   source = audioCtx.createBufferSource();
   request = new XMLHttpRequest();
 
-  request.open('GET', 'viper.ogg', true);
+  request.open('GET', 'https://ec-media.sndcdn.com/jzOAOC28pQom.128.mp3?f10880d39085a94a0418a7ef69b03d522cd6dfee9399eeb9a522059f6efeb6351d684372221475211f3d3171d56a501e236343d1aa2873fa1b17134eaea46352501cabdfc4', true);
 
   request.responseType = 'arraybuffer';
 
@@ -80,7 +80,7 @@ function getData() {
         source.buffer = myBuffer;
         source.playbackRate.value = playbackControl.value;
         source.connect(audioCtx.destination);
-        source.loop = true;
+        //source.loop = true;
 
         loopstartControl.setAttribute('max', Math.floor(songLength));
         loopendControl.setAttribute('max', Math.floor(songLength));
