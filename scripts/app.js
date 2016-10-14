@@ -1,5 +1,6 @@
 // create web audio api context
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContext();
 
 // create Oscillator and gain node
 var oscillator = audioCtx.createOscillator();
@@ -23,8 +24,7 @@ var initialVol = 0.001;
 
 // set options for the oscillator
 
-oscillator.type = 'square';
-oscillator.frequency.value = initialFreq; // value in hertz
+
 oscillator.detune.value = 100; // value in cents
 oscillator.start(0);
 
