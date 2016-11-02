@@ -1,6 +1,12 @@
+// set up listener and panner position information
+var WIDTH = window.innerWidth;
+var HEIGHT = window.innerHeight;
 
+var xPos = Math.floor(WIDTH/2);
+var yPos = Math.floor(HEIGHT/2);
+var zPos = 295;
 
-// define variables
+// define other variables
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioCtx = new AudioContext();
@@ -17,9 +23,17 @@ panner.coneOuterGain = 0;
 panner.setOrientation(1,0,0);
 
 var listener = audioCtx.listener;
-listener.dopplerFactor = 1;
-listener.speedOfSound = 343.3;
-listener.setOrientation(0,0,-1,0,1,0);
+
+if(listener.forwardX) {
+  listener.forwardX.value = 0;
+  listener.forwardY.value = 0;
+  listener.forwardZ.value = -1;
+  listener.upX.value = 0;
+  listener.upY.value = 1;
+  listener.upZ.value = 0;
+} else {
+  listener.setOrientation(0,0,-1,0,1,0);
+}
 
 // Note that the above three features have been deprecated
 // in recent versions of the spec (mid April 2015 onwards)
@@ -34,14 +48,6 @@ var boomBox = document.querySelector('.boom-box');
 var listenerData = document.querySelector('.listener-data');
 var pannerData = document.querySelector('.panner-data');
 
-// set up listener and panner position information
-var WIDTH = window.innerWidth;
-var HEIGHT = window.innerHeight;
-
-var xPos = WIDTH/2;
-var yPos = HEIGHT/2;
-var zPos = 295;
-
 leftBound = (-xPos) + 50;
 rightBound = xPos - 50;
 
@@ -52,15 +58,29 @@ var zVel = 0;
 xIterator = WIDTH/150;
 
 // listener will always be in the same place for this demo
-listener.setPosition(xPos,yPos,300);
+
+if(listener.positionX) {
+  listener.positionX.value = xPos;
+  listener.positionY.value = yPos;
+  listener.positionZ.value = 300;
+} else {
+  listener.setPosition(xPos,yPos,300);
+}
+
 listenerData.innerHTML = 'Listener data: X ' + xPos + ' Y ' + yPos + ' Z ' + 300;
 
 // panner will move as the boombox graphic moves around on the screen
 function positionPanner() {
-  panner.setPosition(xPos,yPos,zPos);
-  panner.setVelocity(xVel,0,zVel);
+  if(panner.positionX) {
+    panner.positionX.value = xPos;
+    panner.positionY.value = yPos;
+    panner.positionZ.value = zPos;
+  } else {
+    panner.setPosition(xPos,yPos,zPos);
+  }
   pannerData.innerHTML = 'Panner data: X ' + xPos + ' Y ' + yPos + ' Z ' + zPos;
 }
+
 
 // use XHR to load an audio track, and
 // decodeAudioData to decode it and stick it in a buffer.
@@ -88,9 +108,11 @@ function getData() {
         source.loop = true;
       },
 
-      function(e){"Error with decoding audio data" + e.err});
+      function(e){
+        console.log("Error with decoding audio data" + e.err);
+      });
 
-  }
+  };
 
   request.send();
 }
@@ -104,13 +126,13 @@ play.onclick = function() {
   source.start(0);
   play.setAttribute('disabled', 'disabled');
   pulseWrapper.classList.add('pulsate');
-}
+};
 
 stop.onclick = function() {
   source.stop(0);
   play.removeAttribute('disabled');
   pulseWrapper.classList.remove('pulsate');
-}
+};
 
 // controls to move left and right past the boom box
 // and zoom in and out
@@ -122,7 +144,7 @@ var zoomOutButton = document.querySelector('.zoom-out');
 
 var boomX = 0;
 var boomY = 0;
-var boomZoom = 0.25;
+var boomZoom = 0.50;
 
 function moveRight() {
   boomX += -xIterator;
@@ -133,7 +155,7 @@ function moveRight() {
     boomX = leftBound;
     xPos = (WIDTH/2) - 5;
   }
-  
+
   boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   positionPanner();
@@ -167,7 +189,7 @@ function zoomIn() {
     boomZoom = 4;
     zPos = 299.9;
   }
-  
+
   positionPanner();
   boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
@@ -179,12 +201,12 @@ function zoomOut() {
   boomZoom += -0.05;
   zPos += -0.066;
   zVel = -17;
-  
-  if(boomZoom <= 0.25) {
-    boomZoom = 0.25;
+
+  if(boomZoom <= 0.5) {
+    boomZoom = 0.5;
     zPos = 295;
   }
-  
+
   positionPanner();
   boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
   boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
@@ -199,26 +221,22 @@ leftButton.onmousedown = moveLeft;
 leftButton.onmouseup = function () {
   window.cancelAnimationFrame(leftLoop);
   xVel = 0;
-  panner.setVelocity(0,0,0);
-}
+};
 
 rightButton.onmousedown = moveRight;
 rightButton.onmouseup = function () {
   window.cancelAnimationFrame(rightLoop);
   xVel = 0;
-  panner.setVelocity(0,0,0);
-}
+};
 
 zoomInButton.onmousedown = zoomIn;
 zoomInButton.onmouseup = function () {
   window.cancelAnimationFrame(zoomInLoop);
   zVel = 0;
-  panner.setVelocity(0,0,0);
-}
+};
 
 zoomOutButton.onmousedown = zoomOut;
 zoomOutButton.onmouseup = function () {
   window.cancelAnimationFrame(zoomOutLoop);
   zVel = 0;
-  panner.setVelocity(0,0,0);
-}
+};
