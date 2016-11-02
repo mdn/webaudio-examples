@@ -20,7 +20,14 @@ panner.rolloffFactor = 1;
 panner.coneInnerAngle = 360;
 panner.coneOuterAngle = 0;
 panner.coneOuterGain = 0;
-panner.setOrientation(1,0,0);
+
+if(panner.orientationX) {
+  panner.orientationX.value = 1;
+  panner.orientationY.value = 0;
+  panner.orientationZ.value = 0;
+} else {
+  panner.setOrientation(1,0,0);
+}
 
 var listener = audioCtx.listener;
 
@@ -34,9 +41,6 @@ if(listener.forwardX) {
 } else {
   listener.setOrientation(0,0,-1,0,1,0);
 }
-
-// Note that the above three features have been deprecated
-// in recent versions of the spec (mid April 2015 onwards)
 
 var source;
 
