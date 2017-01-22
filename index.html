@@ -8,6 +8,8 @@
 
     <p>Encoding a pure sine wave to an Opus file </p>
     <button>Make sine wave</button>
+
+    <audio controls></audio>
     <script>
      var b = document.querySelector("button");
      var clicked = false;
@@ -25,8 +27,8 @@
            e.target.innerHTML = "Stop recording";
            clicked = true;
          } else {
-           mediaRecorder.stop();
            mediaRecorder.requestData();
+           mediaRecorder.stop();
            osc.stop(0);
            e.target.disabled = true;
          }
@@ -40,7 +42,8 @@
      mediaRecorder.onstop = function(evt) {
        // Make blob out of our blobs, and open it.
        var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-       window.location.href = URL.createObjectURL(blob);
+       var audioTag = document.createElement('audio');
+       document.querySelector("audio").src = URL.createObjectURL(blob);
      };
     </script>
   </body>
