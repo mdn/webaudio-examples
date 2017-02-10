@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>createMediaElementSource example</title>
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <h1>createMediaElementSource example</h1>
+    <audio controls>  
+      <source src="viper.ogg" type="audio/ogg">
+      <source src="viper.mp3" type="audio/mp3">   
+      <p>Browser too old to support HTML5 audio? How depressing!</p>
+    </audio>
+    <pre></pre>
+  </body>
+<script>
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var myAudio = document.querySelector('audio');
+var pre = document.querySelector('pre');
+var myScript = document.querySelector('script');
+
+pre.innerHTML = myScript.innerHTML;
+
+// Create a MediaElementAudioSourceNode
+// Feed the HTMLMediaElement into it
+var source = audioCtx.createMediaElementSource(myAudio);
+
+// Create a gain node
+var gainNode = audioCtx.createGain();
+
+// Create variables to store mouse pointer Y coordinate
+// and HEIGHT of screen
+var CurY;
+var HEIGHT = window.innerHeight;
+
+// Get new mouse pointer coordinates when mouse is moved
+// then set new gain value
+
+document.onmousemove = updatePage;
+
+function updatePage(e) {
+    CurY = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+
+    gainNode.gain.value = CurY/HEIGHT;
+    myAudio.volume = CurY/HEIGHT;
+}
+
+
+// connect the AudioBufferSourceNode to the gainNode
+// and the gainNode to the destination, so we can play the
+// music and adjust the volume using the mouse cursor
+source.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+  </script>
+</html>
