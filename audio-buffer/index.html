@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>AudioBuffer example</title>
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <h1>AudioBuffer example</h1>
+    <button>Make white noise</button>
+    <pre></pre>
+  </body>
+<script>
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var button = document.querySelector('button');
+var pre = document.querySelector('pre');
+var myScript = document.querySelector('script');
+
+pre.innerHTML = myScript.innerHTML;
+
+// Stereo
+var channels = 2;
+// Create an empty two second stereo buffer at the
+// sample rate of the AudioContext
+var frameCount = audioCtx.sampleRate * 2.0;
+
+var myArrayBuffer = audioCtx.createBuffer(channels, frameCount, audioCtx.sampleRate);
+
+button.onclick = function() {
+  // Fill the buffer with white noise;
+  //just random values between -1.0 and 1.0
+  for (var channel = 0; channel < channels; channel++) {
+   // This gives us the actual array that contains the data
+   var nowBuffering = myArrayBuffer.getChannelData(channel);
+   for (var i = 0; i < frameCount; i++) {
+     // Math.random() is in [0; 1.0]
+     // audio needs to be in [-1.0; 1.0]
+     nowBuffering[i] = Math.random() * 2 - 1;
+   }
+  }
+
+  // Get an AudioBufferSourceNode.
+  // This is the AudioNode to use when we want to play an AudioBuffer
+  var source = audioCtx.createBufferSource();
+  // set the buffer in the AudioBufferSourceNode
+  source.buffer = myArrayBuffer;
+  // connect the AudioBufferSourceNode to the
+  // destination so we can hear the sound
+  source.connect(audioCtx.destination);
+  // start the source playing
+  source.start();
+}
+  </script>
+</html>
