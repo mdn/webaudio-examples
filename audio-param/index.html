@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>AudioParam example</title>
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <h1>AudioParam example</h1>
+    <audio controls>  
+      <source src="viper.ogg" type="audio/ogg">
+      <source src="viper.mp3" type="audio/mp3">   
+      <p>Browser too old to support HTML5 audio? How depressing!</p>
+    </audio>
+    <div class="button-bar">
+      <button class="set-target-at-time-plus">Set gain +0.25 in 1 second</button>
+      <button class="set-target-at-time-minus">Set gain -0.25 in 1 second</button><br>
+      <button class="linear-ramp-plus">Linear ramp gain to 1 in 2 seconds</button>
+      <button class="linear-ramp-minus">Linear ramp gain to 0 in 2 seconds</button><br>
+      <button class="exp-ramp-plus">Exponential ramp gain to 1 in 2 seconds</button>
+      <button class="exp-ramp-minus">Exponential ramp gain to 0 in 2 seconds</button><br>
+      <button class="at-time-plus">Target at time 1 in 1s</button>
+      <button class="at-time-minus">Target at time 0 in 1s</button><br>
+      <button class="value-curve">Value curve</button>
+    </div>
+    <pre></pre>
+  </body>
+<script>
+// create audio context
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioCtx = new AudioContext();
+
+// set basic variables for example
+var myAudio = document.querySelector('audio');
+var pre = document.querySelector('pre');
+var myScript = document.querySelector('script');
+
+pre.innerHTML = myScript.innerHTML;
+
+var targetAtTimePlus = document.querySelector('.set-target-at-time-plus');
+var targetAtTimeMinus = document.querySelector('.set-target-at-time-minus');
+var linearRampPlus = document.querySelector('.linear-ramp-plus');
+var linearRampMinus = document.querySelector('.linear-ramp-minus');
+var expRampPlus = document.querySelector('.exp-ramp-plus');
+var expRampMinus = document.querySelector('.exp-ramp-minus');
+var atTimePlus = document.querySelector('.at-time-plus');
+var atTimeMinus = document.querySelector('.at-time-minus');
+var valueCurve = document.querySelector('.value-curve');
+
+// Create a MediaElementAudioSourceNode
+// Feed the HTMLMediaElement into it
+var source = audioCtx.createMediaElementSource(myAudio);
+
+// Create a gain node and set it's gain value to 0.5
+var gainNode = audioCtx.createGain();
+gainNode.gain.value = 0.5;
+var currGain = gainNode.gain.value;
+
+// connect the AudioBufferSourceNode to the gainNode
+// and the gainNode to the destination
+source.connect(gainNode);
+gainNode.connect(audioCtx.destination);
+
+// set buttons to do something onclick
+targetAtTimePlus.onclick = function() {
+  currGain += 0.25;
+  gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+}
+
+targetAtTimeMinus.onclick = function() {
+  currGain -= 0.25;
+  gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+}
+
+linearRampPlus.onclick = function() {
+  currGain = 1.0;
+  gainNode.gain.linearRampToValueAtTime(1.0, audioCtx.currentTime + 2);
+}
+
+linearRampMinus.onclick = function() {
+  currGain = 0;
+  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
+}
+
+expRampPlus.onclick = function() {
+  currGain = 1.0;
+  gainNode.gain.exponentialRampToValueAtTime(1.0, audioCtx.currentTime + 2);
+}
+
+expRampMinus.onclick = function() {
+  currGain = 0;
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+}
+
+atTimePlus.onclick = function() {
+  currGain = 1.0;
+  gainNode.gain.setTargetAtTime(1.0, audioCtx.currentTime + 1, 0.5);
+}
+
+atTimeMinus.onclick = function() {
+  currGain = 0;
+  gainNode.gain.setTargetAtTime(0, audioCtx.currentTime + 1, 0.5);
+}
+
+var waveArray = new Float32Array(9);
+waveArray[0] = 0.5;
+waveArray[1] = 1;
+waveArray[2] = 0.5;
+waveArray[3] = 0;
+waveArray[4] = 0.5;
+waveArray[5] = 1;
+waveArray[6] = 0.5;
+waveArray[7] = 0;
+waveArray[8] = 0.5;
+
+valueCurve.onclick = function() {
+  gainNode.gain.setValueCurveAtTime(waveArray, audioCtx.currentTime, 2);
+
+}
+
+  </script>
+</html>
