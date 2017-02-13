@@ -18,6 +18,8 @@ The "offline-audio-context" directory contains a simple example to show how a We
 
 The "offline-audio-context-promise" directory contains a simple example to show how a Web Audio API OfflineAudioContext object can be used to rapidly process/render audio in the background to create a buffer, which can then be used in any way you please. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/startRendering(promise)](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/startRendering(promise)). [Run the example live](http://mdn.github.io/webaudio-examples/offline-audio-context-promise/).
 
+The "panner-node" directory contains a demo to show basic usage of a Web Audio API PannerNode to control audio spatialisation. See [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createPanner](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createPanner) for more details. [Run the example live](http://mdn.github.io/webaudio-examples/panner-node/).
+
 The "script-processor-node" directory contains a simple demo showing how to use the Web Audio API's ScriptProcessorNode to process a loaded audio track, adding a little bit of white noise to each audio sample. For more information see [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) documentation and the [live demo](http://mdn.github.io/webaudio-examples/script-processor-node/).
 
 The "stereo-panner-node" directory contains a simple example to show how the Web Audio API StereoPannerNode can be used to pan an audio stream. See [https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode](https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode) for more details.
