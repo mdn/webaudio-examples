@@ -9,6 +9,8 @@ The "audiocontext-states" directory contains a simple demo of the new Web Audio 
 
 The "compressor-example" directory contains a simple demo to show usage of the Web Audio API createDynamicsCompressor() method and DynamicCompressorNode. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createDynamicsCompressor](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createDynamicsCompressor). [Run the example live](http://mdn.github.io/webaudio-examples/compressor-example/).
 
+The "create-media-stream-destination" directory contains a simple example showing how Web Audio API [AudioContext.createMediaStreamDestination](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamDestination) which can be used to output a stream, in this case to a MediaRecorder instance, to output a sinewave to an opus file. [Run the demo live](http://mdn.github.io/webaudio-examples/create-media-stream-destination/).
+
 The "decode-audio-data" directory contains a simple example demonstrating usage of the Web Audio API decodeAudioData() method. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/decodeAudioData](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/decodeAudioData). [View example live](http://mdn.github.io/webaudio-examples/decode-audio-data/).
 
 

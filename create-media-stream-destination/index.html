@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>createMediaStreamDestination() demo</title>
+  </head>
+  <body>
+    <h1>createMediaStreamDestination() demo</h1>
+
+    <p>Encoding a pure sine wave to an Opus file </p>
+    <p><button>Make sine wave</button></p>
+
+    <audio controls></audio>
+    <script>
+     var b = document.querySelector("button");
+     var clicked = false;
+     var chunks = [];
+     var ac = new AudioContext();
+     var osc = ac.createOscillator();
+     var dest = ac.createMediaStreamDestination();
+     var mediaRecorder = new MediaRecorder(dest.stream);
+     osc.connect(dest);
+
+     b.addEventListener("click", function(e) {
+       if (!clicked) {
+           mediaRecorder.start();
+           osc.start(0);
+           e.target.innerHTML = "Stop recording";
+           clicked = true;
+         } else {
+           mediaRecorder.requestData();
+           mediaRecorder.stop();
+           osc.stop(0);
+           e.target.disabled = true;
+         }
+     });
+
+     mediaRecorder.ondataavailable = function(evt) {
+       // push each chunk (blobs) in an array
+       chunks.push(evt.data);
+     };
+
+     mediaRecorder.onstop = function(evt) {
+       // Make blob out of our blobs, and open it.
+       var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+       var audioTag = document.createElement('audio');
+       document.querySelector("audio").src = URL.createObjectURL(blob);
+     };
+    </script>
+  </body>
+</html>
