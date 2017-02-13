@@ -24,3 +24,5 @@ The "script-processor-node" directory contains a simple demo showing how to use 
 
 The "stereo-panner-node" directory contains a simple example to show how the Web Audio API StereoPannerNode can be used to pan an audio stream. See [https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode](https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode) for more details.
 [Run the example live](http://mdn.github.io/webaudio-examples/stereo-panner-node/).
+
+The "stream-source-buffer" directory contains a simple example demonstrating usage of the Web Audio API AudioContext.createMediaElementSource() method. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource). [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
