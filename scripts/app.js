@@ -53,7 +53,7 @@ var soundSource, concertHallBuffer;
 
 ajaxRequest = new XMLHttpRequest();
 
-ajaxRequest.open('GET', 'http://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg', true);
+ajaxRequest.open('GET', 'https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg', true);
 
 ajaxRequest.responseType = 'arraybuffer';
 
@@ -155,7 +155,7 @@ function visualize() {
       var x = 0;
 
       for(var i = 0; i < bufferLength; i++) {
-   
+
         var v = dataArray[i] / 128.0;
         var y = v * HEIGHT/2;
 
@@ -215,7 +215,7 @@ function visualize() {
 }
 
 function voiceChange() {
-  
+
   distortion.oversample = '4x';
   biquadFilter.gain.value = 0;
   convolver.buffer = undefined;
@@ -257,7 +257,7 @@ function voiceMute() {
     mute.innerHTML = "Unmute";
   } else {
     gainNode.gain.value = 1;
-    mute.id = "";    
+    mute.id = "";
     mute.innerHTML = "Mute";
   }
 }
