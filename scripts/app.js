@@ -137,7 +137,7 @@ function visualize() {
 
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    function draw() {
+    var draw = function() {
 
       drawVisual = requestAnimationFrame(draw);
 
@@ -182,7 +182,7 @@ function visualize() {
 
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    function draw() {
+    var draw = function() {
       drawVisual = requestAnimationFrame(draw);
 
       analyser.getByteFrequencyData(dataArray);
