@@ -65,12 +65,12 @@ ajaxRequest.onload = function() {
       concertHallBuffer = buffer;
       soundSource = audioCtx.createBufferSource();
       soundSource.buffer = concertHallBuffer;
-    }, function(e){"Error with decoding audio data" + e.err});
+    }, function(e){ console.log("Error with decoding audio data" + e.err);});
 
   //soundSource.connect(audioCtx.destination);
   //soundSource.loop = true;
   //soundSource.start();
-}
+};
 
 ajaxRequest.send();
 
@@ -176,26 +176,26 @@ function visualize() {
 
   } else if(visualSetting == "frequencybars") {
     analyser.fftSize = 256;
-    var bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
-    var dataArray = new Uint8Array(bufferLength);
+    var bufferLengthAlt = analyser.frequencyBinCount;
+    console.log(bufferLengthAlt);
+    var dataArrayAlt = new Uint8Array(bufferLengthAlt);
 
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-    var draw = function() {
-      drawVisual = requestAnimationFrame(draw);
+    var drawAlt = function() {
+      drawVisual = requestAnimationFrame(drawAlt);
 
-      analyser.getByteFrequencyData(dataArray);
+      analyser.getByteFrequencyData(dataArrayAlt);
 
       canvasCtx.fillStyle = 'rgb(0, 0, 0)';
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-      var barWidth = (WIDTH / bufferLength) * 2.5;
+      var barWidth = (WIDTH / bufferLengthAlt) * 2.5;
       var barHeight;
       var x = 0;
 
-      for(var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
+      for(var i = 0; i < bufferLengthAlt; i++) {
+        barHeight = dataArrayAlt[i];
 
         canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
         canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight/2);
@@ -204,7 +204,7 @@ function visualize() {
       }
     };
 
-    draw();
+    drawAlt();
 
   } else if(visualSetting == "off") {
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -242,16 +242,16 @@ function voiceChange() {
 visualSelect.onchange = function() {
   window.cancelAnimationFrame(drawVisual);
   visualize();
-}
+};
 
 voiceSelect.onchange = function() {
   voiceChange();
-}
+};
 
 mute.onclick = voiceMute;
 
 function voiceMute() {
-  if(mute.id == "") {
+  if(mute.id === "") {
     gainNode.gain.value = 0;
     mute.id = "activated";
     mute.innerHTML = "Unmute";
