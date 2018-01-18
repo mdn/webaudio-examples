@@ -29,7 +29,7 @@
 
     <input class="loopend-control" type="range" min="0" max="20" step="1" value="0">
     <span class="loopend-value">0</span>
-   
+
     <pre></pre>
   </body>
 <script>
@@ -86,7 +86,7 @@ function getData() {
         loopendControl.setAttribute('max', Math.floor(songLength));
       },
 
-      function(e){"Error with decoding audio data" + e.err});
+      function(e){"Error with decoding audio data" + e.error});
 
   }
 
