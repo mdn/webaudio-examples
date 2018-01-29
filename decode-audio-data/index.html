@@ -80,7 +80,7 @@ function getData() {
         source.buffer = myBuffer;
         source.playbackRate.value = playbackControl.value;
         source.connect(audioCtx.destination);
-        //source.loop = true;
+        source.loop = true;
 
         loopstartControl.setAttribute('max', Math.floor(songLength));
         loopendControl.setAttribute('max', Math.floor(songLength));
