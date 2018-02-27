@@ -1,10 +1,32 @@
-// fork getUserMedia for multiple browser versions, for those
-// that need prefixes
+// Older browsers might not implement mediaDevices at all, so we set an empty object first
+if (navigator.mediaDevices === undefined) {
+  navigator.mediaDevices = {};
+}
 
-navigator.getUserMedia = (navigator.getUserMedia ||
-                          navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia ||
-                          navigator.msGetUserMedia);
+
+// Some browsers partially implement mediaDevices. We can't just assign an object
+// with getUserMedia as it would overwrite existing properties.
+// Here, we will just add the getUserMedia property if it's missing.
+if (navigator.mediaDevices.getUserMedia === undefined) {
+  navigator.mediaDevices.getUserMedia = function(constraints) {
+
+    // First get ahold of the legacy getUserMedia, if present
+    var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+    // Some browsers just don't implement it - return a rejected promise with an error
+    // to keep a consistent interface
+    if (!getUserMedia) {
+      return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+    }
+
+    // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+    return new Promise(function(resolve, reject) {
+      getUserMedia.call(navigator, constraints, resolve, reject);
+    });
+  }
+}
+
+
 
 // set up forked web audio context, for multiple browsers
 // window. is needed otherwise Safari explodes
@@ -89,34 +111,24 @@ var drawVisual;
 
 //main block for doing the audio recording
 
-if (navigator.getUserMedia) {
+if (navigator.mediaDevices.getUserMedia) {
    console.log('getUserMedia supported.');
-   navigator.getUserMedia (
-      // constraints - only audio needed for this app
-      {
-         audio: true
-      },
+   var constraints = {audio: true}
+   navigator.mediaDevices.getUserMedia (constraints)
+      .then(
+        function(stream) {
+           source = audioCtx.createMediaStreamSource(stream);
+           source.connect(analyser);
+           analyser.connect(distortion);
+           distortion.connect(biquadFilter);
+           biquadFilter.connect(convolver);
+           convolver.connect(gainNode);
+           gainNode.connect(audioCtx.destination);
 
-      // Success callback
-      function(stream) {
-         source = audioCtx.createMediaStreamSource(stream);
-         source.connect(analyser);
-         analyser.connect(distortion);
-         distortion.connect(biquadFilter);
-         biquadFilter.connect(convolver);
-         convolver.connect(gainNode);
-         gainNode.connect(audioCtx.destination);
-
-      	 visualize();
-         voiceChange();
-
-      },
-
-      // Error callback
-      function(err) {
-         console.log('The following gUM error occured: ' + err);
-      }
-   );
+        	 visualize();
+           voiceChange();
+      })
+      .catch( function(err) { console.log('The following gUM error occured: ' + err);})
 } else {
    console.log('getUserMedia not supported on your browser!');
 }
