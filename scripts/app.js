@@ -241,6 +241,7 @@ function voiceChange() {
     convolver.buffer = concertHallBuffer;
   } else if(voiceSetting == "biquad") {
     biquadFilter.type = "lowshelf";
+    biquadFilter.frequency.setTargetAtTime(1000, audioCtx.currentTime, 0)
     biquadFilter.gain.setTargetAtTime(25, audioCtx.currentTime, 0)
   } else if(voiceSetting == "off") {
     console.log("Voice settings turned off");
