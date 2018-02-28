@@ -264,7 +264,7 @@ mute.onclick = voiceMute;
 
 function voiceMute() {
   if(mute.id === "") {
-    gainNode.gain.value = 0;
+    gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0)
     mute.id = "activated";
     mute.innerHTML = "Unmute";
   } else {
