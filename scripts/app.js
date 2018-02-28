@@ -267,7 +267,7 @@ function voiceMute() {
     mute.id = "activated";
     mute.innerHTML = "Unmute";
   } else {
-    gainNode.gain.value = 1;
+    gainNode.gain.setTargetAtTime(1, audioCtx.currentTime, 0)
     mute.id = "";
     mute.innerHTML = "Mute";
   }
