@@ -30,18 +30,18 @@ h1 {
 
 button {
     background-color: #0088cc;
-    background-image: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%); 
-    text-shadow: 1px 1px 1px black;  
+    background-image: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
+    text-shadow: 1px 1px 1px black;
     text-align: center;
     color: white;
     border: none;
     width: 150px;
-    font-size: 1.6rem; 
+    font-size: 1.6rem;
     line-height: 2rem;
-    padding: .5rem; 
+    padding: .5rem;
     display: block;
     opacity: 0.3;
-    
+
     transition: 1s all;
     -webkit-transition: 1s all;
 
@@ -72,7 +72,13 @@ button:active {
   left: 5px;
 }
 
-body > p {
+.start-message {
+  position: absolute;
+  font-size: 1.4rem;
+  left: 5px;
+}
+
+.control-message {
   position: absolute;
   font-size: 1.4rem;
   top: 70px;
