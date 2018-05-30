@@ -141,7 +141,7 @@ function visualize() {
   var visualSetting = visualSelect.value;
   console.log(visualSetting);
 
-  if(visualSetting == "sinewave") {
+  if(visualSetting === "sinewave") {
     analyser.fftSize = 2048;
     var bufferLength = analyser.fftSize;
     console.log(bufferLength);
