@@ -71,7 +71,7 @@ function makeDistortionCurve(amount) {
 
 // grab audio track via XHR for convolver node
 
-var soundSource, concertHallBuffer;
+var soundSource;
 
 ajaxRequest = new XMLHttpRequest();
 
@@ -84,9 +84,8 @@ ajaxRequest.onload = function() {
   var audioData = ajaxRequest.response;
 
   audioCtx.decodeAudioData(audioData, function(buffer) {
-      concertHallBuffer = buffer;
       soundSource = audioCtx.createBufferSource();
-      soundSource.buffer = concertHallBuffer;
+      convolver.buffer = buffer;
     }, function(e){ console.log("Error with decoding audio data" + e.err);});
 
   //soundSource.connect(audioCtx.destination);
@@ -121,7 +120,7 @@ if (navigator.mediaDevices.getUserMedia) {
            source.connect(analyser);
            analyser.connect(distortion);
            distortion.connect(biquadFilter);
-           biquadFilter.connect(convolver);
+           biquadFilter.connect(gainNode);
            convolver.connect(gainNode);
            gainNode.connect(audioCtx.destination);
 
@@ -230,23 +229,28 @@ function voiceChange() {
 
   distortion.oversample = '4x';
   biquadFilter.gain.setTargetAtTime(0, audioCtx.currentTime, 0)
-  convolver.buffer = undefined;
 
   var voiceSetting = voiceSelect.value;
   console.log(voiceSetting);
 
-  if(voiceSetting == "distortion") {
-    distortion.curve = makeDistortionCurve(400);
-  } else if(voiceSetting == "convolver") {
-    convolver.buffer = concertHallBuffer;
-  } else if(voiceSetting == "biquad") {
-    biquadFilter.type = "lowshelf";
-    biquadFilter.frequency.setTargetAtTime(1000, audioCtx.currentTime, 0)
-    biquadFilter.gain.setTargetAtTime(25, audioCtx.currentTime, 0)
-  } else if(voiceSetting == "off") {
-    console.log("Voice settings turned off");
-  }
+  //when convolver is selected it is connected back into the audio path
+  if(voiceSetting == "convolver") {
+    biquadFilter.disconnect(0);
+    biquadFilter.connect(convolver);
+  } else {
+    biquadFilter.disconnect(0);
+    biquadFilter.connect(gainNode);
 
+    if(voiceSetting == "distortion") {
+      distortion.curve = makeDistortionCurve(400);
+    } else if(voiceSetting == "biquad") {
+      biquadFilter.type = "lowshelf";
+      biquadFilter.frequency.setTargetAtTime(1000, audioCtx.currentTime, 0)
+      biquadFilter.gain.setTargetAtTime(25, audioCtx.currentTime, 0)
+    } else if(voiceSetting == "off") {
+      console.log("Voice settings turned off");
+    }
+  }
 }
 
 // event listeners to change visualize and voice settings
