@@ -28,3 +28,15 @@ The "stereo-panner-node" directory contains a simple example to show how the Web
 [Run the example live](http://mdn.github.io/webaudio-examples/stereo-panner-node/).
 
 The "stream-source-buffer" directory contains a simple example demonstrating usage of the Web Audio API AudioContext.createMediaElementSource() method. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource). [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
+
+## Local run example
+
+Make sure that you have Node.js and npm in your computer, because the local web server uses express.js to serve the static html files.
+
+```
+$ npm install
+$ node server.js
+
+// to see the result of ./audio-buffer/index.html
+// open browser localhost:8000/audio-buffer
+```

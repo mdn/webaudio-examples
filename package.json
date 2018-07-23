@@ -1,0 +1,22 @@
+{
+  "name": "webaudio-examples",
+  "version": "1.0.0",
+  "description": "Code examples that accompany the MDN Web Audio documentation https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wahengchang/webaudio-examples.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wahengchang/webaudio-examples/issues"
+  },
+  "homepage": "https://github.com/wahengchang/webaudio-examples#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
