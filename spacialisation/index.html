@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Web Audio Spacialisation</title>
+  <meta name="description" content="Panner node demo for Web Audio API">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<div id="boombox">
+
+	<div class="boombox-body">
+
+		<div class="bb-front">
+
+			<section class="master-controls">
+				<input type="range" id="volume" class="control-volume" min="0" max="2" value="1" list="gain-vals" step="0.01" data-action="volume" />
+				<datalist id="gain-vals">
+					<option value="0" label="min"></option>
+					<option value="2" label="max"></option>
+				</datalist>
+				<label for="volume">VOL</label>
+
+				<input type="range" id="panner" class="control-panner" list="pan-vals" min="-1" max="1" value="0" step="0.01" data-action="panner" />
+				<datalist id="pan-vals">
+					<option value="-1" label="left"></option>
+					<option value="1" label="right"></option>
+				</datalist>
+				<label for="panner">PAN</label>
+
+				<button class="control-power" role="switch" aria-checked="false" data-power="on">
+					<span>On/Off</span>
+				</button>
+			</section>
+
+			<section class="tape">
+
+				<audio src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/858/outfoxing.mp3" crossorigin="anonymous"></audio>
+
+				<button data-playing="false" class="tape-controls-play" role="switch" aria-checked="false">
+					<span>Play/Pause</span>
+				</button>
+			</section>
+		</div><!--bb-front-->
+
+		<div class="bb-top"></div>
+		<div class="bb-right"></div>
+		<div class="bb-bottom"></div>
+		<div class="bb-left"></div>
+		<div class="bb-back"></div>
+
+
+	</div><!-- boombox-body -->
+
+</div>
+
+<div id="move-controls" aria-labelledby="move-boombox">
+	<h3 id="move-boombox">Move Boombox</h3>
+
+	<section class="move-controls_xy">
+		<button data-control="left" aria-labelledby="move-boombox left-label">
+			<span id="left-label">Left</span>
+		</button>
+		<button data-control="up" aria-labelledby="move-boombox up-label">
+			<span id="up-label">Up</span>
+		</button>
+		<button data-control="right" aria-labelledby="move-boombox right-label">
+			<span id="right-label">Right</span>
+		</button>
+		<button data-control="down" aria-labelledby="move-boombox down-label">
+			<span id="down-label">Down</span>
+		</button>
+	</section>
+
+	<section class="move-controls_z">
+		<button data-control="back" aria-labelledby="move-boombox back-label">
+			<span id="back-label">Back</span>
+		</button>
+		<button data-control="forward" aria-labelledby="move-boombox for-label">
+			<span id="for-label">Forward</span>
+		</button>
+	</section>
+
+	<section class="move-controls_rotate">
+		<button data-control="rotate-left" aria-labelledby="move-boombox rleft-label">
+			<span id="rleft-label">Rotate left</span>
+		</button>
+		<button data-control="rotate-down" aria-labelledby="move-boombox rdown-label">
+			<span id="rdown-label">Rotate downwards</span>
+		</button>
+		<button data-control="rotate-right" aria-labelledby="move-boombox rright-label">
+			<span id="-label">Rotate right</span>
+		</button>
+		<button data-control="rotate-up" aria-labelledby="move-boombox rup-label">
+			<span id="rup-label">Rotate upwards</span>
+		</button>
+	</section>
+
+</div>
+
+<script type="text/javascript">
+
+console.clear();
+// instigate our audio context ~~~~~~~~~~~~~~~ 1
+
+// for cross browser way
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+
+const listener = audioCtx.listener;
+
+// Let's set the position of our listener based on where our boombox is.
+const posX = window.innerWidth/2;
+const posY = window.innerHeight/2;
+const posZ = 300;
+
+listener.positionX.value = posX;
+listener.positionY.value = posY;
+listener.positionZ.value = posZ;
+
+// THIS ISN'T YET SUPPORTED IN FIREFOX
+
+
+// We could move the listener left or right using `positionX`, up or down using `positionY` or in or out using `positionZ`. But these values actually work well with our demo. We can also set the direction the listener is facing. The default values work well here:
+
+listener.forwardX.value = 0;
+listener.forwardY.value = 0;
+listener.forwardZ.value = -1;
+listener.upX.value = 0;
+listener.upY.value = 1;
+listener.upZ.value = 0;
+
+
+// Let's create our panner node. The panner node has a whole bunch of properties associated with it. Let's take a look at each of them:
+
+// To start we can set the panning model. This is the spacialization algorithm that's used to postion the audio in 3D space. We can set this to `equalpower` which is the default and the general way panning is figured out, or we can set it to `hrtf` which stands for 'Head-related transfer function' and looks to take into account the human head when figuring out where the sound is. Pretty clever stuff. Let's use that model!
+
+const pannerModel = 'HRTF';
+
+// The inner and outer cone angles specify where the volume emulates from. By default both are 360 degrees. For our boom box our speakers will have smaller cones which we can define. The inner cone is where gain (volume) is always emulated at a maximum and the outer cone is where the gain starts to drop away. This is at a reduction of the value of the `coneOuterGain` value.
+// Let's set these parameters for our boombox
+
+const innerCone = 170;
+const outerCone = 180;
+const outerGain = 0.5;
+
+// The next parameter is `distanceModel` This can only be set to `linear`, `inverse` or `exponential`. All of these are described algorithms which are used to reduce the volume of the audio source as it moves away from the listener.
+
+const distanceModel = 'linear';
+
+// We can set a maximum distance, between the source and the listener, for which the volume will not be reduced anymore if the source moves further away. This can be useful, as you may find you want to emulate distance, but volume can drop out and that's actually not what you want. By default it's 10,000. We can keep it as this.
+
+const maxDistance = 10000;
+
+// There's also a reference distance, for when this volume is reduced, where should it be reduced from? And what was it's gain then? The defualt here is 1 and again we can keep it
+
+const refDistance = 1;
+
+// Then there's the roll off factor :) How quickly does the volume reduce as it's moving away. The default is one, let's make that a bit bigger to exageratte our movements
+
+const rollOff = 50;
+
+// Now we can start setting our position and orientation of our boombox. This is a lot like how we did it with our listener. These are also the parameters we're going to change when the controls on our interface are used.
+
+const positionX = posX;
+const positionY = posY;
+const positionZ = posZ;
+
+const orientationX = 1;
+const orientationY = 0;
+const orientationZ = 0;
+
+// let's use the class method for creating our panner node and pass in all those parameters we've set.
+
+const panner = new PannerNode(audioCtx, {
+	panningModel: pannerModel,
+	distanceModel: distanceModel,
+	positionX: positionX,
+	positionY: positionY,
+	positionZ: positionZ,
+	orientationX: orientationX,
+	orientationY: orientationY,
+	orientationZ: orientationZ,
+	refDistance: refDistance,
+	maxDistance: maxDistance,
+	rolloffFactor: rollOff,
+	coneInnerAngle: innerCone,
+	coneOuterAngle: outerCone,
+	coneOuterGain: outerGain
+})
+
+// Now we're going to move our boombox around our 'room'. We've got some controls set up to do this. We can move left and rught, up and down, back and forth and we can rotate the boombox. The sound direction is coming from the boombox speaker at the front, so when we rotate it, we can alter the sounds direction - ie make it project to the back when the boombox is rotated 180 and facing away from us.
+
+const moveControls = document.querySelector('#move-controls').querySelectorAll('button');
+const boombox = document.querySelector('.boombox-body');
+
+// the transforms we can set
+let transform = {
+	xAxis: 0,
+	yAxis: 0,
+	zAxis: 0.8,
+	rotateX: 0,
+	rotateY: 0
+}
+
+// function for setting the panner values and changing the styling
+
+const topBound = 50;
+const bottomBound = window.innerHeight-50;
+const rightBound = window.innerWidth-50;
+const leftBound = 50;
+const innerBound = 0.1; // zoom out reached
+const outerBound = 1.5; // zoom in reached
+
+function moveBoombox(direction, prevMove) {
+	switch (direction) {
+		case 'left':
+			transform.xAxis -= 5;
+			panner.positionX.value -= 0.3;
+		break;
+		case 'up':
+			transform.yAxis -= 5;
+			panner.positionY.value -= 0.3;
+		break;
+		case 'right':
+			transform.xAxis += 5;
+			panner.positionX.value += 0.3;
+		break;
+		case 'down':
+			transform.yAxis += 5;
+			panner.positionY.value += 0.3;
+		break;
+		case 'back':
+			if (transform.zAxis > innerBound) {
+				transform.zAxis -= 0.01;
+			}
+			panner.positionZ.value += 20;
+		break;
+		case 'forward':
+			if (transform.zAxis < outerBound) {
+				transform.zAxis += 0.01;
+			}
+			panner.positionZ.value -= 20;
+		break;
+		case 'rotate-left':
+			transform.rotateY -= 1;
+			panner.orientationX.value -= 10;
+			panner.orientationY.value -= 10;
+		break;
+		case 'rotate-right':
+			transform.rotateY += 1;
+			panner.orientationX.value += 10;
+			panner.orientationY.value += 10;
+		break;
+		case 'rotate-up':
+			transform.rotateX += 5;
+			panner.orientationZ.value += 10;
+			panner.orientationY.value += 10;
+		break;
+		case 'rotate-down':
+			transform.rotateX -= 5;
+			panner.orientationZ.value -= 10;
+			panner.orientationY.value -= 10;
+		break;
+	}
+  boombox.style.transform = 'translateX('+transform.xAxis+'px) translateY('+transform.yAxis+'px) scale('+transform.zAxis+') rotateY('+transform.rotateY+'deg) rotateX('+transform.rotateX+'deg)';
+
+  const move = prevMove || {};
+  move.frameId = requestAnimationFrame(() => moveBoombox(direction, move));
+	return move;
+}
+
+
+moveControls.forEach(function(el) {
+
+	let moving;
+	el.addEventListener('mousedown', function() {
+
+		let direction = this.dataset.control;
+		moving = moveBoombox(direction);
+
+	}, false);
+
+	el.addEventListener('mouseup', function() {
+		window.cancelAnimationFrame(moving.frameId);
+	}, false)
+
+})
+
+
+
+// BOOMBOX FUNCTIONALITY HERE ~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2
+const audioElement = document.querySelector('audio');
+const track = audioCtx.createMediaElementSource(audioElement);
+
+// play, pause (you will want to mute) ~~~~~~~~~~~~~~~~~~ 3
+const playButton = document.querySelector('.tape-controls-play');
+playButton.addEventListener('click', function() {
+
+	if (this.dataset.playing === 'false') {
+		audioElement.play();
+		this.dataset.playing = 'true';
+	// if track is playing pause it
+	} else if (this.dataset.playing === 'true') {
+		audioElement.pause();
+		this.dataset.playing = 'false';
+	}
+
+	let state = this.getAttribute('aria-checked') === "true" ? true : false;
+	this.setAttribute( 'aria-checked', state ? "false" : "true" );
+
+}, false);
+
+// if track ends - an event is fired once the track ends via the audio api. We can listen for this and set the correct params on the html element
+audioElement.addEventListener('ended', () => {
+	playButton.dataset.playing = 'false';
+	playButton.setAttribute( "aria-checked", "false" );
+}, false);
+
+// volume ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4
+const gainNode = audioCtx.createGain();
+
+const volumeControl = document.querySelector('[data-action="volume"]');
+volumeControl.addEventListener('input', function() {
+	gainNode.gain.value = this.value;
+}, false);
+
+const pannerOptions = {pan: 0};
+const stereoPanner = new StereoPannerNode(audioCtx, pannerOptions);
+const pannerControl = document.querySelector('[data-action="panner"]');
+pannerControl.addEventListener('input', function() {
+	stereoPanner.pan.value = this.value;
+}, false);
+
+track.connect(gainNode).connect(stereoPanner).connect(panner).connect(audioCtx.destination);
+
+const powerButton = document.querySelector('.control-power');
+
+powerButton.addEventListener('click', function() {
+	if (this.dataset.power === 'on') {
+		audioCtx.suspend();
+		this.dataset.power = 'off';
+	} else if (this.dataset.power === 'off') {
+		audioCtx.resume();
+		this.dataset.power = 'on';
+	}
+	this.setAttribute( "aria-checked", state ? "false" : "true" );
+	console.log(audioCtx.state);
+}, false);
+
+
+</script>
+
+</body>
+</html>
+
