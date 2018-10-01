@@ -29,7 +29,7 @@ body {
 }
 
 #boombox {
-	width: 82vw; max-width: 900px; margin: 0px auto;
+	width: 82vw; max-width: 800px; margin: 0px auto;
 }
 @media screen and (max-width: 570px) {
 	#boombox {max-width: 600px;}
@@ -115,11 +115,11 @@ body {
 .control-volume {grid-area: volin;}
 .control-volume::before {content: 'min';}
 .control-volume::after {content: 'max';}
-label[for="volume"] {grid-area: vollab;}
+label[for="volume"] {grid-area: vollab;margin-top: 15px;}
 .control-panner {grid-area: panin;}
 .control-panner::before {content: 'left';}
 .control-panner::after {content: 'right';}
-label[for="panner"] {grid-area: panlab;}
+label[for="panner"] {grid-area: panlab;margin-top: 15px;}
 
 .control-power {
 	grid-area: power; align-self: center;
@@ -171,6 +171,7 @@ label[for="panner"] {grid-area: panlab;}
 	background-size: 100% 100%, 100% 100%, 40% 100%, 100% 100%, 100% 100%;
 	border: var(--border); border-bottom-width: 0px;
 	border-radius: var(--borderRad);
+	max-width: 300px;
 }
 @media screen and (max-width: 570px) {
 	.tape {width: 80%; margin-top: 30vh;}
@@ -191,7 +192,8 @@ audio {
 /* ~~~~~~~~~~~~~~~~ All the crazy range styling */
 input[type=range] {
   -webkit-appearance: none;
-	width: 27vw;
+	width: 20vw;
+	min-width: 220px;
   background: transparent;
 }
 
@@ -250,6 +252,14 @@ input[type=range]:focus {
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
   background: var(--boxMain);
+}
+
+/* ~~~~~~~~~~~~~~~~ Media query to stop range sliders breaking out at narrow widths */
+
+@media(max-width: 680px) {
+	input[type=range] {
+		min-width: 120px;
+	}
 }
 
 
