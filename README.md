@@ -29,6 +29,8 @@ The "panner-node" directory contains a demo to show basic usage of a Web Audio A
 
 The "script-processor-node" directory contains a simple demo showing how to use the Web Audio API's ScriptProcessorNode to process a loaded audio track, adding a little bit of white noise to each audio sample. For more information see [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) documentation and the [live demo](http://mdn.github.io/webaudio-examples/script-processor-node/).
 
+The "step-sequencer" directory contains a simple step-sequencer that loops and manipulates sounds based on a dial-up modem. For more information see [Advanced techniques: creating sound, sequencing, timing, scheduling](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques). See the [live demo](http://mdn.github.io/webaudio-examples/step-sequencer/) also.
+
 The "stereo-panner-node" directory contains a simple example to show how the Web Audio API StereoPannerNode can be used to pan an audio stream. See [https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode](https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode) for more details.
 [Run the example live](http://mdn.github.io/webaudio-examples/stereo-panner-node/).
 
