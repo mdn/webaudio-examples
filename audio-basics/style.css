@@ -100,11 +100,22 @@ body {
 	grid-template-areas:
 		"volin panin power"
 		"vollab panlab power";
-	justify-items: center;
+	justify-items: center; align-items: center;
 	padding: 2vmax;
 	background-color: var(--boxSecond);
 	border-bottom: var(--border);
 }
+/* change control grid areas for smaller boom box */
+@media screen and (max-width: 570px) {
+	.master-controls {
+		grid-gap: 10px;
+		grid-template-columns: 16% 1fr 12%;
+		grid-template-areas:
+			"vollab volin power"
+			"panlab panin power";
+	}
+}
+
 .master-controls input, .master-controls label {display: block;}
 .master-controls input::before, .master-controls input::after {
 	line-height: 5vh; color: var(--black);
@@ -115,11 +126,15 @@ body {
 .control-volume {grid-area: volin;}
 .control-volume::before {content: 'min';}
 .control-volume::after {content: 'max';}
-label[for="volume"] {grid-area: vollab;margin-top: 15px;}
+label[for="volume"] {grid-area: vollab; margin-top: 15px;}
 .control-panner {grid-area: panin;}
 .control-panner::before {content: 'left';}
 .control-panner::after {content: 'right';}
-label[for="panner"] {grid-area: panlab;margin-top: 15px;}
+label[for="panner"] {grid-area: panlab; margin-top: 15px;}
+@media screen and (max-width: 570px) {
+	label[for="volume"], label[for="panner"] {margin-top: 0px;}
+	.control-volume {margin-bottom: 20px;}
+}
 
 .control-power {
 	grid-area: power; align-self: center;
@@ -129,6 +144,8 @@ label[for="panner"] {grid-area: panlab;margin-top: 15px;}
 }
 .control-power span {display: none;}
 
+
+/* tape area ~~~~~~~~~~~~~~~~~~~~~~ */
 .tape {
 	display: grid;
 	grid-template-rows: 24vh 6vh;
@@ -182,9 +199,6 @@ audio {
 /*TODO GIVE BUTTONS CLASSES*/
 [class^="tape-controls"] {
 	border: none;
-/* 	background: var(--boxSecond) none no-repeat; */
-/* 	border: var(--border); border-width: 0.5vmin 0.5vmin 0px 0px; */
-/* 	border-radius: var(--borderRad); */
 }
 [class^="tape-controls"] span {display: none;}
 .tape-controls-play {grid-area: play;}
@@ -192,9 +206,22 @@ audio {
 /* ~~~~~~~~~~~~~~~~ All the crazy range styling */
 input[type=range] {
   -webkit-appearance: none;
-	width: 20vw;
-	min-width: 220px;
+	width: 30vw;
   background: transparent;
+}
+/* set min & max for different screen sizes */
+@media screen and (min-width: 1100px) {
+	input[type=range] {width: 270px;}
+}
+@media(max-width: 680px) {
+	input[type=range] {
+		width: 180px;
+	}
+}
+@media(max-width: 380px) {
+	input[type=range] {
+		width: 130px;
+	}
 }
 
 input[type=range]::-ms-track {
@@ -253,15 +280,6 @@ input[type=range]:focus {
 input[type=range]:focus::-webkit-slider-runnable-track {
   background: var(--boxMain);
 }
-
-/* ~~~~~~~~~~~~~~~~ Media query to stop range sliders breaking out at narrow widths */
-
-@media(max-width: 680px) {
-	input[type=range] {
-		min-width: 120px;
-	}
-}
-
 
 /*~~~~~~~~~~~~~~~~ the play pause & power icons*/
 [data-playing] {
