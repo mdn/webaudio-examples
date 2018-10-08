@@ -1,4 +1,4 @@
-let wavetable = {
+const wavetableSource = {
 'real': [
 0.000000,
 -0.000001,
@@ -4100,3 +4100,8 @@ let wavetable = {
 -0.000001,
 ],
 }
+
+const wavetable = {
+  'real': Float32Array.from(wavetableSource.real),
+  'imag': Float32Array.from(wavetableSource.imag),
+};
