@@ -144,7 +144,7 @@ const outerGain = 0.4;
 
 const distanceModel = 'linear';
 
-const maxDistance = 10000;
+const maxDistance = 20000;
 
 const refDistance = 1;
 
@@ -246,8 +246,8 @@ function moveBoombox(direction, prevMove) {
 				panner.positionZ.value += 20;
 			}
 		break;
-		case 'rotate-left':
-			transform.rotateY -= degreesY;
+		case 'rotate-right':
+			transform.rotateY += degreesY;
 			console.log(transform.rotateY);
      	// 'left' is rotation about y-axis with negative angle increment
       z = panner.orientationZ.value*Math.cos(-q) - panner.orientationX.value*Math.sin(-q);
@@ -258,8 +258,8 @@ function moveBoombox(direction, prevMove) {
       panner.orientationY.value = y;
       panner.orientationZ.value = z;
 		break;
-		case 'rotate-right':
-			transform.rotateY += degreesY;
+		case 'rotate-left':
+			transform.rotateY -= degreesY;
 			// 'right' is rotation about y-axis with positive angle increment
       z = panner.orientationZ.value*Math.cos(q) - panner.orientationX.value*Math.sin(q);
       x = panner.orientationZ.value*Math.sin(q) + panner.orientationX.value*Math.cos(q);
