@@ -304,12 +304,17 @@ moveControls.forEach(function(el) {
 	el.addEventListener('mousedown', function() {
 
 		let direction = this.dataset.control;
+		if (moving && moving.frameId) {
+			window.cancelAnimationFrame(moving.frameId);
+		}
 		moving = moveBoombox(direction);
 
 	}, false);
 
-	el.addEventListener('mouseup', function() {
-		window.cancelAnimationFrame(moving.frameId);
+	window.addEventListener('mouseup', function() {
+		if (moving && moving.frameId) {
+			window.cancelAnimationFrame(moving.frameId);
+		}
 	}, false)
 
 })
