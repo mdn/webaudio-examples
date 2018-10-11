@@ -194,7 +194,7 @@ label[for="panner"] {grid-area: panlab; margin-top: 10px;}
 	grid-template-rows: 222px 80px;
 	grid-template-columns: repeat(5, 1fr);
 	grid-template-areas: "tape tape tape tape tape"
-		"back rewind play ff next";
+		"back play play play next";
 
 	width: 300px; margin: 0px auto;
 	background: var(--boxMain) no-repeat center center;
@@ -387,9 +387,15 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 
 /* controls ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #move-controls {
-	position: absolute; bottom: 0px; right: 0px;
+	position: fixed; bottom: 0px; right: 0px;
 	display: flex;
 	justify-content: flex-end;
+	background: hsla(0, 0%, 100%, 0.5);
+	border: var(--border);
+}
+/* little hack for small screens to make sure you can press play */
+@media screen and (max-width: 800px) {
+	body {padding-bottom: 70px;}
 }
 #move-controls h3 {display: none;}
 .move-controls_xy, .move-controls_rotate {
