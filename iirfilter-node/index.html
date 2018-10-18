@@ -289,6 +289,12 @@ setupSample()
 	// play/pause our track
 	playButton.addEventListener('click', function() {
 		if (this.dataset.playing === 'false') {
+
+			// check if context is in suspended state (autoplay policy)
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
 			srcNode = playSourceNode(audioCtx, sample);
 			this.setAttribute('data-playing', 'true');
 			this.setAttribute('aria-pressed', 'true');
