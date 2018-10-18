@@ -101,7 +101,8 @@
 // import { AudioContext } from 'https://dev.jspm.io/standardized-audio-context';
 console.clear();
 
-const audioCtx = new AudioContext();
+const audioCtx = window.AudioContext ? new AudioContext() : new webkitAudioContext();
+
 
 // TODO make all frequencies like each other
 // TODO set value at time rather than value
@@ -150,7 +151,9 @@ function playSweep() {
   sweepEnv.gain.linearRampToValueAtTime(1, audioCtx.currentTime + attackTime);
   sweepEnv.gain.linearRampToValueAtTime(0, audioCtx.currentTime + sweepLength - releaseTime);
 
-  osc.connect(sweepEnv).connect(audioCtx.destination);
+  osc.connect(sweepEnv)
+  sweepEnv.connect(audioCtx.destination);
+  
   osc.start();
   osc.stop(audioCtx.currentTime + sweepLength);
 }
@@ -183,7 +186,8 @@ function playPulse() {
   lfo.frequency.setValueAtTime(lfoHz, audioCtx.currentTime);
 
   lfo.connect(amp.gain);
-  osc.connect(amp).connect(audioCtx.destination);
+  osc.connect(amp)
+  amp.connect(audioCtx.destination);
   lfo.start();
   osc.start();
   osc.stop(audioCtx.currentTime + pulseTime);
@@ -222,7 +226,8 @@ function playNoise() {
   bandpass.frequency.value = bandHz;
 
   // connect our graph
-  noise.connect(bandpass).connect(audioCtx.destination);
+  noise.connect(bandpass);
+  bandpass.connect(audioCtx.destination);
   noise.start();
 }
 
@@ -231,6 +236,12 @@ function playNoise() {
 async function getFile(audioContext, filepath) {
   const response = await fetch(filepath);
   const arrayBuffer = await response.arrayBuffer();
+  if (audioContext.decodeAudioData.length === 2) { // Safari
+    audioContext.decodeAudioData(arrayBuffer, (buffer) => { 
+      doneLoading(buffer);
+    });
+    return;
+  }
   const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
   return audioBuffer;
 }
@@ -246,7 +257,7 @@ function playSample(audioContext, audioBuffer) {
   const sampleSource = audioContext.createBufferSource();
   sampleSource.buffer = audioBuffer;
   sampleSource.playbackRate.setValueAtTime(playbackRate, audioCtx.currentTime);
-  sampleSource.connect(audioContext.destination)
+  sampleSource.connect(audioContext.destination);
   sampleSource.start();
   return sampleSource;
 }
@@ -256,7 +267,7 @@ async function setupSample() {
   // Here we're `await`ing the async/promise that is `getFile`.
   // To be able to use this keyword we need to be within an `async` function
   const sample = await getFile(audioCtx, filePath);
-  return sample;
+  doneLoading(sample);
 }
 
 
@@ -352,33 +363,34 @@ function draw() {
 const loadingEl = document.querySelector('.loading');
 const playButton = document.querySelector('[data-playing]');
 let isPlaying = false;
-setupSample()
-  .then((sample) => {
-    loadingEl.style.display = 'none';
+setupSample();
 
-    dtmf = sample; // to be used in our playSample function
+function doneLoading(sample) {
+  loadingEl.style.display = 'none';
 
-    playButton.addEventListener('click', ev => {
-      isPlaying = !isPlaying;
+  dtmf = sample; // to be used in our playSample function
 
-      if (isPlaying) { // start playing
+  playButton.addEventListener('click', ev => {
+    isPlaying = !isPlaying;
 
-        // check if context is in suspended state (autoplay policy)
-        if (audioCtx.state === 'suspended') {
-          audioCtx.resume();
-        }
+    if (isPlaying) { // start playing
 
-        currentNote = 0;
-        nextNoteTime = audioCtx.currentTime;
-        scheduler(); // kick off scheduling
-        requestAnimationFrame(draw); // start the drawing loop.
-        ev.target.dataset.playing = 'true';
-      } else {
-        window.clearTimeout(timerID);
-        ev.target.dataset.playing = 'false';
+      // check if context is in suspended state (autoplay policy)
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
       }
-    })
-  });
+
+      currentNote = 0;
+      nextNoteTime = audioCtx.currentTime;
+      scheduler(); // kick off scheduling
+      requestAnimationFrame(draw); // start the drawing loop.
+      ev.target.dataset.playing = 'true';
+    } else {
+      window.clearTimeout(timerID);
+      ev.target.dataset.playing = 'false';
+    }
+  })
+}
 
 
 
