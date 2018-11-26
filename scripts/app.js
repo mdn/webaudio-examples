@@ -117,12 +117,12 @@ if (navigator.mediaDevices.getUserMedia) {
       .then(
         function(stream) {
            source = audioCtx.createMediaStreamSource(stream);
-           source.connect(analyser);
-           analyser.connect(distortion);
+           source.connect(distortion);
            distortion.connect(biquadFilter);
            biquadFilter.connect(gainNode);
            convolver.connect(gainNode);
-           gainNode.connect(audioCtx.destination);
+           gainNode.connect(analyser);
+           analyser.connect(audioCtx.destination);
 
         	 visualize();
            voiceChange();
