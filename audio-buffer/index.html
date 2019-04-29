@@ -57,6 +57,10 @@ button.onclick = function() {
   source.connect(audioCtx.destination);
   // start the source playing
   source.start();
+
+  source.onended = () => {
+    console.log('White noise finished');
+  }
 }
   </script>
 </html>
