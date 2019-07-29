@@ -41,6 +41,9 @@
             #start_button, #stop_button {
                 font-size: 16pt;
             }
+            #msg {
+                text-align: center;  
+            }
         </style>
 
         <!-- ----------------------------------------------------- -->
@@ -128,12 +131,14 @@
             // Load the audio from the URL via Ajax and store it in global variable audioData
             // Note that the audio load is asynchronous
             function loadSound(url) {
+                document.getElementById('msg').textContent = "Loading audio...";
                 var request = new XMLHttpRequest();
                 request.open('GET', url, true);
                 request.responseType = 'arraybuffer';
                 // When loaded, decode the data and play the sound
                 request.onload = function () {
                     audioContext.decodeAudioData(request.response, function (buffer) {
+                        document.getElementById('msg').textContent = "Audio sample download finished";
                         audioData = buffer;
                         playSound(audioData);
                     }, onError);
