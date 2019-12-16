@@ -37,7 +37,7 @@
 
 // define variables
 
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var audioCtx;
 var source;
 var songLength;
 
@@ -63,6 +63,12 @@ loopendControl.setAttribute('disabled', 'disabled');
 // Then we put the buffer into the source
 
 function getData() {
+  if(window.webkitAudioContext) {
+    audioCtx = new window.webkitAudioContext();
+  } else {
+    audioCtx = new window.AudioContext();
+  }
+
   source = audioCtx.createBufferSource();
   request = new XMLHttpRequest();
 
