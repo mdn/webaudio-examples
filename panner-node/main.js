@@ -35,7 +35,6 @@ let listener;
 let source;
 
 function init() {
-
   audioCtx = new AudioContext();
   panner = audioCtx.createPanner();
   listener = audioCtx.listener;
@@ -134,6 +133,96 @@ function init() {
   }
 
   getData();
+
+  // controls to move left and right past the boom box
+  // and zoom in and out
+
+  function moveRight() {
+    boomX += -xIterator;
+    xPos += -0.066;
+
+    if(boomX <= leftBound) {
+      boomX = leftBound;
+      xPos = (WIDTH/2) - 5;
+    }
+
+    boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    positionPanner();
+    rightLoop = requestAnimationFrame(moveRight);
+    return rightLoop;
+  }
+
+  function moveLeft() {
+    boomX += xIterator;
+    xPos += 0.066;
+
+    if(boomX > rightBound) {
+      boomX = rightBound;
+      xPos = (WIDTH/2) + 5;
+    }
+
+    positionPanner();
+    boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    leftLoop = requestAnimationFrame(moveLeft);
+    return leftLoop;
+  }
+
+  function zoomIn() {
+    boomZoom += 0.05;
+    zPos += 0.066;
+
+    if(boomZoom > 4) {
+      boomZoom = 4;
+      zPos = 299.9;
+    }
+
+    positionPanner();
+    boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    zoomInLoop = requestAnimationFrame(zoomIn);
+    return zoomInLoop;
+  }
+
+  function zoomOut() {
+    boomZoom += -0.05;
+    zPos += -0.066;
+
+    if(boomZoom <= 0.5) {
+      boomZoom = 0.5;
+      zPos = 295;
+    }
+
+    positionPanner();
+    boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
+    zoomOutLoop = requestAnimationFrame(zoomOut);
+    return zoomOutLoop;
+  }
+
+  // In each of the cases below, onmousedown runs the functions above
+  // onmouseup cancels the resulting requestAnimationFrames.
+
+  leftButton.onmousedown = moveLeft;
+  leftButton.onmouseup = function () {
+    window.cancelAnimationFrame(leftLoop);
+  };
+
+  rightButton.onmousedown = moveRight;
+  rightButton.onmouseup = function () {
+    window.cancelAnimationFrame(rightLoop);
+  };
+
+  zoomInButton.onmousedown = zoomIn;
+  zoomInButton.onmouseup = function () {
+    window.cancelAnimationFrame(zoomInLoop);
+  };
+
+  zoomOutButton.onmousedown = zoomOut;
+  zoomOutButton.onmouseup = function () {
+    window.cancelAnimationFrame(zoomOutLoop);
+  };
 }
 // wire up buttons to stop and play audio
 
@@ -153,94 +242,4 @@ stop.onclick = function() {
   stop.setAttribute('disabled', 'disabled');
   play.removeAttribute('disabled');
   pulseWrapper.classList.remove('pulsate');
-};
-
-// controls to move left and right past the boom box
-// and zoom in and out
-
-function moveRight() {
-  boomX += -xIterator;
-  xPos += -0.066;
-
-  if(boomX <= leftBound) {
-    boomX = leftBound;
-    xPos = (WIDTH/2) - 5;
-  }
-
-  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  positionPanner();
-  rightLoop = requestAnimationFrame(moveRight);
-  return rightLoop;
-}
-
-function moveLeft() {
-  boomX += xIterator;
-  xPos += 0.066;
-
-  if(boomX > rightBound) {
-    boomX = rightBound;
-    xPos = (WIDTH/2) + 5;
-  }
-
-  positionPanner();
-  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  leftLoop = requestAnimationFrame(moveLeft);
-  return leftLoop;
-}
-
-function zoomIn() {
-  boomZoom += 0.05;
-  zPos += 0.066;
-
-  if(boomZoom > 4) {
-    boomZoom = 4;
-    zPos = 299.9;
-  }
-
-  positionPanner();
-  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  zoomInLoop = requestAnimationFrame(zoomIn);
-  return zoomInLoop;
-}
-
-function zoomOut() {
-  boomZoom += -0.05;
-  zPos += -0.066;
-
-  if(boomZoom <= 0.5) {
-    boomZoom = 0.5;
-    zPos = 295;
-  }
-
-  positionPanner();
-  boomBox.style.webkitTransform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  boomBox.style.transform = "translate(" + boomX + "px , " + boomY + "px) scale(" + boomZoom + ")";
-  zoomOutLoop = requestAnimationFrame(zoomOut);
-  return zoomOutLoop;
-}
-
-// In each of the cases below, onmousedown runs the functions above
-// onmouseup cancels the resulting requestAnimationFrames.
-
-leftButton.onmousedown = moveLeft;
-leftButton.onmouseup = function () {
-  window.cancelAnimationFrame(leftLoop);
-};
-
-rightButton.onmousedown = moveRight;
-rightButton.onmouseup = function () {
-  window.cancelAnimationFrame(rightLoop);
-};
-
-zoomInButton.onmousedown = zoomIn;
-zoomInButton.onmouseup = function () {
-  window.cancelAnimationFrame(zoomInLoop);
-};
-
-zoomOutButton.onmousedown = zoomOut;
-zoomOutButton.onmouseup = function () {
-  window.cancelAnimationFrame(zoomOutLoop);
 };
