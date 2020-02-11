@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Web Audio Basics</title>
-  <meta name="description" content="IIR Filter Demo for Web Audio API">
+  <meta name="description" content="Audio basics demo for Web Audio API">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -56,16 +56,19 @@
 
 // for cross browser
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioCtx = new AudioContext();
+let audioCtx;
 
 // load some sound
 const audioElement = document.querySelector('audio');
-const track = audioCtx.createMediaElementSource(audioElement);
+let track;
 
 const playButton = document.querySelector('.tape-controls-play');
 
 // play pause audio
 playButton.addEventListener('click', function() {
+  if(!audioCtx) {
+		init();
+	}
 
 	// check if context is in suspended state (autoplay policy)
 	if (audioCtx.state === 'suspended') {
@@ -92,25 +95,31 @@ audioElement.addEventListener('ended', () => {
 	playButton.setAttribute( "aria-checked", "false" );
 }, false);
 
-// volume
-const gainNode = audioCtx.createGain();
+function init() {
 
-const volumeControl = document.querySelector('[data-action="volume"]');
-volumeControl.addEventListener('input', function() {
-	gainNode.gain.value = this.value;
-}, false);
+	audioCtx = new AudioContext();
+	track = audioCtx.createMediaElementSource(audioElement);
 
-// panning
-const pannerOptions = {pan: 0};
-const panner = new StereoPannerNode(audioCtx, pannerOptions);
+	// volume
+	const gainNode = audioCtx.createGain();
 
-const pannerControl = document.querySelector('[data-action="panner"]');
-pannerControl.addEventListener('input', function() {
-	panner.pan.value = this.value;
-}, false);
+	const volumeControl = document.querySelector('[data-action="volume"]');
+	volumeControl.addEventListener('input', function() {
+		gainNode.gain.value = this.value;
+	}, false);
 
-// connect our graph
-track.connect(gainNode).connect(panner).connect(audioCtx.destination);
+	// panning
+	const pannerOptions = { pan: 0 };
+	const panner = new StereoPannerNode(audioCtx, pannerOptions);
+
+	const pannerControl = document.querySelector('[data-action="panner"]');
+	pannerControl.addEventListener('input', function() {
+		panner.pan.value = this.value;
+	}, false);
+
+	// connect our graph
+	track.connect(gainNode).connect(panner).connect(audioCtx.destination);
+}
 
 // Track credit: Outfoxing the Fox by Kevin MacLeod under Creative Commons
 

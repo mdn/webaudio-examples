@@ -23,15 +23,15 @@
 
   <p>Current context time: No context exists.</p>
 
-  
+
   <script>
-  var audioCtx;
+  let audioCtx;
 
-  var startBtn = document.querySelector('button:nth-of-type(1)');
-  var susresBtn = document.querySelector('button:nth-of-type(2)');
-  var stopBtn = document.querySelector('button:nth-of-type(3)');
+  const startBtn = document.querySelector('button:nth-of-type(1)');
+  const susresBtn = document.querySelector('button:nth-of-type(2)');
+  const stopBtn = document.querySelector('button:nth-of-type(3)');
 
-  var timeDisplay = document.querySelector('p');
+  const timeDisplay = document.querySelector('p');
 
   susresBtn.setAttribute('disabled','disabled');
   stopBtn.setAttribute('disabled','disabled');
@@ -46,8 +46,8 @@
     audioCtx = new AudioContext();
 
     // create Oscillator and gain node
-    var oscillator = audioCtx.createOscillator();
-    var gainNode = audioCtx.createGain();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
 
     // connect oscillator to gain node to speakers
 
@@ -79,7 +79,7 @@
     } else if(audioCtx.state === 'suspended') {
       audioCtx.resume().then(function() {
         susresBtn.textContent = 'Suspend context';
-      });  
+      });
     }
   }
 

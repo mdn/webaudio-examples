@@ -24,26 +24,26 @@
     <pre></pre>
   </body>
 <script>
-var myAudio = document.querySelector('audio');
-var pre = document.querySelector('pre');
-var myScript = document.querySelector('script');
-var button = document.querySelector('button');
-var audioCtx;
+const myAudio = document.querySelector('audio');
+const pre = document.querySelector('pre');
+const myScript = document.querySelector('script');
+const button = document.querySelector('button');
+let audioCtx;
 
 pre.innerHTML = myScript.innerHTML;
 
 myAudio.addEventListener('play', () => {
   if(!audioCtx) {
     // Set up AudioContext
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
     audioCtx = new AudioContext();
 
     // Create a MediaElementAudioSourceNode
     // Feed the HTMLMediaElement into it
-    var source = audioCtx.createMediaElementSource(myAudio);
+    const source = audioCtx.createMediaElementSource(myAudio);
 
     // Create a compressor node
-    var compressor = audioCtx.createDynamicsCompressor();
+    const compressor = audioCtx.createDynamicsCompressor();
     compressor.threshold.value = -50;
     compressor.knee.value = 40;
     compressor.ratio.value = 12;
@@ -55,15 +55,15 @@ myAudio.addEventListener('play', () => {
     source.connect(audioCtx.destination);
 
     button.onclick = function() {
-      var active = button.getAttribute('data-active');
-      if(active == 'false') {
+      const active = button.getAttribute('data-active');
+      if(active === 'false') {
         button.setAttribute('data-active', 'true');
         button.innerHTML = 'Remove compression';
 
         source.disconnect(audioCtx.destination);
         source.connect(compressor);
         compressor.connect(audioCtx.destination);
-      } else if(active == 'true') {
+      } else if(active === 'true') {
         button.setAttribute('data-active', 'false');
         button.innerHTML = 'Add compression';
 

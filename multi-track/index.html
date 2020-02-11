@@ -57,7 +57,7 @@ console.clear();
 
 // for cross browser compatibility
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioCtx = new AudioContext();
+let audioCtx = new AudioContext();
 
 // select all list elements
 const trackEls = document.querySelectorAll('li');

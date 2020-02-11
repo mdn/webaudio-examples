@@ -298,13 +298,13 @@ function scheduleNote(beatNumber, time) {
   // console.log(beatNumber, time);
 
   if (pads[0].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playSweep()
+    playSweep();
   }
   if (pads[1].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playPulse()
+    playPulse();
   }
   if (pads[2].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playNoise()
+    playNoise();
   }
   if (pads[3].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
     playSample(audioCtx, dtmf);
