@@ -1,10 +1,11 @@
 let heading = document.querySelector('h1');
 heading.textContent = 'CLICK ANYWHERE TO START'
-document.body.onclick = init;
+document.body.addEventListener('click', init);
 
 
 function init() {
-  heading.textContent = 'Voice-change-O-matic'; 
+  heading.textContent = 'Voice-change-O-matic';
+  document.body.removeEventListener('click', init)
 
   // Older browsers might not implement mediaDevices at all, so we set an empty object first
   if (navigator.mediaDevices === undefined) {
@@ -276,11 +277,11 @@ function init() {
 
   function voiceMute() {
     if(mute.id === "") {
-      gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0)
+      gainNode.gain.value = 0;
       mute.id = "activated";
       mute.innerHTML = "Unmute";
     } else {
-      gainNode.gain.setTargetAtTime(1, audioCtx.currentTime, 0)
+      gainNode.gain.value = 1;
       mute.id = "";
       mute.innerHTML = "Mute";
     }
