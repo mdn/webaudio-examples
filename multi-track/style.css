@@ -55,20 +55,20 @@ body {
 #tracks li:last-child {border-bottom: none;}
 #tracks li[data-loading="true"] {background-color:var(--boxHigh);}
 
-.loading-text, .track, button {}
+.loading-text, .track, .playbutton {}
 
 .loading-text {}
 .track {color: var(--black);}
 .track:hover {text-decoration: none;}
 
-button {
+.playbutton {
   display: none;
   padding: 30px;
   border: var(--border); border-radius: var(--borderRad);
   font-size: 100%;
   cursor: pointer;
 }
-button span {display: none;}
+.playbutton span {display: none;}
 [data-playing] {
     background: var(--red) url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z" fill="black" /></svg>') no-repeat center center;
     background-size: 60% 60%;
