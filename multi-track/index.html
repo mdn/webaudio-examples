@@ -15,7 +15,7 @@
 
        So provide a simple button to get things started.
   -->
-  <button id="startbutton" onclick="initDemo()">Click me first</button>
+  <button id="startbutton">Press to load tracks</button>
 
   <div class="wrapper">
     <section id="tracks">
@@ -65,7 +65,11 @@ console.clear();
 
 // for cross browser compatibility
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null; 
+let audioCtx = null;
+
+// Provide a start button so demo can load tracks from an event handler for cross-browser compatibility
+const startButton = document.querySelector('#startbutton');
+console.log(startButton);
 
 // select all list elements
 const trackEls = document.querySelectorAll('li');
@@ -115,8 +119,7 @@ function playTrack(audioBuffer) {
   return trackSource;
 }
 
-
-function initDemo() {
+startButton.addEventListener('click', () => {
   if (audioCtx != null) {
     return;
   }
@@ -157,7 +160,7 @@ function initDemo() {
       })
     })
   })
-}
+});
 
 </script>
 </body>

@@ -31,6 +31,20 @@ body {
   color: var(--black);
 }
 
+#startbutton {
+  width: 12vw;
+  line-height: 3;
+  background-color: var(--boxMain);
+  border: var(--border); border-radius: var(--borderRad);
+  position: absolute;
+  top: 1px;
+  left: 1px;
+}
+
+#startbutton:hover {
+  background-color: var(--boxSecond);
+}
+
 .wrapper {
   display: flex;
   justify-content: center;
