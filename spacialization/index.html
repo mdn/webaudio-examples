@@ -358,7 +358,7 @@ function init() {
 			audioCtx.resume();
 			this.dataset.power = 'on';
 		}
-		this.setAttribute( "aria-checked", state ? "false" : "true" );
+		this.setAttribute( "aria-checked", audioCtx.state ? "false" : "true" );
 		console.log(audioCtx.state);
 	}, false);
 
