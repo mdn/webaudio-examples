@@ -28,9 +28,6 @@ The [decode-audio-data](https://github.com/mdn/webaudio-examples/tree/master/dec
 ## IIRFilterNode
 The [iirfilter-node](https://github.com/mdn/webaudio-examples/tree/master/iirfilter-node) directory contains an example showing usage of an [IIRFilterNode](https://developer.mozilla.org/en-US/docs/Web/API/IIRFilterNode). [Run the demo live](http://mdn.github.io/webaudio-examples/iirfilter-node/).
 
-## Output Timestamp
-The [output-timestamp](https://github.com/mdn/webaudio-examples/tree/master/output-timestamp) directory contains an example of how the <code>[AudioContext.getOutputTimestamp()](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputTimestamp)</code> property can be used to log <code>contextTime</code> and <code>performanceTime</code> to the console. [Try the demo live](https://mdn.github.io/webaudio-examples/output-timestamp/).
-
 ## createMediaElementSource
 The [media-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/media-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API <code>AudioContext.createMediaElementSource()</code> method. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) or [view the demo live](http://mdn.github.io/webaudio-examples/media-source-buffer/).
 
@@ -39,6 +36,9 @@ The [offline-audio-context](https://github.com/mdn/webaudio-examples/tree/master
 
 ## OfflineAudioContext Promise
 The [offline-audio-context-promise](https://github.com/mdn/webaudio-examples/tree/master/offline-audio-context-promise) directory contains a simple example to show how a Web Audio API <code>OfflineAudioContext</code> object can be used to rapidly process/render audio in the background to create a buffer, which can then be used in any way you please. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/startRendering(promise)](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/startRendering(promise)). [Run the example live](http://mdn.github.io/webaudio-examples/offline-audio-context-promise/).
+
+## Output Timestamp
+The [output-timestamp](https://github.com/mdn/webaudio-examples/tree/master/output-timestamp) directory contains an example of how the <code>[AudioContext.getOutputTimestamp()](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputTimestamp)</code> property can be used to log <code>contextTime</code> and <code>performanceTime</code> to the console. [Try the demo live](https://mdn.github.io/webaudio-examples/output-timestamp/).
 
 ## PannerNode
 The [panner-node](https://github.com/mdn/webaudio-examples/tree/master/panner-node) directory contains a demo to show basic usage of a Web Audio API <code>PannerNode</code> to control audio spatialization. See [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createPanner](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createPanner) for more details. [Run the example live](http://mdn.github.io/webaudio-examples/panner-node/).
