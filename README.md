@@ -49,6 +49,9 @@ The [panner-node](https://github.com/mdn/webaudio-examples/tree/master/panner-no
 ## ScriptProcessorNode
 The [script-processor-node](https://github.com/mdn/webaudio-examples/tree/master/script-processor-node) directory contains a simple demo showing how to use the Web Audio API's <code>ScriptProcessorNode</code> to process a loaded audio track, adding a little bit of white noise to each audio sample. For more information see [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) documentation and the [live demo](http://mdn.github.io/webaudio-examples/script-processor-node/).
 
+## Spacialization
+The [spacialization](https://github.com/mdn/webaudio-examples/tree/master/spacialization) directory contains an example of how the various properties of a <code>[PannerNode](https://developer.mozilla.org/en-US/docs/Web/API/PannerNode)</code> object can be adjusted to emulate a three-dimensional environment. For more information see [Web audio spatialization basics](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Web_audio_spatialization_basics). Try the [live demo](http://mdn.github.io/webaudio-examples/spacialization/).
+
 ## Step Sequencer
 The [step-sequencer](https://github.com/mdn/webaudio-examples/tree/master/step-sequencer) directory contains a simple step-sequencer that loops and manipulates sounds based on a dial-up modem. For more information see [Advanced techniques: creating sound, sequencing, timing, scheduling](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques). See the [live demo](http://mdn.github.io/webaudio-examples/step-sequencer/) also.
 
