@@ -31,6 +31,9 @@ The [iirfilter-node](https://github.com/mdn/webaudio-examples/tree/master/iirfil
 ## createMediaElementSource
 The [media-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/media-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API <code>AudioContext.createMediaElementSource()</code> method. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) or [view the demo live](http://mdn.github.io/webaudio-examples/media-source-buffer/).
 
+## Multi Track
+The [multi-track](https://github.com/mdn/webaudio-examples/tree/master/multi-track) directory contains an example of connecting separate independently-playable audio tracks to a single <code>[AudioDestinationNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode)</code>. [Run the example live](http://mdn.github.io/webaudio-examples/multi-track/).
+
 ## OfflineAudioContext
 The [offline-audio-context](https://github.com/mdn/webaudio-examples/tree/master/offline-audio-context) directory contains a simple example to show how a Web Audio API <code>OfflineAudioContext</code> object can be used to rapidly process/render audio in the background to create a buffer, which can then be used in any way you please. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext). [Run example live](http://mdn.github.io/webaudio-examples/offline-audio-context/).
 
