@@ -31,17 +31,26 @@ The [iirfilter-node](https://github.com/mdn/webaudio-examples/tree/master/iirfil
 ## createMediaElementSource
 The [media-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/media-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API <code>AudioContext.createMediaElementSource()</code> method. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) or [view the demo live](http://mdn.github.io/webaudio-examples/media-source-buffer/).
 
+## Multi Track
+The [multi-track](https://github.com/mdn/webaudio-examples/tree/master/multi-track) directory contains an example of connecting separate independently-playable audio tracks to a single <code>[AudioDestinationNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode)</code>. [Run the example live](http://mdn.github.io/webaudio-examples/multi-track/).
+
 ## OfflineAudioContext
 The [offline-audio-context](https://github.com/mdn/webaudio-examples/tree/master/offline-audio-context) directory contains a simple example to show how a Web Audio API <code>OfflineAudioContext</code> object can be used to rapidly process/render audio in the background to create a buffer, which can then be used in any way you please. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext). [Run example live](http://mdn.github.io/webaudio-examples/offline-audio-context/).
 
 ## OfflineAudioContext Promise
 The [offline-audio-context-promise](https://github.com/mdn/webaudio-examples/tree/master/offline-audio-context-promise) directory contains a simple example to show how a Web Audio API <code>OfflineAudioContext</code> object can be used to rapidly process/render audio in the background to create a buffer, which can then be used in any way you please. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/startRendering(promise)](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/startRendering(promise)). [Run the example live](http://mdn.github.io/webaudio-examples/offline-audio-context-promise/).
 
+## Output Timestamp
+The [output-timestamp](https://github.com/mdn/webaudio-examples/tree/master/output-timestamp) directory contains an example of how the <code>[AudioContext.getOutputTimestamp()](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputTimestamp)</code> property can be used to log <code>contextTime</code> and <code>performanceTime</code> to the console. [Try the demo live](https://mdn.github.io/webaudio-examples/output-timestamp/).
+
 ## PannerNode
 The [panner-node](https://github.com/mdn/webaudio-examples/tree/master/panner-node) directory contains a demo to show basic usage of a Web Audio API <code>PannerNode</code> to control audio spatialization. See [https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createPanner](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createPanner) for more details. [Run the example live](http://mdn.github.io/webaudio-examples/panner-node/).
 
 ## ScriptProcessorNode
 The [script-processor-node](https://github.com/mdn/webaudio-examples/tree/master/script-processor-node) directory contains a simple demo showing how to use the Web Audio API's <code>ScriptProcessorNode</code> to process a loaded audio track, adding a little bit of white noise to each audio sample. For more information see [ScriptProcessorNode](https://developer.mozilla.org/en-US/docs/Web/API/ScriptProcessorNode) documentation and the [live demo](http://mdn.github.io/webaudio-examples/script-processor-node/).
+
+## Spacialization
+The [spacialization](https://github.com/mdn/webaudio-examples/tree/master/spacialization) directory contains an example of how the various properties of a <code>[PannerNode](https://developer.mozilla.org/en-US/docs/Web/API/PannerNode)</code> object can be adjusted to emulate a three-dimensional environment. For more information see [Web audio spatialization basics](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Web_audio_spatialization_basics). Try the [live demo](http://mdn.github.io/webaudio-examples/spacialization/).
 
 ## Step Sequencer
 The [step-sequencer](https://github.com/mdn/webaudio-examples/tree/master/step-sequencer) directory contains a simple step-sequencer that loops and manipulates sounds based on a dial-up modem. For more information see [Advanced techniques: creating sound, sequencing, timing, scheduling](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Advanced_techniques). See the [live demo](http://mdn.github.io/webaudio-examples/step-sequencer/) also.
