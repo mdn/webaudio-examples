@@ -1,41 +1,40 @@
-var appContents = document.querySelector('.app-contents');
-var startMessage = document.querySelector('.start-message');
+const appContents = document.querySelector('.app-contents');
+const startMessage = document.querySelector('.start-message');
+let isAppInit = false;
 appContents.style.display = 'none';
 
 window.addEventListener('keydown', init);
 window.addEventListener('click', init);
 
 function init() {
+  if (isAppInit) {
+    return;
+  }
+
   appContents.style.display = 'block';
   document.body.removeChild(startMessage);
 
   // create web audio api context
-  var AudioContext = window.AudioContext || window.webkitAudioContext;
-  var audioCtx = new AudioContext();
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioContext();
 
   // create Oscillator and gain node
-  var oscillator = audioCtx.createOscillator();
-  var gainNode = audioCtx.createGain();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
 
   // connect oscillator to gain node to speakers
-
   oscillator.connect(gainNode);
   gainNode.connect(audioCtx.destination);
 
-  // create initial theremin frequency and volumn values
+  // create initial theremin frequency and volume values
+  const WIDTH = window.innerWidth;
+  const HEIGHT = window.innerHeight;
 
-  var WIDTH = window.innerWidth;
-  var HEIGHT = window.innerHeight;
-
-  var maxFreq = 6000;
-  var maxVol = 0.02;
-
-  var initialFreq = 3000;
-  var initialVol = 0.001;
+  const maxFreq = 6000;
+  const maxVol = 0.02;
+  const initialVol = 0.001;
 
   // set options for the oscillator
-
-
   oscillator.detune.value = 100; // value in cents
   oscillator.start(0);
 
@@ -48,20 +47,18 @@ function init() {
   gainNode.gain.maxValue = initialVol;
 
   // Mouse pointer coordinates
-
-  var CurX;
-  var CurY;
+  let CurX;
+  let CurY;
 
   // Get new mouse pointer coordinates when mouse is moved
   // then set new gain and pitch values
-
   document.onmousemove = updatePage;
 
   function updatePage(e) {
       KeyFlag = false;
 
-      CurX = (window.Event) ? e.pageX : event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-      CurY = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+      CurX = e.pageX;
+      CurY = e.pageY;
 
       oscillator.frequency.value = (CurX/WIDTH) * maxFreq;
       gainNode.gain.value = (CurY/HEIGHT) * maxVol;
@@ -70,11 +67,10 @@ function init() {
   }
 
   // mute button
-
-  var mute = document.querySelector('.mute');
+  const mute = document.querySelector('.mute');
 
   mute.onclick = function() {
-    if(mute.getAttribute('data-muted') === 'false') {
+    if (mute.getAttribute('data-muted') === 'false') {
       gainNode.disconnect(audioCtx.destination);
       mute.setAttribute('data-muted', 'true');
       mute.innerHTML = "Unmute";
@@ -85,34 +81,31 @@ function init() {
     };
   }
 
-
-
   // canvas visualization
-
   function random(number1,number2) {
-    var randomNo = number1 + (Math.floor(Math.random() * (number2 - number1)) + 1);
-    return randomNo;
+    return number1 + (Math.floor(Math.random() * (number2 - number1)) + 1);
   }
 
-  var canvas = document.querySelector('.canvas');
+  const canvas = document.querySelector('.canvas');
+  const canvasCtx = canvas.getContext('2d');
+
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
 
-  var canvasCtx = canvas.getContext('2d');
-
   function canvasDraw() {
-    if(KeyFlag == true) {
+    if (KeyFlag) {
       rX = KeyX;
       rY = KeyY;
     } else {
       rX = CurX;
       rY = CurY;
     }
+
     rC = Math.floor((gainNode.gain.value/maxVol)*30);
 
     canvasCtx.globalAlpha = 0.2;
 
-    for(i=1;i<=15;i=i+2) {
+    for (let i = 1; i <= 15; i = i+2) {
       canvasCtx.beginPath();
       canvasCtx.fillStyle = 'rgb(' + 100+(i*10) + ',' + Math.floor((gainNode.gain.value/maxVol)*255) + ',' + Math.floor((oscillator.frequency.value/maxFreq)*255) + ')';
       canvasCtx.arc(rX+random(0,50),rY+random(0,50),rC/2+i,(Math.PI/180)*0,(Math.PI/180)*360,false);
@@ -122,58 +115,57 @@ function init() {
   }
 
   // clear screen
-
-  var clear = document.querySelector('.clear');
+  const clear = document.querySelector('.clear');
 
   clear.onclick = function() {
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   // keyboard controls
+  const body = document.querySelector('body');
 
-  var body = document.querySelector('body');
+  let KeyX = 1;
+  let KeyY = 0.01;
+  let KeyFlag = false;
 
-  var KeyX = 1;
-  var KeyY = 0.01;
-  var KeyFlag = false;
+  const ARROW_LEFT = 'ArrowLeft';
+  const ARROW_RIGHT = 'ArrowRight';
+  const ARROW_UP = 'ArrowUp';
+  const ARROW_DOWN = 'ArrowDown';
 
   body.onkeydown = function(e) {
     KeyFlag = true;
 
-    // 37 is arrow left, 39 is arrow right,
-    // 38 is arrow up, 40 is arrow down
-
-    if(e.keyCode == 37) {
+    if (e.code === ARROW_LEFT) {
       KeyX -= 20;
     }
 
-    if(e.keyCode == 39) {
+    if (e.code === ARROW_RIGHT) {
       KeyX += 20;
     }
 
-    if(e.keyCode == 38) {
+    if (e.code === ARROW_UP) {
       KeyY -= 20;
     }
 
-    if(e.keyCode == 40) {
+    if (e.code === ARROW_DOWN) {
       KeyY += 20;
     }
 
     // set max and min constraints for KeyX and KeyY
-
-    if(KeyX < 1) {
+    if (KeyX < 1) {
       KeyX = 1;
     }
 
-    if(KeyX > WIDTH) {
+    if (KeyX > WIDTH) {
       KeyX = WIDTH;
     }
 
-    if(KeyY < 0.01) {
+    if (KeyY < 0.01) {
       KeyY = 0.01;
     }
 
-    if(KeyY > HEIGHT) {
+    if (KeyY > HEIGHT) {
       KeyY = HEIGHT;
     }
 
@@ -183,4 +175,5 @@ function init() {
     canvasDraw();
   };
 
+  isAppInit = true;
 }
