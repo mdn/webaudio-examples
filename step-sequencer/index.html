@@ -98,15 +98,16 @@
 <script src="wavetable.js"></script>
 
 <script type="text/javascript">
-// import { AudioContext } from 'https://dev.jspm.io/standardized-audio-context';
 console.clear();
 
-const audioCtx = new AudioContext();
+// ! You should just be able to do 
+// const audioCtx = new AudioContext();
+// but this allows for Safari support !
+const audioCtx = window.AudioContext ? new AudioContext() : new webkitAudioContext();
 
-// TODO make all frequencies like each other
+// TODO make all frequencies like each other, one day
 
 // Before we do anything more, let's grab our checkboxes from the interface. We want to keep them in the groups they are in as each row represents a different sound or _voice_.
-
 const pads = document.querySelectorAll('.pads');
 const allPadButtons = document.querySelectorAll('#tracks button');
 
@@ -230,7 +231,8 @@ function playNoise(time) {
 async function getFile(audioContext, filepath) {
   const response = await fetch(filepath);
   const arrayBuffer = await response.arrayBuffer();
-  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  // ! A callback has been added here as a second param for Safari only !
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer, function() {return});
   return audioBuffer;
 }
 
