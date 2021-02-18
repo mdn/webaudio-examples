@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Audio File Loader</title>
+  <meta name="description" content="A way to make sure files have loaded before playing them">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <!--
+       Some browsers' autoplay policy requires that an AudioContext be initialized
+       during an input event in order to correctly synchronize.
+
+       So provide a simple button to get things started.
+  -->
+  <button id="startbutton">Press to load tracks</button>
+
+  <div class="wrapper">
+    <section id="tracks">
+      <ul>
+        <li data-loading="true">
+          <a href="leadguitar.mp3" class="track">Lead Guitar</a>
+          <p class="loading-text">Loading...</p>
+          <button data-playing="false" aria-decribedby="guitar-play-label" class="playbutton">
+            <span id="guitar-play-label">Play</span>
+          </button>
+        </li>
+        <li data-loading="true">
+          <a href="bassguitar.mp3" class="track">Bass Guitar</a>
+          <p class="loading-text">Loading...</p>
+          <button data-playing="false" aria-describedby="bass-play-label" class="playbutton">
+            <span id="bass-play-label">Play</span>
+          </button>
+        </li>
+        <li data-loading="true">
+          <a href="drums.mp3" class="track">Drums</a>
+          <p class="loading-text">Loading...</p>
+          <button data-playing="false" aria-describedby="drums-play-label" class="playbutton">
+            <span id="drums-play-label">Play</span>
+          </button>
+        </li>
+        <li data-loading="true">
+          <a href="horns.mp3" class="track">Horns</a>
+          <p class="loading-text">Loading...</p>
+          <button data-playing="false" aria-describedby="horns-play-label" class="playbutton">
+            <span id="horns-play-label">Play</span>
+          </button>
+        </li>
+        <li data-loading="true">
+          <a href="clav.mp3" class="track">Clavi</a>
+          <p class="loading-text">Loading...</p>
+          <button data-playing="false" aria-describedby="clavi-play-label" class="playbutton">
+            <span id="clavi-play-label">Play</span>
+          </button>
+        </li>
+      </ul>
+      <p class="sourced">All tracks sourced from <a href="http://jplayer.org/">jplayer.org</a></p>
+    </section>
+  </div><!-- wrapper -->
+
+<script type="text/javascript">
+console.clear();
+
+// for cross browser compatibility
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+// Provide a start button so demo can load tracks from an event handler for cross-browser compatibility
+const startButton = document.querySelector('#startbutton');
+console.log(startButton);
+
+// select all list elements
+const trackEls = document.querySelectorAll('li');
+console.log(trackEls);
+
+// switch aria attribute on click
+// allPadButtons.forEach(el => {
+//   el.addEventListener('click', () => {
+//     if (el.getAttribute('aria-checked') === 'false') {
+//       el.setAttribute('aria-checked', 'true');
+//     } else {
+//       el.setAttribute('aria-checked', 'false');
+//     }
+//   }, false)
+// })
+
+
+// Loading ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// function for fetching the audio file and decode the data
+async function getFile(filepath) {
+  const response = await fetch(filepath);
+  const arrayBuffer = await response.arrayBuffer();
+  const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+  return audioBuffer;
+}
+
+// function to call each file and return an array of decoded files
+async function loadFile(filePath) {
+  const track = await getFile(filePath);
+  return track;
+}
+
+let offset = 0;
+// create a buffer, plop in data, connect and play -> modify graph here if required
+function playTrack(audioBuffer) {
+  const trackSource = audioCtx.createBufferSource();
+  trackSource.buffer = audioBuffer;
+  trackSource.connect(audioCtx.destination)
+
+  if (offset == 0) {
+    trackSource.start();
+    offset = audioCtx.currentTime;
+  } else {
+    trackSource.start(0, audioCtx.currentTime - offset);
+  }
+
+  return trackSource;
+}
+
+startButton.addEventListener('click', () => {
+  if (audioCtx != null) {
+    return;
+  }
+
+  audioCtx = new AudioContext();
+
+  document.querySelector("#startbutton").hidden = true;
+
+  trackEls.forEach((el, i) => {
+
+    // get children
+    const anchor = el.querySelector('a');
+    const loadText = el.querySelector('p');
+    const playButton = el.querySelector('.playbutton');
+
+    // load file
+    loadFile(anchor.href).then((track) => {
+
+      // set loading to false
+      el.dataset.loading = 'false';
+
+      // hide loading text
+      loadText.style.display = 'none';
+
+      // show button
+      playButton.style.display = 'inline-block';
+
+      // allow play on click
+      playButton.addEventListener('click', function() {
+
+        // check if context is in suspended state (autoplay policy)
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        playTrack(track);
+        playButton.dataset.playing = true;
+      })
+    })
+  })
+});
+
+</script>
+</body>
+</html>

@@ -17,24 +17,24 @@
     <h1>offlineAudioContext example with startRendering() promise</h1>
 
     <button class="play">Play</button>
-   
+
     <pre></pre>
   </body>
 <script>
 
 // define online and offline audio context
 
-var audioCtx = new AudioContext();
-var offlineCtx = new OfflineAudioContext(2,44100*40,44100);
+let audioCtx = new AudioContext();
+let offlineCtx = new OfflineAudioContext(2,44100*40,44100);
 
 source = offlineCtx.createBufferSource();
 
-// define variables
+// define constants for dom nodes
 
-var pre = document.querySelector('pre');
-var myScript = document.querySelector('script');
-var play = document.querySelector('.play');
-var stop = document.querySelector('.stop');
+const pre = document.querySelector('pre');
+const myScript = document.querySelector('script');
+const play = document.querySelector('.play');
+const stop = document.querySelector('.stop');
 
 // use XHR to load an audio track, and
 // decodeAudioData to decode it and stick it in a buffer.
@@ -49,7 +49,7 @@ function getData() {
 
 
   request.onload = function() {
-    var audioData = request.response;
+    let audioData = request.response;
 
     audioCtx.decodeAudioData(audioData, function(buffer) {
       myBuffer = buffer;
@@ -59,8 +59,8 @@ function getData() {
       //source.loop = true;
       offlineCtx.startRendering().then(function(renderedBuffer) {
         console.log('Rendering completed successfully');
-        var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-        var song = audioCtx.createBufferSource();
+        
+        let song = audioCtx.createBufferSource();
         song.buffer = renderedBuffer;
 
         song.connect(audioCtx.destination);

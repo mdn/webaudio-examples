@@ -15,9 +15,9 @@
 
   <body>
     <h1>AudioParam example</h1>
-    <audio controls>  
+    <audio controls>
       <source src="viper.ogg" type="audio/ogg">
-      <source src="viper.mp3" type="audio/mp3">   
+      <source src="viper.mp3" type="audio/mp3">
       <p>Browser too old to support HTML5 audio? How depressing!</p>
     </audio>
     <div class="button-bar">
@@ -35,96 +35,101 @@
   </body>
 <script>
 // create audio context
-var AudioContext = window.AudioContext || window.webkitAudioContext;
-var audioCtx = new AudioContext();
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
 
 // set basic variables for example
-var myAudio = document.querySelector('audio');
-var pre = document.querySelector('pre');
-var myScript = document.querySelector('script');
+const myAudio = document.querySelector('audio');
+const pre = document.querySelector('pre');
+const myScript = document.querySelector('script');
 
 pre.innerHTML = myScript.innerHTML;
 
-var targetAtTimePlus = document.querySelector('.set-target-at-time-plus');
-var targetAtTimeMinus = document.querySelector('.set-target-at-time-minus');
-var linearRampPlus = document.querySelector('.linear-ramp-plus');
-var linearRampMinus = document.querySelector('.linear-ramp-minus');
-var expRampPlus = document.querySelector('.exp-ramp-plus');
-var expRampMinus = document.querySelector('.exp-ramp-minus');
-var atTimePlus = document.querySelector('.at-time-plus');
-var atTimeMinus = document.querySelector('.at-time-minus');
-var valueCurve = document.querySelector('.value-curve');
+const targetAtTimePlus = document.querySelector('.set-target-at-time-plus');
+const targetAtTimeMinus = document.querySelector('.set-target-at-time-minus');
+const linearRampPlus = document.querySelector('.linear-ramp-plus');
+const linearRampMinus = document.querySelector('.linear-ramp-minus');
+const expRampPlus = document.querySelector('.exp-ramp-plus');
+const expRampMinus = document.querySelector('.exp-ramp-minus');
+const atTimePlus = document.querySelector('.at-time-plus');
+const atTimeMinus = document.querySelector('.at-time-minus');
+const valueCurve = document.querySelector('.value-curve');
 
-// Create a MediaElementAudioSourceNode
-// Feed the HTMLMediaElement into it
-var source = audioCtx.createMediaElementSource(myAudio);
+myAudio.addEventListener('play', () => {
+  audioCtx = new AudioContext();
 
-// Create a gain node and set it's gain value to 0.5
-var gainNode = audioCtx.createGain();
-gainNode.gain.value = 0.5;
-var currGain = gainNode.gain.value;
+  // Create a MediaElementAudioSourceNode
+  // Feed the HTMLMediaElement into it
+  const source = audioCtx.createMediaElementSource(myAudio);
 
-// connect the AudioBufferSourceNode to the gainNode
-// and the gainNode to the destination
-source.connect(gainNode);
-gainNode.connect(audioCtx.destination);
+  // Create a gain node and set it's gain value to 0.5
+  const gainNode = audioCtx.createGain();
+  gainNode.gain.value = 0.5;
+  let currGain = gainNode.gain.value;
 
-// set buttons to do something onclick
-targetAtTimePlus.onclick = function() {
-  currGain += 0.25;
-  gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
-}
+  // connect the AudioBufferSourceNode to the gainNode
+  // and the gainNode to the destination
+  source.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
 
-targetAtTimeMinus.onclick = function() {
-  currGain -= 0.25;
-  gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
-}
+  // set buttons to do something onclick
+  targetAtTimePlus.onclick = function() {
+    currGain += 0.25;
+    gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+  }
 
-linearRampPlus.onclick = function() {
-  currGain = 1.0;
-  gainNode.gain.linearRampToValueAtTime(1.0, audioCtx.currentTime + 2);
-}
+  targetAtTimeMinus.onclick = function() {
+    currGain -= 0.25;
+    gainNode.gain.setValueAtTime(currGain, audioCtx.currentTime + 1);
+  }
 
-linearRampMinus.onclick = function() {
-  currGain = 0;
-  gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
-}
+  linearRampPlus.onclick = function() {
+    currGain = 1.0;
+    gainNode.gain.linearRampToValueAtTime(1.0, audioCtx.currentTime + 2);
+  }
 
-expRampPlus.onclick = function() {
-  currGain = 1.0;
-  gainNode.gain.exponentialRampToValueAtTime(1.0, audioCtx.currentTime + 2);
-}
+  linearRampMinus.onclick = function() {
+    currGain = 0;
+    gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
+  }
 
-expRampMinus.onclick = function() {
-  currGain = 0;
-  gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
-}
+  expRampPlus.onclick = function() {
+    currGain = 1.0;
+    gainNode.gain.exponentialRampToValueAtTime(1.0, audioCtx.currentTime + 2);
+  }
 
-atTimePlus.onclick = function() {
-  currGain = 1.0;
-  gainNode.gain.setTargetAtTime(1.0, audioCtx.currentTime + 1, 0.5);
-}
+  expRampMinus.onclick = function() {
+    currGain = 0;
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+  }
 
-atTimeMinus.onclick = function() {
-  currGain = 0;
-  gainNode.gain.setTargetAtTime(0, audioCtx.currentTime + 1, 0.5);
-}
+  atTimePlus.onclick = function() {
+    currGain = 1.0;
+    gainNode.gain.setTargetAtTime(1.0, audioCtx.currentTime + 1, 0.5);
+  }
 
-var waveArray = new Float32Array(9);
-waveArray[0] = 0.5;
-waveArray[1] = 1;
-waveArray[2] = 0.5;
-waveArray[3] = 0;
-waveArray[4] = 0.5;
-waveArray[5] = 1;
-waveArray[6] = 0.5;
-waveArray[7] = 0;
-waveArray[8] = 0.5;
+  atTimeMinus.onclick = function() {
+    currGain = 0;
+    gainNode.gain.setTargetAtTime(0, audioCtx.currentTime + 1, 0.5);
+  }
 
-valueCurve.onclick = function() {
-  gainNode.gain.setValueCurveAtTime(waveArray, audioCtx.currentTime, 2);
+  let waveArray = new Float32Array(9);
+  waveArray[0] = 0.5;
+  waveArray[1] = 1;
+  waveArray[2] = 0.5;
+  waveArray[3] = 0;
+  waveArray[4] = 0.5;
+  waveArray[5] = 1;
+  waveArray[6] = 0.5;
+  waveArray[7] = 0;
+  waveArray[8] = 0.5;
 
-}
+  valueCurve.onclick = function() {
+    gainNode.gain.setValueCurveAtTime(waveArray, audioCtx.currentTime, 2);
+
+  }
+
+});
 
   </script>
 </html>

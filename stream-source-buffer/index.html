@@ -19,7 +19,7 @@
     </video>
     <br>
     <input type="range" min="1" max="40">
-    
+
     <pre></pre>
 
     <p>Biquad filter frequency response for: </p>
@@ -27,24 +27,24 @@
     </ul>
   </body>
 <script>
-var myAudio = document.querySelector('audio');
-var pre = document.querySelector('pre');
-var video = document.querySelector('video');
-var myScript = document.querySelector('script');
-var range = document.querySelector('input');
-var freqResponseOutput = document.querySelector('.freq-response-output');
+const myAudio = document.querySelector('audio');
+const pre = document.querySelector('pre');
+const video = document.querySelector('video');
+const myScript = document.querySelector('script');
+const range = document.querySelector('input');
+const freqResponseOutput = document.querySelector('.freq-response-output');
 // create float32 arrays for getFrequencyResponse
-var myFrequencyArray = new Float32Array(5);
+const myFrequencyArray = new Float32Array(5);
 myFrequencyArray[0] = 1000;
 myFrequencyArray[1] = 2000;
 myFrequencyArray[2] = 3000;
 myFrequencyArray[3] = 4000;
 myFrequencyArray[4] = 5000;
-var magResponseOutput = new Float32Array(5);
-var phaseResponseOutput = new Float32Array(5);
+const magResponseOutput = new Float32Array(5);
+const phaseResponseOutput = new Float32Array(5);
 // getUserMedia block - grab stream
 // put it into a MediaStreamAudioSourceNode
-// also output the visuals into a video element 
+// also output the visuals into a video element
 if (navigator.mediaDevices) {
     console.log('getUserMedia supported.');
     navigator.mediaDevices.getUserMedia ({audio: true, video: true})
@@ -56,10 +56,10 @@ if (navigator.mediaDevices) {
         };
         // Create a MediaStreamAudioSourceNode
         // Feed the HTMLMediaElement into it
-        var audioCtx = new AudioContext();
-        var source = audioCtx.createMediaStreamSource(stream);
+        const audioCtx = new AudioContext();
+        const source = audioCtx.createMediaStreamSource(stream);
         // Create a biquadfilter
-        var biquadFilter = audioCtx.createBiquadFilter();
+        const biquadFilter = audioCtx.createBiquadFilter();
         biquadFilter.type = "lowshelf";
         biquadFilter.frequency.value = 1000;
         biquadFilter.gain.value = range.value;
@@ -76,7 +76,7 @@ if (navigator.mediaDevices) {
         function calcFrequencyResponse() {
             biquadFilter.getFrequencyResponse(myFrequencyArray,magResponseOutput,phaseResponseOutput);
             for (i = 0; i <= myFrequencyArray.length-1;i++){
-                var listItem = document.createElement('li');
+                let listItem = document.createElement('li');
                 listItem.innerHTML = '<strong>' + myFrequencyArray[i] + 'Hz</strong>: Magnitude ' + magResponseOutput[i] + ', Phase ' + phaseResponseOutput[i] + ' radians.';
                 freqResponseOutput.appendChild(listItem);
             }

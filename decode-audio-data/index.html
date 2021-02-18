@@ -16,6 +16,8 @@
   <body>
     <h1>decodeAudioData example</h1>
 
+    <p>Note: This example does not work in Safari, due to some kind of bug.</p>
+
     <button class="play">Play</button>
     <button class="stop">Stop</button>
 
@@ -29,7 +31,7 @@
 
     <input class="loopend-control" type="range" min="0" max="20" step="1" value="0">
     <span class="loopend-value">0</span>
-   
+
     <pre></pre>
   </body>
 <script>
@@ -37,25 +39,25 @@
 
 // define variables
 
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-var source;
-var songLength;
+let audioCtx;
+let source;
+let songLength;
 
-var pre = document.querySelector('pre');
-var myScript = document.querySelector('script');
-var play = document.querySelector('.play');
-var stop = document.querySelector('.stop');
+const pre = document.querySelector('pre');
+const myScript = document.querySelector('script');
+const play = document.querySelector('.play');
+const stop = document.querySelector('.stop');
 
-var playbackControl = document.querySelector('.playback-rate-control');
-var playbackValue = document.querySelector('.playback-rate-value');
+const playbackControl = document.querySelector('.playback-rate-control');
+const playbackValue = document.querySelector('.playback-rate-value');
 playbackControl.setAttribute('disabled', 'disabled');
 
-var loopstartControl = document.querySelector('.loopstart-control');
-var loopstartValue = document.querySelector('.loopstart-value');
+const loopstartControl = document.querySelector('.loopstart-control');
+const loopstartValue = document.querySelector('.loopstart-value');
 loopstartControl.setAttribute('disabled', 'disabled');
 
-var loopendControl = document.querySelector('.loopend-control');
-var loopendValue = document.querySelector('.loopend-value');
+const loopendControl = document.querySelector('.loopend-control');
+const loopendValue = document.querySelector('.loopend-value');
 loopendControl.setAttribute('disabled', 'disabled');
 
 // use XHR to load an audio track, and
@@ -63,16 +65,22 @@ loopendControl.setAttribute('disabled', 'disabled');
 // Then we put the buffer into the source
 
 function getData() {
+  if(window.webkitAudioContext) {
+    audioCtx = new window.webkitAudioContext();
+  } else {
+    audioCtx = new window.AudioContext();
+  }
+
   source = audioCtx.createBufferSource();
   request = new XMLHttpRequest();
 
-  request.open('GET', 'viper.ogg', true);
+  request.open('GET', 'viper.mp3', true);
 
   request.responseType = 'arraybuffer';
 
 
   request.onload = function() {
-    var audioData = request.response;
+    let audioData = request.response;
 
     audioCtx.decodeAudioData(audioData, function(buffer) {
         myBuffer = buffer;
@@ -80,13 +88,13 @@ function getData() {
         source.buffer = myBuffer;
         source.playbackRate.value = playbackControl.value;
         source.connect(audioCtx.destination);
-        //source.loop = true;
+        source.loop = true;
 
         loopstartControl.setAttribute('max', Math.floor(songLength));
         loopendControl.setAttribute('max', Math.floor(songLength));
       },
 
-      function(e){"Error with decoding audio data" + e.err});
+      function(e){"Error with decoding audio data" + e.error});
 
   }
 

@@ -15,9 +15,9 @@
 
   <body>
     <h1>StereoPannerNode example</h1>
-    <audio controls>  
+    <audio controls>
       <source src="viper.ogg" type="audio/ogg">
-      <source src="viper.mp3" type="audio/mp3">   
+      <source src="viper.mp3" type="audio/mp3">
       <p>Browser too old to support HTML5 audio? How depressing!</p>
     </audio>
     <h2>Set stereo panning</h2>
@@ -26,35 +26,42 @@
     <pre></pre>
   </body>
 <script>
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-var myAudio = document.querySelector('audio');
-var pre = document.querySelector('pre');
-var myScript = document.querySelector('script');
+let audioCtx;
+const myAudio = document.querySelector('audio');
+const pre = document.querySelector('pre');
+const myScript = document.querySelector('script');
 
-var panControl = document.querySelector('.panning-control');
-var panValue = document.querySelector('.panning-value');
+const panControl = document.querySelector('.panning-control');
+const panValue = document.querySelector('.panning-value');
 
 pre.innerHTML = myScript.innerHTML;
 
-// Create a MediaElementAudioSourceNode
-// Feed the HTMLMediaElement into it
-var source = audioCtx.createMediaElementSource(myAudio);
+myAudio.addEventListener('play', () => {
+  // Create audio context if it doesn't already exist
+  if(!audioCtx) {
+    audioCtx = new window.AudioContext();
+  }
 
-// Create a stereo panner
-var panNode = audioCtx.createStereoPanner();
+  // Create a MediaElementAudioSourceNode
+  // Feed the HTMLMediaElement into it
+  let source = audioCtx.createMediaElementSource(myAudio);
 
-// Event handler function to increase panning to the right and left
-// when the slider is moved
+  // Create a stereo panner
+  let panNode = audioCtx.createStereoPanner();
 
-panControl.oninput = function() {
-  panNode.pan.value = panControl.value;
-  panValue.innerHTML = panControl.value;
-}
+  // Event handler function to increase panning to the right and left
+  // when the slider is moved
 
-// connect the AudioBufferSourceNode to the gainNode
-// and the gainNode to the destination, so we can play the
-// music and adjust the panning using the controls
-source.connect(panNode);
-panNode.connect(audioCtx.destination);
+  panControl.oninput = function() {
+    panNode.pan.value = panControl.value;
+    panValue.innerHTML = panControl.value;
+  }
+
+  // connect the AudioBufferSourceNode to the gainNode
+  // and the gainNode to the destination, so we can play the
+  // music and adjust the panning using the controls
+  source.connect(panNode);
+  panNode.connect(audioCtx.destination);
+})
   </script>
 </html>
