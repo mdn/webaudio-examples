@@ -104,7 +104,6 @@ console.clear();
 const audioCtx = new AudioContext();
 
 // TODO make all frequencies like each other
-// TODO set value at time rather than value
 
 // Before we do anything more, let's grab our checkboxes from the interface. We want to keep them in the groups they are in as each row represents a different sound or _voice_.
 
@@ -139,20 +138,20 @@ releaseControl.addEventListener('input', ev => {
 
 const sweepLength = 2;
 // expose attack time & release time
-function playSweep() {
+function playSweep(time) {
   const osc = audioCtx.createOscillator();
   osc.setPeriodicWave(wave);
   osc.frequency.value = 380;
 
   const sweepEnv = audioCtx.createGain();
-  sweepEnv.gain.cancelScheduledValues(audioCtx.currentTime);
-  sweepEnv.gain.setValueAtTime(0, audioCtx.currentTime);
-  sweepEnv.gain.linearRampToValueAtTime(1, audioCtx.currentTime + attackTime);
-  sweepEnv.gain.linearRampToValueAtTime(0, audioCtx.currentTime + sweepLength - releaseTime);
+  sweepEnv.gain.cancelScheduledValues(time);
+  sweepEnv.gain.setValueAtTime(0, time);
+  sweepEnv.gain.linearRampToValueAtTime(1, time + attackTime);
+  sweepEnv.gain.linearRampToValueAtTime(0, time + sweepLength - releaseTime);
 
   osc.connect(sweepEnv).connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + sweepLength);
+  osc.start(time);
+  osc.stop(time + sweepLength);
 }
 
 
@@ -170,23 +169,23 @@ lfoControl.addEventListener('input', ev => {
 }, false);
 
 const pulseTime = 1;
-function playPulse() {
+function playPulse(time) {
   const osc = audioCtx.createOscillator();
   osc.type = 'sine';
-  osc.frequency.setValueAtTime(pulseHz, audioCtx.currentTime);
+  osc.frequency.value = pulseHz;
 
   const amp = audioCtx.createGain();
-  amp.gain.setValueAtTime(1, audioCtx.currentTime);
+  amp.gain.value = 1;
 
   const lfo = audioCtx.createOscillator();
   lfo.type = 'square';
-  lfo.frequency.setValueAtTime(lfoHz, audioCtx.currentTime);
+  lfo.frequency.value = lfoHz;
 
   lfo.connect(amp.gain);
   osc.connect(amp).connect(audioCtx.destination);
   lfo.start();
-  osc.start();
-  osc.stop(audioCtx.currentTime + pulseTime);
+  osc.start(time);
+  osc.stop(time + pulseTime);
 }
 
 
@@ -203,7 +202,7 @@ bandControl.addEventListener('input', ev => {
   bandHz = Number(ev.target.value);
 }, false);
 
-function playNoise() {
+function playNoise(time) {
   const bufferSize = audioCtx.sampleRate * noiseDuration; // set the time of the note
   const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); // create an empty buffer
   const data = buffer.getChannelData(0); // get data
@@ -223,7 +222,7 @@ function playNoise() {
 
   // connect our graph
   noise.connect(bandpass).connect(audioCtx.destination);
-  noise.start();
+  noise.start(time);
 }
 
 // Loading ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -242,12 +241,12 @@ rateControl.addEventListener('input', ev => {
 }, false);
 
 // create a buffer, plop in data, connect and play -> modify graph here if required
-function playSample(audioContext, audioBuffer) {
+function playSample(audioContext, audioBuffer, time) {
   const sampleSource = audioContext.createBufferSource();
   sampleSource.buffer = audioBuffer;
-  sampleSource.playbackRate.setValueAtTime(playbackRate, audioCtx.currentTime);
+  sampleSource.playbackRate.value = playbackRate;
   sampleSource.connect(audioContext.destination)
-  sampleSource.start();
+  sampleSource.start(time);
   return sampleSource;
 }
 
@@ -297,17 +296,17 @@ function scheduleNote(beatNumber, time) {
   notesInQueue.push({note: beatNumber, time: time});
   // console.log(beatNumber, time);
 
-  if (pads[0].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playSweep();
+  if (pads[0].querySelectorAll('button')[beatNumber].getAttribute('aria-checked') === 'true') {
+    playSweep(time);
   }
-  if (pads[1].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playPulse();
+  if (pads[1].querySelectorAll('button')[beatNumber].getAttribute('aria-checked') === 'true') {
+    playPulse(time);
   }
-  if (pads[2].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playNoise();
+  if (pads[2].querySelectorAll('button')[beatNumber].getAttribute('aria-checked') === 'true') {
+    playNoise(time);
   }
-  if (pads[3].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-    playSample(audioCtx, dtmf);
+  if (pads[3].querySelectorAll('button')[beatNumber].getAttribute('aria-checked') === 'true') {
+    playSample(audioCtx, dtmf, time);
   }
 
 }
