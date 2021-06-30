@@ -16,6 +16,9 @@ The [audio-param](https://github.com/mdn/webaudio-examples/tree/master/audio-par
 ## Audio context states
 The [audiocontext-states](https://github.com/mdn/webaudio-examples/tree/master/audiocontext-states) directory contains a simple demo of the new Web Audio API <code>[AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext)</code> methods, including the <code>states</code> property and the <code>close()</code>, <code>resume()</code>, and <code>suspend()</code> methods. [Run the demo live](http://mdn.github.io/webaudio-examples/audiocontext-states/).
 
+## Audio worklet
+The [audioworklet](https://github.com/mdn/webaudio-examples/tree/master/audioworklet) directory contains an example showing how to use the <code>[AudioWorklet](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet)</code> interface. See also the guide on [background audio processing using AudioWorklet](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_AudioWorklet). [Run the example live](http://mdn.github.io/webaudio-examples/audioworklet/).
+
 ## Compressor example
 The [compressor-example](https://github.com/mdn/webaudio-examples/tree/master/compressor-example) directory contains a simple demo to show usage of the Web Audio API <code>[BaseAudioContext.createDynamicsCompressor()](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createDynamicsCompressor)</code> method and <code>[DynamicsCompressorNode](https://developer.mozilla.org/en-US/docs/Web/API/DynamicsCompressorNode)</code> interface. [Run the example live](http://mdn.github.io/webaudio-examples/compressor-example/).
 
