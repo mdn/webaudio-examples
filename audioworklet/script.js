@@ -25,7 +25,6 @@ async function createHissProcessor() {
       await audioContext.audioWorklet.addModule("hiss-generator.js");
       processorNode = new AudioWorkletNode(audioContext, "hiss-generator");
     } catch(e) {
-      console.log("foo");
       console.log(`** Error: Unable to create worklet node: ${e}`);
       return null;
     }

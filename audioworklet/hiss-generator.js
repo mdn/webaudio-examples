@@ -80,5 +80,5 @@
       return true;
     }
   }
-  console.log("...")
+
   registerProcessor("hiss-generator", HissGeneratorProcessor);
