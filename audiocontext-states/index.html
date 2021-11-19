@@ -40,6 +40,9 @@
     startBtn.setAttribute('disabled','disabled');
     susresBtn.removeAttribute('disabled');
     stopBtn.removeAttribute('disabled');
+    
+    // Refresh the label from any previous 'Resume context'
+    susresBtn.textContent = 'Suspend context';
 
     // create web audio api context
     AudioContext = window.AudioContext || window.webkitAudioContext;
