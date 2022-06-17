@@ -1,0 +1,86 @@
+/* general styling */
+
+html {
+  font-size: 10px;
+  height: 100%;
+}
+
+body {
+	width: 100%;
+	height: inherit;
+}
+
+canvas {
+  display: block;
+}
+
+/* header styling */
+
+h1 {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  font-size: 3rem;
+  margin: 0;
+  color: white;
+  text-shadow: 0 0 10px rgba(0,0,0,0.3) ;
+}
+
+/* button styling */
+
+button {
+    background-color: #0088cc;
+    background-image: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
+    text-shadow: 1px 1px 1px black;
+    text-align: center;
+    color: white;
+    border: none;
+    width: 150px;
+    font-size: 1.6rem;
+    line-height: 2rem;
+    padding: .5rem;
+    display: block;
+    opacity: 0.3;
+
+    transition: 1s all;
+    -webkit-transition: 1s all;
+
+    position: absolute;
+}
+
+button:hover, button:focus {
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.7);
+  opacity: 1;
+}
+
+button:active {
+  box-shadow: inset 2px 2px 3px rgba(0,0,0,0.7);
+}
+
+#activated {
+  background-color: red;
+  color: white;
+}
+
+.mute {
+  top: 41px;
+  left: 5px;
+}
+
+.clear {
+  top: 6px;
+  left: 5px;
+}
+
+.start-message {
+  position: absolute;
+  font-size: 1.4rem;
+  left: 5px;
+}
+
+.control-message {
+  position: absolute;
+  font-size: 1.4rem;
+  top: 70px;
+  left: 5px;
+}

@@ -63,3 +63,9 @@ The [stereo-panner-node](https://github.com/mdn/webaudio-examples/tree/master/st
 
 ## Stream source buffer
 The [stream-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/stream-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API [`AudioContext.createMediaElementSource()`](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) method. [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
+
+## Violent theremin
+
+Violent theremin uses the Web Audio API to generate sound, and HTML5 canvas for a bit of pretty visualization. The colours generated depend on the pitch and gain of the current note, which are themselves dependent on the mouse pointer position.
+
+You can [view the demo](http://mdn.github.io/webaudio-examples/violent-theremin/) live here.
