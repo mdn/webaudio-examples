@@ -37,20 +37,19 @@
         audioCtx = new AudioContext();
 
         // Create an Oscillator and a Gain node
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
+        const oscillator = new OscillatorNode(audioCtx, {
+          type: "square",
+          frequency: 100, // Value in Herz
+        });
+        const gainNode = new GainNode(audioCtx, { gain: 0.1 });
 
         // Connect both nodes to the speakers
 
         oscillator.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
-        // Make noise, sweet noise
-        oscillator.type = "square";
-        oscillator.frequency.value = 100; // value in hertz
+        // Now that everything is connected, starts the sound
         oscillator.start(0);
-
-        gainNode.gain.value = 0.1;
 
         // Report the state of the audio context to the
         // console, when it changes
