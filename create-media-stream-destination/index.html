@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>createMediaStreamDestination() demo</title>
+    <title>Web Audio API examples: MediaStreamAudioDestination()</title>
   </head>
   <body>
-    <h1>createMediaStreamDestination() demo</h1>
+    <h1>Web Audio API examples: MediaStreamAudioDestination()</h1>
 
     <p>Encoding a pure sine wave to an Opus file </p>
     <p><button>Make sine wave</button></p>
@@ -22,25 +22,24 @@
 
      function init() {
        ac = new AudioContext();
-       osc = ac.createOscillator();
-       dest = ac.createMediaStreamDestination();
+       osc = new OscillatorNode(ac);
+       dest = new MediaStreamAudioDestinationNode(ac);
        mediaRecorder = new MediaRecorder(dest.stream);
        osc.connect(dest);
 
-       mediaRecorder.ondataavailable = function(evt) {
+       mediaRecorder.ondataavailable = (evt) => {
          // push each chunk (blobs) in an array
          chunks.push(evt.data);
        };
 
-       mediaRecorder.onstop = function(evt) {
+       mediaRecorder.onstop = (evt) => {
          // Make blob out of our blobs, and open it.
-         let blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-         let audioTag = document.createElement('audio');
+         const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
          document.querySelector("audio").src = URL.createObjectURL(blob);
        };
      }
 
-     b.addEventListener("click", function(e) {
+     b.addEventListener("click", (e) => {
        if(!ac) {
            init();
        }
@@ -48,7 +47,7 @@
        if (!clicked) {
            mediaRecorder.start();
            osc.start(0);
-           e.target.innerHTML = "Stop recording";
+           e.target.textContent = "Stop recording";
            clicked = true;
          } else {
            mediaRecorder.requestData();
