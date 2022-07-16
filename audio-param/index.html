@@ -42,9 +42,8 @@
     let audioCtx;
 
     // set basic variables for example
-    const myAudio = document.querySelector("audio");
+    const audioElt = document.querySelector("audio");
     const pre = document.querySelector("pre");
-    const myScript = document.querySelector("script");
 
     const targetAtTimePlus = document.querySelector(".set-target-at-time-plus");
     const targetAtTimeMinus = document.querySelector(
@@ -58,16 +57,18 @@
     const atTimeMinus = document.querySelector(".at-time-minus");
     const valueCurve = document.querySelector(".value-curve");
 
-    myAudio.addEventListener("play", () => {
+    audioElt.addEventListener("play", () => {
       audioCtx = new AudioContext();
 
       // Create a MediaElementAudioSourceNode
       // Feed the HTMLMediaElement into it
-      const source = audioCtx.createMediaElementSource(myAudio);
+      const source = new MediaElementSourceNode(audioCtx, {
+        mediaElement: audioElt,
+      });
 
       // Create a gain node and set it's gain value to 0.5
-      const gainNode = audioCtx.createGain();
-      gainNode.gain.value = 0.5;
+      const gainNode = new GainNode(audioCtx, { gain: 0.5 });
+
       let currGain = gainNode.gain.value;
 
       // connect the AudioBufferSourceNode to the gainNode
