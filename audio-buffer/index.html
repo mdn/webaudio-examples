@@ -32,11 +32,11 @@
       // sample rate of the AudioContext
       const frameCount = audioCtx.sampleRate * 2.0;
 
-      const buffer = audioCtx.createBuffer(
-        channels,
-        frameCount,
-        audioCtx.sampleRate
-      );
+      const buffer = new AudioBuffer(audioCtx, {
+        numberOfChannels: channels,
+        length: frameCount,
+        sampleRate: audioCtx.sampleRate,
+      });
 
       // Fill the buffer with white noise;
       // just random values between -1.0 and 1.0
