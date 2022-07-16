@@ -134,10 +134,10 @@
 
       function init() {
         audioCtx = new AudioContext();
-        track = audioCtx.createMediaElementSource(audioElement);
+        track = new MediaElementAudioSourceNode(audioCtx, { mediaElement: audioElement });
 
         // Create the node that controls the volume.
-        const gainNode = audioCtx.createGain();
+        const gainNode = new GainNode(audioCtx);
 
         const volumeControl = document.querySelector('[data-action="volume"]');
         volumeControl.addEventListener(
@@ -148,9 +148,8 @@
           false
         );
 
-        // Create the nod ethat controls the panning
-        const pannerOptions = { pan: 0 };
-        const panner = new StereoPannerNode(audioCtx, pannerOptions);
+        // Create the node that controls the panning
+        const panner = new StereoPannerNode(audioCtx, { pan: 0 });
 
         const pannerControl = document.querySelector('[data-action="panner"]');
         pannerControl.addEventListener(
