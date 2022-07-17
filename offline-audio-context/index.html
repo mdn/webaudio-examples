@@ -9,11 +9,11 @@
 
   <body>
     <h1>Web Audio API examples: OfflineAudioContext</h1>
-    <button id="play" disabled="true">Play</button>
+    <button id="play">Play</button>
   </body>
   <script>
     // Define both online and offline audio contexts
-    const audioCtx = new AudioContext();
+    let audioCtx; // Must be defined after a user action
     const offlineCtx = new OfflineAudioContext(2, 44100 * 40, 44100);
 
     // Define useful DOM nodes as constants
@@ -42,25 +42,27 @@
         });
     }
 
-    // Read the data
-    getData();
-
     // Once the data is ready, let's start the song.
     offlineCtx.oncomplete = (e) => {
       const song = new AudioBufferSourceNode(audioCtx, {
         buffer: e.renderedBuffer,
       });
       song.connect(audioCtx.destination);
+      
+      // Play the song
+      song.start();
+    };
 
-      // Loaded and connected, we can play it we want
-      play.disabled = false;
-      play.onclick = () => {
-        song.start();
-        // No rerun possible as we can't start() it again.
-        play.disabled = true;
-      };
+    play.onclick = () => {
+      // The user did an action, we can create an audio context
+      audioCtx = new AudioContext();
 
+      // Read the data
+      getData();
       console.log("Initialisation completed.");
+
+      // No rerun possible as we can't call start() it again.
+      play.disabled = true;
     };
   </script>
 </html>
