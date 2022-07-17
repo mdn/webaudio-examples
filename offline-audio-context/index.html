@@ -19,34 +19,27 @@
     // Define useful DOM nodes as constants
     const play = document.querySelector("#play");
 
-    // Use XHR to load an audio track, and
-    // decodeAudioData to decode it and stick it in a buffer.
-    // Then we put the buffer into the source
+    // Fetch an audio track, decode it and stick it in a buffer.
+    // Then put the buffer into the source and start playing it.
     function getData() {
-      request = new XMLHttpRequest();
-
-      request.open("GET", "viper.ogg", true);
-
-      request.responseType = "arraybuffer";
-
-      request.onload = function () {
-        audioCtx.decodeAudioData(
-          request.response,
-          (decodedBuffer) => {
-            const source = new AudioBufferSourceNode(offlineCtx, {
-              buffer: decodedBuffer,
-            });
-            source.connect(offlineCtx.destination);
-            source.start();
-            offlineCtx.startRendering();
-          },
-          (e) => {
-            console.log(`Error while decoding audio data ${e.err}.`);
-          }
-        );
-      };
-
-      request.send();
+      fetch("viper.ogg")
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => {
+          audioCtx.decodeAudioData(
+            buffer,
+            (decodedBuffer) => {
+              const source = new AudioBufferSourceNode(offlineCtx, {
+                buffer: decodedBuffer,
+              });
+              source.connect(offlineCtx.destination);
+              source.start();
+              offlineCtx.startRendering();
+            },
+            (e) => {
+              console.log(`Error while decoding audio data ${e.err}.`);
+            }
+          );
+        });
     }
 
     // Read the data
@@ -67,7 +60,7 @@
         play.disabled = true;
       };
 
-      console.log("Completed.");
+      console.log("Initialisation completed.");
     };
   </script>
 </html>
