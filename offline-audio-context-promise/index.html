@@ -23,11 +23,11 @@
       // Then we put the buffer into the source and can play it.
       fetch("viper.ogg")
         .then((response) => response.arrayBuffer())
-        .then((buffer) => audioCtx.decodeAudioData(buffer))
-        .then((downloadedBuffer) => {
+        .then((downloadedBuffer) => audioCtx.decodeAudioData(downloadedBuffer))
+        .then((decodedBuffer) => {
           console.log("File downloaded.successfully.");
           const source = new AudioBufferSourceNode(offlineCtx, {
-            buffer: downloadedBuffer,
+            buffer: decodedBuffer,
           });
           source.connect(offlineCtx.destination);
           return source.start();
