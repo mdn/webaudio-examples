@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
 
     <title>offlineAudioContext example</title>
 
-    <link rel="stylesheet" href="" />
+    <link rel="stylesheet" href="">
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -20,75 +20,73 @@
 
     <pre></pre>
   </body>
-  <script>
-    // define online and offline audio context
+<script>
 
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioCtx = new AudioContext();
-    const offlineCtx = new OfflineAudioContext(2, 44100 * 40, 44100);
+// define online and offline audio context
 
-    source = offlineCtx.createBufferSource();
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+const offlineCtx = new OfflineAudioContext(2,44100*40,44100);
 
-    // define dom node constants
+source = offlineCtx.createBufferSource();
 
-    const pre = document.querySelector("pre");
-    const myScript = document.querySelector("script");
-    const play = document.querySelector(".play");
-    const stop = document.querySelector(".stop");
+// define dom node constants
 
-    // use XHR to load an audio track, and
-    // decodeAudioData to decode it and stick it in a buffer.
-    // Then we put the buffer into the source
+const pre = document.querySelector('pre');
+const myScript = document.querySelector('script');
+const play = document.querySelector('.play');
+const stop = document.querySelector('.stop');
 
-    function getData() {
-      request = new XMLHttpRequest();
+// use XHR to load an audio track, and
+// decodeAudioData to decode it and stick it in a buffer.
+// Then we put the buffer into the source
 
-      request.open("GET", "viper.ogg", true);
+function getData() {
+  request = new XMLHttpRequest();
 
-      request.responseType = "arraybuffer";
+  request.open('GET', 'viper.ogg', true);
 
-      request.onload = function () {
-        let audioData = request.response;
+  request.responseType = 'arraybuffer';
 
-        audioCtx.decodeAudioData(
-          audioData,
-          function (buffer) {
-            myBuffer = buffer;
-            source.buffer = myBuffer;
-            source.connect(offlineCtx.destination);
-            source.start();
-            //source.loop = true;
-            offlineCtx.startRendering();
-          },
 
-          function (e) {
-            "Error with decoding audio data" + e.err;
-          }
-        );
-      };
+  request.onload = function() {
+    let audioData = request.response;
 
-      request.send();
-    }
+    audioCtx.decodeAudioData(audioData, function(buffer) {
+        myBuffer = buffer;
+        source.buffer = myBuffer;
+        source.connect(offlineCtx.destination);
+        source.start();
+        //source.loop = true;
+        offlineCtx.startRendering();
+      },
 
-    // wire up buttons to stop and play audio, and range slider control
+      function(e){"Error with decoding audio data" + e.err});
 
-    getData();
+  }
 
-    offlineCtx.oncomplete = function (e) {
-      let song = audioCtx.createBufferSource();
-      song.buffer = e.renderedBuffer;
+  request.send();
+}
 
-      song.connect(audioCtx.destination);
+// wire up buttons to stop and play audio, and range slider control
 
-      play.onclick = function () {
-        song.start();
-      };
+getData();
 
-      console.log("completed!");
-    };
+offlineCtx.oncomplete = function(e) {
+  let song = audioCtx.createBufferSource();
+  song.buffer = e.renderedBuffer;
 
-    // dump script to pre element
+  song.connect(audioCtx.destination);
 
-    pre.innerHTML = myScript.innerHTML;
+  play.onclick = function() {
+    song.start();
+  }
+
+  console.log("completed!");
+}
+
+// dump script to pre element
+
+pre.innerHTML = myScript.innerHTML;
   </script>
 </html>
