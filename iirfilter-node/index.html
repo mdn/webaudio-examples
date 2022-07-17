@@ -9,7 +9,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
-    <style type="text/css">
+    <style>
       :root {
         --orange: hsla(32, 100%, 50%, 1);
         --yellow: hsla(49, 99%, 50%, 1);
@@ -208,7 +208,7 @@
       </div>
     </div>
 
-    <script type="text/javascript">
+    <script>
       console.clear();
 
       // Create the audio context
@@ -242,7 +242,7 @@
       // Change this to change the filter - can be 0-3 and will reference the values in the array below
       const filterNumber = 2;
 
-      let lowPassCoefs = [
+      const lowPassCoefs = [
         {
           frequency: 200,
           feedforward: [0.00020298, 0.0004059599, 0.00020298],
