@@ -1,92 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
 
-    <title>offlineAudioContext example</title>
-
-    <link rel="stylesheet" href="">
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <title>Web Audio API examples: OfflineAudioContext</title>
   </head>
 
   <body>
-    <h1>offlineAudioContext example</h1>
-
-    <button class="play">Play</button>
-
-    <pre></pre>
+    <h1>Web Audio API examples: OfflineAudioContext</h1>
+    <button id="play" disabled="true">Play</button>
   </body>
-<script>
+  <script>
+    // Define both online and offline audio contexts
+    const audioCtx = new AudioContext();
+    const offlineCtx = new OfflineAudioContext(2, 44100 * 40, 44100);
 
-// define online and offline audio context
+    source = new AudioBufferSourceNode(offlineCtx);
 
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioCtx = new AudioContext();
-const offlineCtx = new OfflineAudioContext(2,44100*40,44100);
+    // Define useful DOM nodes as constants
+    const play = document.querySelector("#play");
 
-source = offlineCtx.createBufferSource();
+    // Use XHR to load an audio track, and
+    // decodeAudioData to decode it and stick it in a buffer.
+    // Then we put the buffer into the source
+    function getData() {
+      request = new XMLHttpRequest();
 
-// define dom node constants
+      request.open("GET", "viper.ogg", true);
 
-const pre = document.querySelector('pre');
-const myScript = document.querySelector('script');
-const play = document.querySelector('.play');
-const stop = document.querySelector('.stop');
+      request.responseType = "arraybuffer";
 
-// use XHR to load an audio track, and
-// decodeAudioData to decode it and stick it in a buffer.
-// Then we put the buffer into the source
+      request.onload = function () {
+        let audioData = request.response;
 
-function getData() {
-  request = new XMLHttpRequest();
+        audioCtx.decodeAudioData(
+          audioData,
+          (buffer) => {
+            source.buffer = buffer;
+            source.connect(offlineCtx.destination);
+            source.start();
+            offlineCtx.startRendering();
+          },
+          (e) => {
+            console.log(`Error while decoding audio data ${e.err}.`);
+          }
+        );
+      };
 
-  request.open('GET', 'viper.ogg', true);
+      request.send();
+    }
 
-  request.responseType = 'arraybuffer';
+    // Read the data
+    getData();
 
+    // Once the data is ready, let's start the song.
+    offlineCtx.oncomplete = (e) => {
+      const song = new AudioBufferSourceNode(audioCtx, {
+        buffer: e.renderedBuffer,
+      });
+      song.connect(audioCtx.destination);
 
-  request.onload = function() {
-    let audioData = request.response;
+      // Loaded and connected, we can play it we want
+      play.disabled = false;
+      play.onclick = () => {
+        song.start();
+        // No rerun possible as we can't start() it again.
+        play.disabled = true;
+      };
 
-    audioCtx.decodeAudioData(audioData, function(buffer) {
-        myBuffer = buffer;
-        source.buffer = myBuffer;
-        source.connect(offlineCtx.destination);
-        source.start();
-        //source.loop = true;
-        offlineCtx.startRendering();
-      },
-
-      function(e){"Error with decoding audio data" + e.err});
-
-  }
-
-  request.send();
-}
-
-// wire up buttons to stop and play audio, and range slider control
-
-getData();
-
-offlineCtx.oncomplete = function(e) {
-  let song = audioCtx.createBufferSource();
-  song.buffer = e.renderedBuffer;
-
-  song.connect(audioCtx.destination);
-
-  play.onclick = function() {
-    song.start();
-  }
-
-  console.log("completed!");
-}
-
-// dump script to pre element
-
-pre.innerHTML = myScript.innerHTML;
+      console.log("Completed.");
+    };
   </script>
 </html>
