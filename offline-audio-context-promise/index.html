@@ -8,65 +8,55 @@
 
   <body>
     <h1>Web Audio API examples: OfflineAudioContext (using promises)</h1>
-    <button id="play" disabled="true">Play</button>
+    <button id="play">Play</button>
   </body>
   <script>
     // Define both online and offline audio contexts
-    const audioCtx = new AudioContext();
+    let audioCtx; // Must be initialized after a user interaction
     const offlineCtx = new OfflineAudioContext(2, 44100 * 40, 44100);
 
     // Define constants for dom nodes
     const play = document.querySelector("#play");
 
-    // use XHR to load an audio track, and
-    // decodeAudioData to decode it and stick it in a buffer.
-    // Then we put the buffer into the source
-
     function getData() {
-      request = new XMLHttpRequest();
-
-      request.open("GET", "viper.ogg", true);
-
-      request.responseType = "arraybuffer";
-
-      request.onload = () => {
-        audioCtx.decodeAudioData(request.response).then((downloadedBuffer) => {
+      // Fetch an audio track, decode it and stick it in a buffer.
+      // Then we put the buffer into the source and can play it.
+      fetch("viper.ogg")
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => audioCtx.decodeAudioData(buffer))
+        .then((downloadedBuffer) => {
           console.log("File downloaded.successfully.");
           const source = new AudioBufferSourceNode(offlineCtx, {
             buffer: downloadedBuffer,
           });
           source.connect(offlineCtx.destination);
-          source.start();
-
-          offlineCtx
-            .startRendering()
-            .then((renderedBuffer) => {
-              console.log("Rendering completed successfully.");
-              play.disabled = false;
-              const song = new AudioBufferSourceNode(audioCtx, {
-                buffer: renderedBuffer,
-              });
-              song.connect(audioCtx.destination);
-
-              play.onclick = () => {
-                song.start();
-                play.disabled = true;
-              };
-            })
-            .catch((err) => {
-              console.error(`Rendering failed: ${err}`);
-            });
+          return source.start();
+        })
+        .then(() => offlineCtx.startRendering())
+        .then((renderedBuffer) => {
+          console.log("Rendering completed successfully.");
+          play.disabled = false;
+          const song = new AudioBufferSourceNode(audioCtx, {
+            buffer: renderedBuffer,
+          });
+          song.connect(audioCtx.destination);
+          
+          // Start the song
+          song.start();
         })
         .catch((err) => {
-          console.error(`Download error: ${err}`);
+          console.error(`Error encountered: ${err}`);
         });
-      };
-
-      request.send();
     }
 
-    // Run getData to start the process off
+    // Activate the play button 
+    play.onclick = () => {
+      play.disabled = true;
+      // We can initialize the context as the user clicked.
+      audioCtx = new AudioContext();
 
-    getData();
+      // Fetch the data and start the song
+      getData();
+    };
   </script>
 </html>
