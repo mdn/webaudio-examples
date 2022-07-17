@@ -16,8 +16,6 @@
     const audioCtx = new AudioContext();
     const offlineCtx = new OfflineAudioContext(2, 44100 * 40, 44100);
 
-    source = new AudioBufferSourceNode(offlineCtx);
-
     // Define useful DOM nodes as constants
     const play = document.querySelector("#play");
 
@@ -32,12 +30,12 @@
       request.responseType = "arraybuffer";
 
       request.onload = function () {
-        let audioData = request.response;
-
         audioCtx.decodeAudioData(
-          audioData,
-          (buffer) => {
-            source.buffer = buffer;
+          request.response,
+          (decodedBuffer) => {
+            const source = new AudioBufferSourceNode(offlineCtx, {
+              buffer: decodedBuffer,
+            });
             source.connect(offlineCtx.destination);
             source.start();
             offlineCtx.startRendering();
