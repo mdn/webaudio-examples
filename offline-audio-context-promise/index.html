@@ -1,89 +1,72 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>offlineAudioContext example</title>
-
-    <link rel="stylesheet" href="">
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
   </head>
 
   <body>
     <h1>offlineAudioContext example with startRendering() promise</h1>
-
-    <button class="play">Play</button>
-
-    <pre></pre>
+    <button id="play" disabled="true">Play</button>
   </body>
-<script>
+  <script>
+    // Define both online and offline audio contexts
+    const audioCtx = new AudioContext();
+    const offlineCtx = new OfflineAudioContext(2, 44100 * 40, 44100);
 
-// define online and offline audio context
+    // Define constants for dom nodes
+    const play = document.querySelector("#play");
 
-let audioCtx = new AudioContext();
-let offlineCtx = new OfflineAudioContext(2,44100*40,44100);
+    // use XHR to load an audio track, and
+    // decodeAudioData to decode it and stick it in a buffer.
+    // Then we put the buffer into the source
 
-source = offlineCtx.createBufferSource();
+    function getData() {
+      request = new XMLHttpRequest();
 
-// define constants for dom nodes
+      request.open("GET", "viper.ogg", true);
 
-const pre = document.querySelector('pre');
-const myScript = document.querySelector('script');
-const play = document.querySelector('.play');
-const stop = document.querySelector('.stop');
+      request.responseType = "arraybuffer";
 
-// use XHR to load an audio track, and
-// decodeAudioData to decode it and stick it in a buffer.
-// Then we put the buffer into the source
+      request.onload = () => {
+        audioCtx.decodeAudioData(request.response).then((downloadedBuffer) => {
+          console.log("File downloaded.successfully.");
+          const source = new AudioBufferSourceNode(offlineCtx, {
+            buffer: downloadedBuffer,
+          });
+          source.connect(offlineCtx.destination);
+          source.start();
 
-function getData() {
-  request = new XMLHttpRequest();
+          offlineCtx
+            .startRendering()
+            .then((renderedBuffer) => {
+              console.log("Rendering completed successfully.");
+              play.disabled = false;
+              const song = new AudioBufferSourceNode(audioCtx, {
+                buffer: renderedBuffer,
+              });
+              song.connect(audioCtx.destination);
 
-  request.open('GET', 'viper.ogg', true);
+              play.onclick = () => {
+                song.start();
+                play.disabled = true;
+              };
+            })
+            .catch((err) => {
+              console.error(`Rendering failed: ${err}`);
+            });
+        })
+        .catch((err) => {
+          console.error(`Download error: ${err}`);
+        });
+      };
 
-  request.responseType = 'arraybuffer';
+      request.send();
+    }
 
+    // Run getData to start the process off
 
-  request.onload = function() {
-    let audioData = request.response;
-
-    audioCtx.decodeAudioData(audioData, function(buffer) {
-      myBuffer = buffer;
-      source.buffer = myBuffer;
-      source.connect(offlineCtx.destination);
-      source.start();
-      //source.loop = true;
-      offlineCtx.startRendering().then(function(renderedBuffer) {
-        console.log('Rendering completed successfully');
-        
-        let song = audioCtx.createBufferSource();
-        song.buffer = renderedBuffer;
-
-        song.connect(audioCtx.destination);
-
-        play.onclick = function() {
-          song.start();
-        }
-      }).catch(function(err) {
-          console.log('Rendering failed: ' + err);
-          // Note: The promise should reject when startRendering is called a second time on an OfflineAudioContext
-      });
-    });
-  }
-
-  request.send();
-}
-
-// Run getData to start the process off
-
-getData();
-
-// dump script to pre element
-
-pre.innerHTML = myScript.innerHTML;
+    getData();
   </script>
 </html>
