@@ -32,7 +32,8 @@
           step="1"
         />
         <span id="bpmval">120</span>
-        <button data-playing="false">Play</button>
+        <input type="checkbox" id="playBtn" />
+        <label for="playBtn">Play</label>
       </section>
 
       <div id="tracks">
@@ -63,20 +64,19 @@
           </section>
           <!--
 
-        -->
+          -->
           <section class="pads">
-            <button role="switch" aria-checked="false">
-              <span>Voice 1, Note 1</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 1, Note 2</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 1, Note 3</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 1, Note 4</span>
-            </button>
+            <input type="checkbox" id="v1n1" />
+            <label for="v1n1">Voice 1, Note 1</label>
+
+            <input type="checkbox" id="v1n2" />
+            <label for="v1n2">Voice 1, Note 2</label>
+
+            <input type="checkbox" id="v1n3" />
+            <label for="v1n3">Voice 1, Note 3</label>
+
+            <input type="checkbox" id="v1n4" />
+            <label for="v1n4">Voice 1, Note 4</label>
           </section>
         </section>
 
@@ -107,20 +107,19 @@
           </section>
           <!--
 
-        -->
+          -->
           <section class="pads">
-            <button role="switch" aria-checked="false">
-              <span>Voice 2, Note 1</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 2, Note 2</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 2, Note 3</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 2, Note 4</span>
-            </button>
+            <input type="checkbox" id="v2n1" />
+            <label for="v2n1">Voice 2, Note 1</label>
+
+            <input type="checkbox" id="v1n2" />
+            <label for="v2n2">Voice 2, Note 2</label>
+
+            <input type="checkbox" id="v1n3" />
+            <label for="v2n3">Voice 2, Note 3</label>
+
+            <input type="checkbox" id="v1n4" />
+            <label for="v2n4">Voice 2, Note 4</label>
           </section>
         </section>
 
@@ -151,20 +150,19 @@
           </section>
           <!--
 
-        -->
+          -->
           <section class="pads">
-            <button role="switch" aria-checked="false">
-              <span>Voice 3, Note 1</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 3, Note 2</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 3, Note 3</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 3, Note 4</span>
-            </button>
+            <input type="checkbox" id="v3n1" />
+            <label for="v3n1">Voice 3, Note 1</label>
+
+            <input type="checkbox" id="v3n2" />
+            <label for="v3n2">Voice 3, Note 2</label>
+
+            <input type="checkbox" id="v3n3" />
+            <label for="v3n3">Voice 3, Note 3</label>
+
+            <input type="checkbox" id="v3n4" />
+            <label for="v3n4">Voice 3, Note 4</label>
           </section>
         </section>
 
@@ -185,20 +183,19 @@
           </section>
           <!--
 
-        -->
+          -->
           <section class="pads">
-            <button role="switch" aria-checked="false">
-              <span>Voice 4, Note 1</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 4, Note 2</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 4, Note 3</span>
-            </button>
-            <button role="switch" aria-checked="false">
-              <span>Voice 4, Note 4</span>
-            </button>
+            <input type="checkbox" id="v4n1" />
+            <label for="v4n1">Voice 4, Note 1</label>
+
+            <input type="checkbox" id="v4n2" />
+            <label for="v4n2">Voice 4, Note 2</label>
+
+            <input type="checkbox" id="v4n3" />
+            <label for="v4n3">Voice 4, Note 3</label>
+
+            <input type="checkbox" id="v4n4" />
+            <label for="v4n4">Voice 4, Note 4</label>
           </section>
         </section>
       </div>
@@ -216,23 +213,7 @@
 
       // Before we do anything more, let's grab our checkboxes from the interface. We want to keep them in the groups they are in as each row represents a different sound or _voice_.
       const pads = document.querySelectorAll(".pads");
-      const allPadButtons = document.querySelectorAll("#tracks button");
-
-      // Toggle aria attribute on click
-      allPadButtons.forEach((el) => {
-        el.addEventListener(
-          "click",
-          () => {
-            if (el.getAttribute("aria-checked") === "false") {
-              el.setAttribute("aria-checked", "true");
-            } else {
-              el.setAttribute("aria-checked", "false");
-            }
-          },
-          false
-        );
-      });
-
+      
       const wave = audioCtx.createPeriodicWave(wavetable.real, wavetable.imag);
 
       // let noteTime = 1;
@@ -437,7 +418,7 @@
         nextNoteTime += secondsPerBeat; // Add beat length to last beat time
 
         // Advance the beat number, wrap to zero when reaching 4
-        currentNote = ++currentNote % 4;
+        currentNote = (currentNote+1) % 4;
       }
 
       // Create a queue for the notes that are to be played, with the current time that we want them to play:
@@ -445,43 +426,26 @@
       let dtmf;
 
       function scheduleNote(beatNumber, time) {
-        // push the note on the queue, even if we're not playing.
+        // Push the note into the queue, even if we're not playing.
         notesInQueue.push({ note: beatNumber, time: time });
-        // console.log(beatNumber, time);
 
-        if (
-          pads[0]
-            .querySelectorAll("button")
-            [beatNumber].getAttribute("aria-checked") === "true"
-        ) {
+        if (pads[0].querySelectorAll("input")[beatNumber].checked) {
           playSweep(time);
         }
-        if (
-          pads[1]
-            .querySelectorAll("button")
-            [beatNumber].getAttribute("aria-checked") === "true"
-        ) {
+        if (pads[1].querySelectorAll("input")[beatNumber].checked) {
           playPulse(time);
         }
-        if (
-          pads[2]
-            .querySelectorAll("button")
-            [beatNumber].getAttribute("aria-checked") === "true"
-        ) {
+        if (pads[2].querySelectorAll("input")[beatNumber].checked) {
           playNoise(time);
         }
-        if (
-          pads[3]
-            .querySelectorAll("button")
-            [beatNumber].getAttribute("aria-checked") === "true"
-        ) {
+        if (pads[3].querySelectorAll("input")[beatNumber].checked) {
           playSample(audioCtx, dtmf, time);
         }
       }
 
       let timerID;
       function scheduler() {
-        // while there are notes that will need to play before the next interval,
+        // While there are notes that will need to play before the next interval,
         // schedule them and advance the pointer.
         while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
           scheduleNote(currentNote, nextNoteTime);
@@ -490,7 +454,8 @@
         timerID = setTimeout(scheduler, lookahead);
       }
 
-      // We also need a draw function to update the UI, so we can see when the beat progresses.
+      // Draw function to update the UI, so we can see when the beat progress.
+      // This is a loop: it reschudele itself to redraw at the end.
       let lastNoteDrawn = 3;
       function draw() {
         let drawNote = lastNoteDrawn;
@@ -498,15 +463,14 @@
 
         while (notesInQueue.length && notesInQueue[0].time < currentTime) {
           drawNote = notesInQueue[0].note;
-          notesInQueue.splice(0, 1); // remove note from queue
+          notesInQueue.shift(); // Remove note from queue
         }
 
         // We only need to draw if the note has moved.
         if (lastNoteDrawn !== drawNote) {
-          pads.forEach((el) => {
-            el.children[lastNoteDrawn].style.borderColor =
-              "hsla(0, 0%, 10%, 1)";
-            el.children[drawNote].style.borderColor = "hsla(49, 99%, 50%, 1)";
+          pads.forEach((pad) => {
+            pad.children[lastNoteDrawn*2].style.borderColor = "var(--black)";
+            pad.children[drawNote*2].style.borderColor = "var(--yellow)";
           });
 
           lastNoteDrawn = drawNote;
@@ -517,7 +481,7 @@
 
       // when the sample has loaded allow play
       const loadingEl = document.querySelector(".loading");
-      const playButton = document.querySelector("[data-playing]");
+      const playButton = document.querySelector("#playBtn");
       let isPlaying = false;
       setupSample().then((sample) => {
         loadingEl.style.display = "none";
