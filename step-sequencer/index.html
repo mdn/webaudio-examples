@@ -205,18 +205,16 @@
     <script src="wavetable.js"></script>
 
     <script type="text/javascript">
-      console.clear();
-
       const audioCtx = new AudioContext();
-
-      // TODO make all frequencies like each other, one day
 
       // Before we do anything more, let's grab our checkboxes from the interface. We want to keep them in the groups they are in as each row represents a different sound or _voice_.
       const pads = document.querySelectorAll(".pads");
       
-      const wave = audioCtx.createPeriodicWave(wavetable.real, wavetable.imag);
+      const wave = new PeriodicWave(audioCtx, {
+        real: wavetable.real,
+        imag: wavetable.imag
+      });
 
-      // let noteTime = 1;
       let attackTime = 0.2;
       const attackControl = document.querySelector("#attack");
       attackControl.addEventListener(
@@ -240,9 +238,11 @@
       // Expose attack time & release time
       const sweepLength = 2;
       function playSweep(time) {
-        const osc = audioCtx.createOscillator();
-        osc.setPeriodicWave(wave);
-        osc.frequency.value = 380;
+        const osc = new OscillatorNode(audioCtx, {
+          frequency: 380,
+          type: "custom",
+          periodicWave: wave
+        });
 
         const sweepEnv = new GainNode(audioCtx);
         sweepEnv.gain.cancelScheduledValues(time);
@@ -325,27 +325,30 @@
 
       function playNoise(time) {
         const bufferSize = audioCtx.sampleRate * noiseDuration; // set the time of the note
-        const buffer = audioCtx.createBuffer(
-          1,
-          bufferSize,
-          audioCtx.sampleRate
-        ); // create an empty buffer
-        const data = buffer.getChannelData(0); // get data
+        // Create an empty buffer
+        const noiseBuffer = new AudioBuffer({
+          length: bufferSize,
+          sampleRate: audioCtx.sampleRate
+        });
 
-        // fill the buffer with noise
+        // Fill the buffer with noise
+        const data = noiseBuffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
           data[i] = Math.random() * 2 - 1;
         }
 
-        // create a buffer source for our created data
-        const noise = audioCtx.createBufferSource();
-        noise.buffer = buffer;
+        // Create a buffer source for our created data
+        const noise = new AudioBufferSourceNode(audioCtx, {
+          buffer: noiseBuffer
+        });
 
-        const bandpass = audioCtx.createBiquadFilter();
-        bandpass.type = "bandpass";
-        bandpass.frequency.value = bandHz;
+        // Filter the output
+        const bandpass = new BiquadFilterNode(audioCtx, {
+          type: "bandpass",
+          frequency: bandHz
+        });
 
-        // connect our graph
+        // Connect our graph
         noise.connect(bandpass).connect(audioCtx.destination);
         noise.start(time);
       }
