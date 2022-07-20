@@ -1,169 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
 
-    <title>createMediaStreamSource example</title>
+    <title>Web Audio API examples: audio analyser</title>
 
     <style>
-        #canvas {
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-            background-color: black;
-        }
-        #controls {
-            text-align: center;
-        }
-        #start_button, #stop_button {
-            font-size: 16pt;
-        }
-        #msg {
-            text-align: center;
-        }
+      #canvas {
+        background-color: black;
+      }
     </style>
   </head>
 
   <body>
-        <canvas id="canvas" width="512" height="256" ></canvas>
+    <h1>Web Audio API examples: audio analyser</h1>
+    <canvas id="canvas" width="512" height="256"></canvas>
 
-        <p id="controls">
-          <input type="button" id="start_button" value="Start">
-          &nbsp; &nbsp;
-          <input type="button" id="stop_button" value="Stop">
-          <p id="msg"></p>
-        </p>
+    <div id="controls">
+      <input type="button" id="start_button" value="Start" />
+      &nbsp; &nbsp;
+      <input type="button" id="stop_button" value="Stop" disabled/>
+      <br/><br/>
+      <output id="msg"></output>
+    </div>
 
-        <script>
-            // Hacks to deal with different function names in different browsers
-            window.requestAnimFrame = (function(){
-              return  window.requestAnimationFrame       ||
-                      window.webkitRequestAnimationFrame ||
-                      window.mozRequestAnimationFrame    ||
-                      function(callback, element){
-                        window.setTimeout(callback, 1000 / 60);
-                      };
-            })();
-            window.AudioContext = (function(){
-                return  window.webkitAudioContext || window.AudioContext || window.mozAudioContext;
-            })();
-            // Global Variables for Audio
-            let audioContext;
-            let audioBuffer;
-            let sourceNode;
-            let analyserNode;
-            let javascriptNode;
-            let audioData = null;
-            let audioPlaying = false;
-            let sampleSize = 1024;  // number of samples to collect before analyzing data
-            let amplitudeArray;     // array to hold time domain data
-            // This must be hosted on the same server as this page - otherwise you get a Cross Site Scripting error
-            let audioUrl = "viper.mp3";
-            // Global variables for the Graphics
-            let canvasWidth  = 512;
-            let canvasHeight = 256;
-            let ctx;
+    <script>
+      // Useful UI elements
+      const msg = document.querySelector("output");
+      const startBtn = document.querySelector("#start_button");
+      const stopBtn = document.querySelector("#stop_button");
+      const canvasElt = document.querySelector("#canvas");
 
-            ctx = document.querySelector('#canvas').getContext('2d');
+      // When the _Start_ button is clicked, set up the audio nodes, play the sound,
+      // gather samples for the analysis, update the canvas.
+      startBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        startBtn.disabled = true;
 
-            // When the Start button is clicked, finish setting up the audio nodes, play the sound,
-            // gather samples for the analysis, update the canvas
-            document.querySelector('#start_button').addEventListener('click', function(e) {
-                // the AudioContext is the primary 'container' for all your audio node objects
-                if(!audioContext) {
-                  try {
-                      audioContext = new AudioContext();
-                  } catch(e) {
-                      alert('Web Audio API is not supported in this browser');
+        // A user interaction happened we can create the audioContext
+        const audioContext = new AudioContext();
+      
+        // Load the audio the first time through, otherwise play it from the buffer
+        msg.textContent = "Loading audio…";
+
+        fetch("viper.mp3")
+          .then((response) => response.arrayBuffer())
+          .then((downloadedBuffer) => audioContext.decodeAudioData(downloadedBuffer))
+          .then((decodedBuffer) => {
+            msg.textContent = "Configuring audio stack…";
+
+            // Set up the AudioBufferSourceNode
+            const sourceNode = new AudioBufferSourceNode(audioContext, {
+              buffer: decodedBuffer,
+              loop: true
+            });
+
+            // Set up the audio analyser and the javascript node
+            const analyserNode = new AnalyserNode(audioContext);
+            const javascriptNode = audioContext.createScriptProcessor(1024, 1, 1);
+            
+            // Connect the nodes together
+            sourceNode.connect(audioContext.destination);
+            sourceNode.connect(analyserNode);
+            analyserNode.connect(javascriptNode);
+            javascriptNode.connect(audioContext.destination);
+
+            // Play the audio
+            msg.textContent = "Audio playing…";
+            sourceNode.start(0); // Play the sound now
+
+            // Set up the event handler that is triggered every time enough samples have been collected
+            // then trigger the audio analysis and draw the results
+            javascriptNode.onaudioprocess = () => {
+              // Read the frequency values
+              const amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
+
+              // Get the time domain data for this sample
+              analyserNode.getByteTimeDomainData(amplitudeArray);
+
+              // Draw the display when the audio is playing
+              if (audioContext.state === "running") {
+                // Draw the time domain in the canvas
+                requestAnimationFrame(() => {
+                  // Get the canvas 2d context
+                  const canvasContext = canvasElt.getContext("2d");
+
+                  // Clear the canvas
+                  canvasContext.clearRect(0, 0, canvasElt.width, canvasElt.height);
+
+                  // Draw the amplitude inside the canvas
+                  for (let i = 0; i < amplitudeArray.length; i++) {
+                    const value = amplitudeArray[i] / 256;
+                    const y = canvasElt.height - canvasElt.height * value;
+                    canvasContext.fillStyle = "white";
+                    canvasContext.fillRect(i, y, 1, 1);
                   }
-                }
+                });
+              }
+            };
 
-                e.preventDefault();
-                // Set up the audio Analyser, the Source Buffer and javascriptNode
-                setupAudioNodes();
-                // setup the event handler that is triggered every time enough samples have been collected
-                // trigger the audio analysis and draw the results
-                javascriptNode.onaudioprocess = function () {
-                    // get the Time Domain data for this sample
-                    analyserNode.getByteTimeDomainData(amplitudeArray);
-                    // draw the display if the audio is playing
-                    if (audioPlaying == true) {
-                        requestAnimFrame(drawTimeDomain);
-                    }
-                }
-                // Load the Audio the first time through, otherwise play it from the buffer
-                if(audioData == null) {
-                    loadSound(audioUrl);
-                } else {
-                    playSound(audioData);
-                }
+            // Set up the event handler to stop playing the audio
+            stopBtn.addEventListener("click", (e) => {
+              e.preventDefault();
+              startBtn.disabled = false;
+              stopBtn.disabled = true;
+              sourceNode.stop(0);
+              msg.textContent = "Audio stopped.";
             });
-
-            // Stop the audio playing
-            document.querySelector('#stop_button').addEventListener('click', function(e) {
-                e.preventDefault();
-                sourceNode.stop(0);
-                audioPlaying = false;
-            });
-
-
-            function setupAudioNodes() {
-                sourceNode     = audioContext.createBufferSource();
-                analyserNode   = audioContext.createAnalyser();
-                javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
-                // Create the array for the data values
-                amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
-                // Now connect the nodes together
-                sourceNode.connect(audioContext.destination);
-                sourceNode.connect(analyserNode);
-                analyserNode.connect(javascriptNode);
-                javascriptNode.connect(audioContext.destination);
-            }
-            // Load the audio from the URL via Ajax and store it in global variable audioData
-            // Note that the audio load is asynchronous
-            function loadSound(url) {
-                document.getElementById('msg').textContent = "Loading audio...";
-                let request = new XMLHttpRequest();
-                request.open('GET', url, true);
-                request.responseType = 'arraybuffer';
-                // When loaded, decode the data and play the sound
-                request.onload = function () {
-                    audioContext.decodeAudioData(request.response, function (buffer) {
-                        document.getElementById('msg').textContent = "Audio sample download finished";
-                        audioData = buffer;
-                        playSound(audioData);
-                    }, onError);
-                }
-                request.send();
-            }
-
-            // Play the audio and loop until stopped
-            function playSound(buffer) {
-                sourceNode.buffer = buffer;
-                sourceNode.start(0);    // Play the sound now
-                sourceNode.loop = true;
-                audioPlaying = true;
-            }
-
-            function onError(e) {
-                console.log(e);
-            }
-
-            function drawTimeDomain() {
-                clearCanvas();
-                for (let i = 0; i < amplitudeArray.length; i++) {
-                    let value = amplitudeArray[i] / 256;
-                    let y = canvasHeight - (canvasHeight * value) - 1;
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(i, y, 1, 1);
-                }
-            }
-
-            function clearCanvas() {
-                ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            }
-        </script>
-    </body>
+            stopBtn.disabled = false;
+          })
+          .catch((e) => {
+            console.error(`Error: ${e}`);
+          });
+      });
+    </script>
+  </body>
 </html>
