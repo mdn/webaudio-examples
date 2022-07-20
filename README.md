@@ -62,7 +62,7 @@ The [step-sequencer](https://github.com/mdn/webaudio-examples/tree/master/step-s
 The [stereo-panner-node](https://github.com/mdn/webaudio-examples/tree/master/stereo-panner-node) directory contains a simple example to show how the Web Audio API [`StereoPannerNode`](https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode) interface can be used to pan an audio stream. [Run the example live](http://mdn.github.io/webaudio-examples/stereo-panner-node/).
 
 ## Stream source buffer
-The [stream-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/stream-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API [`MediaStreamAudioSourceNode`](https://developer.mozilla.org/en-US/docs/Web/API/AMediaStreamAudioSourceNode) object. [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
+The [stream-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/stream-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API [`MediaStreamAudioSourceNode`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode) object. [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
 
 ## Violent theremin
 
