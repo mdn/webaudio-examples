@@ -84,7 +84,7 @@ The [stereo-panner-node](https://github.com/mdn/webaudio-examples/tree/master/st
 
 ## Stream source buffer
 
-The [stream-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/stream-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API [`AudioContext.createMediaElementSource()`](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) method. [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
+The [stream-source-buffer](https://github.com/mdn/webaudio-examples/tree/master/stream-source-buffer) directory contains a simple example demonstrating usage of the Web Audio API [`MediaStreamAudioSourceNode`](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode) object. [View example live](http://mdn.github.io/webaudio-examples/stream-source-buffer/).
 
 ## Violent theremin
 
