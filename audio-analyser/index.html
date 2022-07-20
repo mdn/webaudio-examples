@@ -88,17 +88,13 @@
                   // Get the canvas 2d context
                   const canvasContext = canvasElt.getContext("2d");
 
-                  // Define canvas size
-                  const canvasHeight = 512;
-                  const canvasWidth = 256;
-
                   // Clear the canvas
-                  canvasContext.clearRect(0, 0, canvasHeight, canvasWidth);
+                  canvasContext.clearRect(0, 0, canvasElt.height, canvasElt.width);
 
                   // Draw the amplitude inside the canvas
                   for (let i = 0; i < amplitudeArray.length; i++) {
                     let value = amplitudeArray[i] / 256;
-                    let y = canvasHeight - canvasHeight * value - 1;
+                    let y = canvasElt.height - canvasElt.weight * value - 1;
                     canvasContext.fillStyle = "#ffffff";
                     canvasContext.fillRect(i, y, 1, 1);
                   }
