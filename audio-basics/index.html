@@ -1,129 +1,170 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Web Audio Basics</title>
-  <meta name="description" content="Audio basics demo for Web Audio API">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Web Audio API examples: Basics</title>
+    <meta name="description" content="Audio basics demo for Web Audio API" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div id="boombox">
+      <div class="boombox-handle"></div>
 
-<div id="boombox">
-	<div class="boombox-handle"></div>
+      <div class="boombox-body">
+        <section class="master-controls">
+          <input
+            type="range"
+            id="volume"
+            class="control-volume"
+            min="0"
+            max="2"
+            value="1"
+            list="gain-vals"
+            step="0.01"
+            data-action="volume"
+          />
+          <datalist id="gain-vals">
+            <option value="0" label="min"></option>
+            <option value="2" label="max"></option>
+          </datalist>
 
-	<div class="boombox-body">
+          <label for="volume">VOL</label>
 
-		<section class="master-controls">
-			<input type="range" id="volume" class="control-volume" min="0" max="2" value="1" list="gain-vals" step="0.01" data-action="volume" />
-			<datalist id="gain-vals">
-				<option value="0" label="min">
-				<option value="2" label="max">
-			</datalist>
-			<label for="volume">VOL</label>
+          <input
+            type="range"
+            id="panner"
+            class="control-panner"
+            list="pan-vals"
+            min="-1"
+            max="1"
+            value="0"
+            step="0.01"
+            data-action="panner"
+          />
+          <datalist id="pan-vals">
+            <option value="-1" label="left"></option>
+            <option value="1" label="right"></option>
+          </datalist>
 
-			<input type="range" id="panner" class="control-panner" list="pan-vals" min="-1" max="1" value="0" step="0.01" data-action="panner" />
-			<datalist id="pan-vals">
-				<option value="-1" label="left">
-				<option value="1" label="right">
-			</datalist>
-			<label for="panner">PAN</label>
+          <label for="panner">PAN</label>
 
-			<button class="control-power" role="switch" aria-checked="false" data-power="on">
-				<span>On/Off</span>
-			</button>
-		</section>
+          <button
+            class="control-power"
+            role="switch"
+            aria-checked="false"
+            data-power="on"
+          >
+            <span>On/Off</span>
+          </button>
+        </section>
 
-		<section class="tape">
+        <section class="tape">
+          <audio src="outfoxing.mp3" crossorigin="anonymous"></audio>
 
-			<audio src="outfoxing.mp3" crossorigin="anonymous" ></audio>
+          <!-- 			type="audio/mpeg" -->
 
-<!-- 			type="audio/mpeg" -->
+          <button
+            data-playing="false"
+            class="tape-controls-play"
+            role="switch"
+            aria-checked="false"
+          >
+            <span>Play/Pause</span>
+          </button>
+        </section>
+      </div>
+      <!-- boombox-body -->
+    </div>
 
-			<button data-playing="false" class="tape-controls-play" role="switch" aria-checked="false">
-				<span>Play/Pause</span>
-			</button>
-		</section>
+    <script type="text/javascript">
+      console.clear();
 
-	</div><!-- boombox-body -->
-</div>
+      // instigate our audio context
+      let audioCtx;
 
-<script type="text/javascript">
-	console.clear();
+      // load some sound
+      const audioElement = document.querySelector("audio");
+      let track;
 
-// instigate our audio context
+      const playButton = document.querySelector(".tape-controls-play");
 
-// for cross browser
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioCtx;
+      // play pause audio
+      playButton.addEventListener(
+        "click",
+        () => {
+          if (!audioCtx) {
+            init();
+          }
 
-// load some sound
-const audioElement = document.querySelector('audio');
-let track;
+          // check if context is in suspended state (autoplay policy)
+          if (audioCtx.state === "suspended") {
+            audioCtx.resume();
+          }
 
-const playButton = document.querySelector('.tape-controls-play');
+          if (playButton.dataset.playing === "false") {
+            audioElement.play();
+            playButton.dataset.playing = "true";
+            // if track is playing pause it
+          } else if (playButton.dataset.playing === "true") {
+            audioElement.pause();
+            playButton.dataset.playing = "false";
+          }
 
-// play pause audio
-playButton.addEventListener('click', function() {
-  if(!audioCtx) {
-		init();
-	}
+          // Toggle the state between play and not playing
+          let state =
+            playButton.getAttribute("aria-checked") === "true" ? true : false;
+          playButton.setAttribute("aria-checked", state ? "false" : "true");
+        },
+        false
+      );
 
-	// check if context is in suspended state (autoplay policy)
-	if (audioCtx.state === 'suspended') {
-		audioCtx.resume();
-	}
+      // If track ends
+      audioElement.addEventListener(
+        "ended",
+        () => {
+          playButton.dataset.playing = "false";
+          playButton.setAttribute("aria-checked", "false");
+        },
+        false
+      );
 
-	if (this.dataset.playing === 'false') {
-		audioElement.play();
-		this.dataset.playing = 'true';
-	// if track is playing pause it
-	} else if (this.dataset.playing === 'true') {
-		audioElement.pause();
-		this.dataset.playing = 'false';
-	}
+      function init() {
+        audioCtx = new AudioContext();
+        track = new MediaElementAudioSourceNode(audioCtx, { mediaElement: audioElement });
 
-	let state = this.getAttribute('aria-checked') === "true" ? true : false;
-	this.setAttribute( 'aria-checked', state ? "false" : "true" );
+        // Create the node that controls the volume.
+        const gainNode = new GainNode(audioCtx);
 
-}, false);
+        const volumeControl = document.querySelector('[data-action="volume"]');
+        volumeControl.addEventListener(
+          "input",
+          () => {
+            gainNode.gain.value = volumeControl.value;
+          },
+          false
+        );
 
-// if track ends
-audioElement.addEventListener('ended', () => {
-	playButton.dataset.playing = 'false';
-	playButton.setAttribute( "aria-checked", "false" );
-}, false);
+        // Create the node that controls the panning
+        const panner = new StereoPannerNode(audioCtx, { pan: 0 });
 
-function init() {
+        const pannerControl = document.querySelector('[data-action="panner"]');
+        pannerControl.addEventListener(
+          "input",
+          () => {
+            panner.pan.value = pannerControl.value;
+          },
+          false
+        );
 
-	audioCtx = new AudioContext();
-	track = audioCtx.createMediaElementSource(audioElement);
+        // connect our graph
+        track.connect(gainNode).connect(panner).connect(audioCtx.destination);
+      }
 
-	// volume
-	const gainNode = audioCtx.createGain();
-
-	const volumeControl = document.querySelector('[data-action="volume"]');
-	volumeControl.addEventListener('input', function() {
-		gainNode.gain.value = this.value;
-	}, false);
-
-	// panning
-	const pannerOptions = { pan: 0 };
-	const panner = new StereoPannerNode(audioCtx, pannerOptions);
-
-	const pannerControl = document.querySelector('[data-action="panner"]');
-	pannerControl.addEventListener('input', function() {
-		panner.pan.value = this.value;
-	}, false);
-
-	// connect our graph
-	track.connect(gainNode).connect(panner).connect(audioCtx.destination);
-}
-
-// Track credit: Outfoxing the Fox by Kevin MacLeod under Creative Commons
-
-</script>
-
-</body>
+      // Track credit: Outfoxing the Fox by Kevin MacLeod under Creative Commons
+    </script>
+  </body>
 </html>
