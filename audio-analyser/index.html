@@ -56,7 +56,7 @@
               loop: true
             });
 
-            // Set up the audio Analyser and javascriptNode
+            // Set up the audio analyser and the javascript node
             const analyserNode = new AnalyserNode(audioContext);
             const javascriptNode = audioContext.createScriptProcessor(1024, 1, 1);
             
@@ -69,7 +69,6 @@
             // Play the audio
             msg.textContent = "Audio playing…";
             sourceNode.start(0); // Play the sound now
-            let audioPlaying = true;
 
             // Set up the event handler that is triggered every time enough samples have been collected
             // then trigger the audio analysis and draw the results
@@ -81,7 +80,7 @@
               analyserNode.getByteTimeDomainData(amplitudeArray);
 
               // Draw the display when the audio is playing
-              if (audioPlaying) {
+              if (audioContext.state === "running") {
                 requestAnimationFrame(() => {
                   // Draw the time domain in the canvas
 
@@ -108,7 +107,6 @@
               startBtn.disabled = false;
               stopBtn.disabled = true;
               sourceNode.stop(0);
-              audioPlaying = false;
               msg.textContent = "Audio stopped.";
             });
             stopBtn.disabled = false;
