@@ -43,6 +43,7 @@
       const msg = document.querySelector("output");
       const startBtn = document.querySelector("#start_button");
       const stopBtn = document.querySelector("#stop_button");
+      const canvasElt = document.querySelector("#canvas");
 
       // When the Start button is clicked, finish setting up the audio nodes, play the sound,
       // gather samples for the analysis, update the canvas
@@ -98,7 +99,7 @@
                   // Draw the time domain in the canvas
 
                   // Get the canvas 2d context
-                  const canvasContext = document.querySelector("#canvas").getContext("2d");
+                  const canvasContext = canvasElt.getContext("2d");
 
                   // Define canvas size
                   const canvasHeight = 512;
