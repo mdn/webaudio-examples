@@ -81,20 +81,19 @@
 
               // Draw the display when the audio is playing
               if (audioContext.state === "running") {
+                // Draw the time domain in the canvas
                 requestAnimationFrame(() => {
-                  // Draw the time domain in the canvas
-
                   // Get the canvas 2d context
                   const canvasContext = canvasElt.getContext("2d");
 
                   // Clear the canvas
-                  canvasContext.clearRect(0, 0, canvasElt.height, canvasElt.width);
+                  canvasContext.clearRect(0, 0, canvasElt.width, canvasElt.height);
 
                   // Draw the amplitude inside the canvas
                   for (let i = 0; i < amplitudeArray.length; i++) {
-                    let value = amplitudeArray[i] / 256;
-                    let y = canvasElt.height - canvasElt.weight * value - 1;
-                    canvasContext.fillStyle = "#ffffff";
+                    const value = amplitudeArray[i] / 256;
+                    const y = canvasElt.height - canvasElt.height * value;
+                    canvasContext.fillStyle = "white";
                     canvasContext.fillRect(i, y, 1, 1);
                   }
                 });
