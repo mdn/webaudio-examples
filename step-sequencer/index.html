@@ -325,6 +325,7 @@
 
       function playNoise(time) {
         const bufferSize = audioCtx.sampleRate * noiseDuration; // set the time of the note
+
         // Create an empty buffer
         const noiseBuffer = new AudioBuffer({
           length: bufferSize,
@@ -357,13 +358,7 @@
       async function getFile(audioContext, filepath) {
         const response = await fetch(filepath);
         const arrayBuffer = await response.arrayBuffer();
-        // ! A callback has been added here as a second param for Safari only !
-        const audioBuffer = await audioContext.decodeAudioData(
-          arrayBuffer,
-          function () {
-            return;
-          }
-        );
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
         return audioBuffer;
       }
 
@@ -482,7 +477,7 @@
         requestAnimationFrame(draw);
       }
 
-      // when the sample has loaded allow play
+      // When the sample has loaded, allow play
       const loadingEl = document.querySelector(".loading");
       const playButton = document.querySelector("#playBtn");
       let isPlaying = false;
@@ -495,9 +490,9 @@
           isPlaying = !isPlaying;
 
           if (isPlaying) {
-            // start playing
+            // Start playing
 
-            // check if context is in suspended state (autoplay policy)
+            // Check if context is in suspended state (autoplay policy)
             if (audioCtx.state === "suspended") {
               audioCtx.resume();
             }
