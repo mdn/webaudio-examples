@@ -31,7 +31,7 @@
       // sample rate of the AudioContext
       const frameCount = audioCtx.sampleRate * 2.0;
 
-      const buffer = new AudioBuffer(audioCtx, {
+      const buffer = new AudioBuffer({
         numberOfChannels: channels,
         length: frameCount,
         sampleRate: audioCtx.sampleRate,
