@@ -20,8 +20,8 @@
     <div id="controls">
       <input type="button" id="start_button" value="Start" />
       &nbsp; &nbsp;
-      <input type="button" id="stop_button" value="Stop" disabled/>
-      <br/><br/>
+      <input type="button" id="stop_button" value="Stop" disabled />
+      <br /><br />
       <output id="msg"></output>
     </div>
 
@@ -40,26 +40,32 @@
 
         // A user interaction happened we can create the audioContext
         const audioContext = new AudioContext();
-      
+
         // Load the audio the first time through, otherwise play it from the buffer
         msg.textContent = "Loading audio…";
 
         fetch("viper.mp3")
           .then((response) => response.arrayBuffer())
-          .then((downloadedBuffer) => audioContext.decodeAudioData(downloadedBuffer))
+          .then((downloadedBuffer) =>
+            audioContext.decodeAudioData(downloadedBuffer)
+          )
           .then((decodedBuffer) => {
             msg.textContent = "Configuring audio stack…";
 
             // Set up the AudioBufferSourceNode
             const sourceNode = new AudioBufferSourceNode(audioContext, {
               buffer: decodedBuffer,
-              loop: true
+              loop: true,
             });
 
             // Set up the audio analyser and the javascript node
             const analyserNode = new AnalyserNode(audioContext);
-            const javascriptNode = audioContext.createScriptProcessor(1024, 1, 1);
-            
+            const javascriptNode = audioContext.createScriptProcessor(
+              1024,
+              1,
+              1
+            );
+
             // Connect the nodes together
             sourceNode.connect(audioContext.destination);
             sourceNode.connect(analyserNode);
@@ -74,7 +80,9 @@
             // then trigger the audio analysis and draw the results
             javascriptNode.onaudioprocess = () => {
               // Read the frequency values
-              const amplitudeArray = new Uint8Array(analyserNode.frequencyBinCount);
+              const amplitudeArray = new Uint8Array(
+                analyserNode.frequencyBinCount
+              );
 
               // Get the time domain data for this sample
               analyserNode.getByteTimeDomainData(amplitudeArray);
@@ -87,7 +95,12 @@
                   const canvasContext = canvasElt.getContext("2d");
 
                   // Clear the canvas
-                  canvasContext.clearRect(0, 0, canvasElt.width, canvasElt.height);
+                  canvasContext.clearRect(
+                    0,
+                    0,
+                    canvasElt.width,
+                    canvasElt.height
+                  );
 
                   // Draw the amplitude inside the canvas
                   for (let i = 0; i < amplitudeArray.length; i++) {

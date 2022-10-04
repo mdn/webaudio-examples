@@ -9,22 +9,22 @@ async function createHissProcessor() {
   if (!audioContext) {
     try {
       audioContext = new AudioContext();
-    } catch(e) {
+    } catch (e) {
       console.log("** Error: Unable to create audio context");
       return null;
     }
   }
-  
+
   let processorNode;
-  
+
   try {
     processorNode = new AudioWorkletNode(audioContext, "hiss-generator");
-  } catch(e) {
+  } catch (e) {
     try {
-      console.log("adding...")
+      console.log("adding...");
       await audioContext.audioWorklet.addModule("hiss-generator.js");
       processorNode = new AudioWorkletNode(audioContext, "hiss-generator");
-    } catch(e) {
+    } catch (e) {
       console.log(`** Error: Unable to create worklet node: ${e}`);
       return null;
     }
@@ -44,34 +44,37 @@ async function audioDemoStart() {
   gainNode = audioContext.createGain();
 
   // Configure the oscillator node
-  
+
   soundSource.type = "square";
   soundSource.frequency.setValueAtTime(440, audioContext.currentTime); // (A4)
-  
+
   // Configure the gain for the oscillator
-  
+
   gainNode.gain.setValueAtTime(oscGainRange.value, audioContext.currentTime);
-  
+
   // Connect and start
-  
-  soundSource.connect(gainNode).connect(hissGenNode).connect(audioContext.destination);
+
+  soundSource
+    .connect(gainNode)
+    .connect(hissGenNode)
+    .connect(audioContext.destination);
   soundSource.start();
-  
+
   // Get access to the worklet's gain parameter
-  
+
   hissGainParam = hissGenNode.parameters.get("gain");
   hissGainParam.setValueAtTime(hissGainRange.value, audioContext.currentTime);
 }
 
-window.addEventListener("load", event => {
+window.addEventListener("load", (event) => {
   document.getElementById("toggle").addEventListener("click", toggleSound);
-  
+
   hissGainRange = document.getElementById("hiss-gain");
   oscGainRange = document.getElementById("osc-gain");
-  
+
   hissGainRange.oninput = updateHissGain;
   oscGainRange.oninput = updateOscGain;
-  
+
   hissGainRange.disabled = true;
   oscGainRange.disabled = true;
 });
@@ -79,7 +82,7 @@ window.addEventListener("load", event => {
 async function toggleSound(event) {
   if (!audioContext) {
     audioDemoStart();
-    
+
     hissGainRange.disabled = false;
     oscGainRange.disabled = false;
   } else {
