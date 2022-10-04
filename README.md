@@ -24,7 +24,7 @@ The [audiocontext-states](https://github.com/mdn/webaudio-examples/tree/master/a
 
 ## Audio worklet
 
-The [audioworklet](https://github.com/mdn/webaudio-examples/tree/master/audioworklet) directory contains an example showing how to use the [``AudioWorklet``](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet) interface. See also the guide on [background audio processing using AudioWorklet](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_AudioWorklet). [Run the example live](http://mdn.github.io/webaudio-examples/audioworklet/).
+The [audioworklet](https://github.com/mdn/webaudio-examples/tree/master/audioworklet) directory contains an example showing how to use the [`AudioWorklet`](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet) interface. See also the guide on [background audio processing using AudioWorklet](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_AudioWorklet). [Run the example live](http://mdn.github.io/webaudio-examples/audioworklet/).
 
 ## Compressor example
 
