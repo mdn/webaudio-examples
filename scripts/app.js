@@ -11,9 +11,9 @@ function init() {
     navigator.mediaDevices = {};
   }
 
-  // Some browsers partially implement mediaDevices. We can't just assign an object
+  // Some browsers partially implement mediaDevices. We can't assign an object
   // with getUserMedia as it would overwrite existing properties.
-  // Here, we will just add the getUserMedia property if it's missing.
+  // Add the getUserMedia property if it's missing.
   if (navigator.mediaDevices.getUserMedia === undefined) {
     navigator.mediaDevices.getUserMedia = function (constraints) {
       // First get ahold of the legacy getUserMedia, if present
@@ -39,18 +39,15 @@ function init() {
 
   // Set up forked web audio context, for multiple browsers
   // window. is needed otherwise Safari explodes
-
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const voiceSelect = document.getElementById("voice");
   let source;
   let stream;
 
   // Grab the mute button to use below
-
   const mute = document.querySelector(".mute");
 
   // Set up the different audio nodes we will use for the app
-
   const analyser = audioCtx.createAnalyser();
   analyser.minDecibels = -90;
   analyser.maxDecibels = -10;
@@ -65,7 +62,6 @@ function init() {
 
   // Distortion curve for the waveshaper, thanks to Kevin Ennis
   // http://stackoverflow.com/questions/22312841/waveshaper-node-in-webaudio-how-to-emulate-distortion
-
   function makeDistortionCurve(amount) {
     let k = typeof amount === "number" ? amount : 50,
       n_samples = 44100,
@@ -81,9 +77,7 @@ function init() {
   }
 
   // Grab audio track via XHR for convolver node
-
   let soundSource;
-
   ajaxRequest = new XMLHttpRequest();
 
   ajaxRequest.open(
@@ -116,15 +110,11 @@ function init() {
   const canvasCtx = canvas.getContext("2d");
 
   const intendedWidth = document.querySelector(".wrapper").clientWidth;
-
   canvas.setAttribute("width", intendedWidth);
-
   const visualSelect = document.getElementById("visual");
-
   let drawVisual;
 
   // Main block for doing the audio recording
-
   if (navigator.mediaDevices.getUserMedia) {
     console.log("getUserMedia supported.");
     const constraints = { audio: true };
@@ -160,6 +150,9 @@ function init() {
       analyser.fftSize = 2048;
       const bufferLength = analyser.fftSize;
       console.log(bufferLength);
+
+      // We can use Float32Array instead of Uint8Array if we want higher precision
+      // const dataArray = new Float32Array(bufferLength);
       const dataArray = new Uint8Array(bufferLength);
 
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -202,6 +195,8 @@ function init() {
       analyser.fftSize = 256;
       const bufferLengthAlt = analyser.frequencyBinCount;
       console.log(bufferLengthAlt);
+
+      // See comment above for Float32Array()
       const dataArrayAlt = new Uint8Array(bufferLengthAlt);
 
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
@@ -252,7 +247,7 @@ function init() {
       echoDelay.discard();
     }
 
-    //when convolver is selected it is connected back into the audio path
+    // When convolver is selected it is connected back into the audio path
     if (voiceSetting == "convolver") {
       biquadFilter.disconnect(0);
       biquadFilter.connect(convolver);
@@ -312,7 +307,6 @@ function init() {
   }
 
   // Event listeners to change visualize and voice settings
-
   visualSelect.onchange = function () {
     window.cancelAnimationFrame(drawVisual);
     visualize();
