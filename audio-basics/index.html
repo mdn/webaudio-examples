@@ -134,7 +134,9 @@
 
       function init() {
         audioCtx = new AudioContext();
-        track = new MediaElementAudioSourceNode(audioCtx, { mediaElement: audioElement });
+        track = new MediaElementAudioSourceNode(audioCtx, {
+          mediaElement: audioElement,
+        });
 
         // Create the node that controls the volume.
         const gainNode = new GainNode(audioCtx);
