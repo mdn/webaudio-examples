@@ -1,20 +1,19 @@
 /* basic page setup and text stuff */
 
-body,
-html {
-  margin: 0;
-  font-size: 10px;
+body, html {
+	margin: 0;
+	font-size: 10px;
 }
 
 body {
-  min-width: 600px;
+	min-width: 600px;
 }
 
 h1 {
-  font-family: "UnifrakturMaguntia", cursive;
-  text-align: center;
-  font-size: 8rem;
-  margin: 4rem 0 0 0;
+	font-family: 'UnifrakturMaguntia', cursive;
+	text-align: center;
+	font-size: 8rem;
+	margin: 4rem 0 0 0;
 }
 
 p {
@@ -25,31 +24,30 @@ p {
 /* button styling and positioning */
 
 button {
-  background-color: #0088cc;
-  background-image: linear-gradient(to bottom, #0088cc 0%, #0055cc 100%);
-  text-shadow: 1px 1px 1px black;
-  text-align: center;
-  color: white;
-  border: none;
-  width: 120px;
-  font-size: 1.5rem;
-  line-height: 1.5rem;
-  padding: 0.5rem;
+    background-color: #0088cc;
+    background-image: linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
+    text-shadow: 1px 1px 1px black;
+    text-align: center;
+    color: white;
+    border: none;
+    width: 120px;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    padding: .5rem;
 
-  position: absolute;
+    position: absolute;
 
-  box-shadow: inset 0px 0px 0px rgba(0, 0, 0, 0.7);
-  transition: 0.1s all;
-  -webkit-transition: 0.1s all;
+    box-shadow: inset 0px 0px 0px rgba(0,0,0,0.7);
+    transition: 0.1s all;
+    -webkit-transition: 0.1s all;
 }
 
-button:hover,
-button:focus {
+button:hover, button:focus {
   opacity: 0.8;
 }
 
 button:active {
-  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0px 0px 10px rgba(0,0,0,0.7);
 }
 
 .play {
@@ -65,63 +63,60 @@ button:active {
 .left {
   top: 44px;
   right: 64px;
-  background: url(icons/left.svg) no-repeat center,
-    linear-gradient(to bottom, #0088cc 0%, #0055cc 100%);
+  background: url(icons/left.svg) no-repeat center, linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
+
 }
 
 .right {
   top: 44px;
   right: 2px;
-  background: url(icons/right.svg) no-repeat center,
-    linear-gradient(to bottom, #0088cc 0%, #0055cc 100%);
+  background: url(icons/right.svg) no-repeat center, linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
 }
 
 .zoom-in {
   top: 2px;
   right: 31px;
-  background: url(icons/zoom-in.svg) no-repeat center,
-    linear-gradient(to bottom, #0088cc 0%, #0055cc 100%);
+  background: url(icons/zoom-in.svg) no-repeat center, linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
 }
 
 .zoom-out {
   top: 86px;
   right: 31px;
-  background: url(icons/zoom-out.svg) no-repeat center,
-    linear-gradient(to bottom, #0088cc 0%, #0055cc 100%);
+  background: url(icons/zoom-out.svg) no-repeat center, linear-gradient(to bottom,  #0088cc 0%,#0055cc 100%);
 }
 
 .move {
-  width: 60px;
-  height: 40px;
-  background-size: 50% 60%, 100% 100%;
+	width: 60px;
+	height: 40px;
+	background-size: 50% 60%, 100% 100%;
 }
 
 /* setting up the room of metal */
 
 .room {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  height: 300px;
-  width: 100%;
-  position: relative;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	height: 300px;
+	width: 100%;
+	position: relative;
 }
 
 .flex-wrapper {
-  width: inherit;
-  height: inherit;
+	width: inherit;
+	height: inherit;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .boom-box {
-  width: 200px;
-  height: 180px;
-  background: url(icons/boom.svg) no-repeat;
-  background-size: 100% 100%;
+	width: 200px;
+	height: 180px;
+	background: url(icons/boom.svg) no-repeat;
+	background-size: 100% 100%;
 
   -webkit-transform: scale(0.5);
   transform: scale(0.5);
@@ -140,27 +135,18 @@ button:active {
 /* animation class for boom box pulsating */
 
 @-webkit-keyframes pulse {
-  from {
-    -webkit-transform: scaleY(1);
-  }
-  to {
-    -webkit-transform: scaleY(1.07);
-  }
+  from { -webkit-transform: scaleY(1); }
+  to { -webkit-transform: scaleY(1.07);}
 }
 
 @keyframes pulse {
-  from {
-    transform: scaleY(1);
-  }
-  to {
-    transform: scaleY(1.07);
-  }
+	from { transform: scaleY(1); }
+	to { transform: scaleY(1.07);}
 }
 
 /* position data outputs */
 
-.listener-data,
-.panner-data {
+.listener-data, .panner-data {
   width: 230px;
   position: absolute;
   right: 2px;

@@ -24,9 +24,7 @@
       audioCtx = new AudioContext();
       // Create a MediaElementAudioSourceNode
       // Feed the HTMLMediaElement into it
-      let source = new MediaElementAudioSourceNode(audioCtx, {
-        mediaElement: audioElement,
-      });
+      let source = new MediaElementAudioSourceNode(audioCtx, { mediaElement: audioElement });
 
       // Create a gain node
       let gainNode = new GainNode(audioCtx);

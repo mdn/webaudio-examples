@@ -1,17 +1,17 @@
-const appContents = document.querySelector(".app-contents");
-const startMessage = document.querySelector(".start-message");
+const appContents = document.querySelector('.app-contents');
+const startMessage = document.querySelector('.start-message');
 let isAppInit = false;
-appContents.style.display = "none";
+appContents.style.display = 'none';
 
-window.addEventListener("keydown", init);
-window.addEventListener("click", init);
+window.addEventListener('keydown', init);
+window.addEventListener('click', init);
 
 function init() {
   if (isAppInit) {
     return;
   }
 
-  appContents.style.display = "block";
+  appContents.style.display = 'block';
   document.body.removeChild(startMessage);
 
   // create web audio api context
@@ -38,8 +38,8 @@ function init() {
   oscillator.detune.value = 100; // value in cents
   oscillator.start(0);
 
-  oscillator.onended = function () {
-    console.log("Your tone has now stopped playing!");
+  oscillator.onended = function() {
+    console.log('Your tone has now stopped playing!');
   };
 
   gainNode.gain.value = initialVol;
@@ -55,39 +55,39 @@ function init() {
   document.onmousemove = updatePage;
 
   function updatePage(e) {
-    KeyFlag = false;
+      KeyFlag = false;
 
-    CurX = e.pageX;
-    CurY = e.pageY;
+      CurX = e.pageX;
+      CurY = e.pageY;
 
-    oscillator.frequency.value = (CurX / WIDTH) * maxFreq;
-    gainNode.gain.value = (CurY / HEIGHT) * maxVol;
+      oscillator.frequency.value = (CurX/WIDTH) * maxFreq;
+      gainNode.gain.value = (CurY/HEIGHT) * maxVol;
 
-    canvasDraw();
+      canvasDraw();
   }
 
   // mute button
-  const mute = document.querySelector(".mute");
+  const mute = document.querySelector('.mute');
 
-  mute.onclick = function () {
-    if (mute.getAttribute("data-muted") === "false") {
+  mute.onclick = function() {
+    if (mute.getAttribute('data-muted') === 'false') {
       gainNode.disconnect(audioCtx.destination);
-      mute.setAttribute("data-muted", "true");
+      mute.setAttribute('data-muted', 'true');
       mute.innerHTML = "Unmute";
     } else {
       gainNode.connect(audioCtx.destination);
-      mute.setAttribute("data-muted", "false");
+      mute.setAttribute('data-muted', 'false');
       mute.innerHTML = "Mute";
-    }
-  };
+    };
+  }
 
   // canvas visualization
-  function random(number1, number2) {
+  function random(number1,number2) {
     return number1 + (Math.floor(Math.random() * (number2 - number1)) + 1);
   }
 
-  const canvas = document.querySelector(".canvas");
-  const canvasCtx = canvas.getContext("2d");
+  const canvas = document.querySelector('.canvas');
+  const canvasCtx = canvas.getContext('2d');
 
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
@@ -101,54 +101,39 @@ function init() {
       rY = CurY;
     }
 
-    rC = Math.floor((gainNode.gain.value / maxVol) * 30);
+    rC = Math.floor((gainNode.gain.value/maxVol)*30);
 
     canvasCtx.globalAlpha = 0.2;
 
-    for (let i = 1; i <= 15; i = i + 2) {
+    for (let i = 1; i <= 15; i = i+2) {
       canvasCtx.beginPath();
-      canvasCtx.fillStyle =
-        "rgb(" +
-        100 +
-        i * 10 +
-        "," +
-        Math.floor((gainNode.gain.value / maxVol) * 255) +
-        "," +
-        Math.floor((oscillator.frequency.value / maxFreq) * 255) +
-        ")";
-      canvasCtx.arc(
-        rX + random(0, 50),
-        rY + random(0, 50),
-        rC / 2 + i,
-        (Math.PI / 180) * 0,
-        (Math.PI / 180) * 360,
-        false
-      );
+      canvasCtx.fillStyle = 'rgb(' + 100+(i*10) + ',' + Math.floor((gainNode.gain.value/maxVol)*255) + ',' + Math.floor((oscillator.frequency.value/maxFreq)*255) + ')';
+      canvasCtx.arc(rX+random(0,50),rY+random(0,50),rC/2+i,(Math.PI/180)*0,(Math.PI/180)*360,false);
       canvasCtx.fill();
       canvasCtx.closePath();
     }
   }
 
   // clear screen
-  const clear = document.querySelector(".clear");
+  const clear = document.querySelector('.clear');
 
-  clear.onclick = function () {
+  clear.onclick = function() {
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  };
+  }
 
   // keyboard controls
-  const body = document.querySelector("body");
+  const body = document.querySelector('body');
 
   let KeyX = 1;
   let KeyY = 0.01;
   let KeyFlag = false;
 
-  const ARROW_LEFT = "ArrowLeft";
-  const ARROW_RIGHT = "ArrowRight";
-  const ARROW_UP = "ArrowUp";
-  const ARROW_DOWN = "ArrowDown";
+  const ARROW_LEFT = 'ArrowLeft';
+  const ARROW_RIGHT = 'ArrowRight';
+  const ARROW_UP = 'ArrowUp';
+  const ARROW_DOWN = 'ArrowDown';
 
-  body.onkeydown = function (e) {
+  body.onkeydown = function(e) {
     KeyFlag = true;
 
     if (e.code === ARROW_LEFT) {
@@ -184,8 +169,8 @@ function init() {
       KeyY = HEIGHT;
     }
 
-    oscillator.frequency.value = (KeyX / WIDTH) * maxFreq;
-    gainNode.gain.value = (KeyY / HEIGHT) * maxVol;
+    oscillator.frequency.value = (KeyX/WIDTH) * maxFreq;
+    gainNode.gain.value = (KeyY/HEIGHT) * maxVol;
 
     canvasDraw();
   };
