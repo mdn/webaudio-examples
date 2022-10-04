@@ -6,7 +6,8 @@
     <meta name="description" content="Panner node demo for Web Audio API" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
@@ -23,7 +24,8 @@
               value="1"
               list="gain-vals"
               step="0.01"
-              data-action="volume" />
+              data-action="volume"
+            />
             <datalist id="gain-vals">
               <option value="0" label="min"></option>
               <option value="2" label="max"></option>
@@ -39,7 +41,8 @@
               max="1"
               value="0"
               step="0.01"
-              data-action="panner" />
+              data-action="panner"
+            />
             <datalist id="pan-vals">
               <option value="-1" label="left"></option>
               <option value="1" label="right"></option>
@@ -50,7 +53,8 @@
               class="control-power"
               role="switch"
               aria-checked="false"
-              data-power="on">
+              data-power="on"
+            >
               <span>On/Off</span>
             </button>
           </section>
@@ -62,7 +66,8 @@
               data-playing="false"
               class="tape-controls-play"
               role="switch"
-              aria-checked="false">
+              aria-checked="false"
+            >
               <span>Play/Pause</span>
             </button>
           </section>
@@ -108,22 +113,26 @@
       <section class="move-controls_rotate">
         <button
           data-control="rotate-left"
-          aria-labelledby="move-boombox rleft-label">
+          aria-labelledby="move-boombox rleft-label"
+        >
           <span id="rleft-label">Rotate left</span>
         </button>
         <button
           data-control="rotate-down"
-          aria-labelledby="move-boombox rdown-label">
+          aria-labelledby="move-boombox rdown-label"
+        >
           <span id="rdown-label">Rotate downwards</span>
         </button>
         <button
           data-control="rotate-right"
-          aria-labelledby="move-boombox rright-label">
+          aria-labelledby="move-boombox rright-label"
+        >
           <span id="-label">Rotate right</span>
         </button>
         <button
           data-control="rotate-up"
-          aria-labelledby="move-boombox rup-label">
+          aria-labelledby="move-boombox rup-label"
+        >
           <span id="rup-label">Rotate upwards</span>
         </button>
       </section>
