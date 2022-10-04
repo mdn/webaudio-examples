@@ -20,8 +20,7 @@
       min="-1"
       max="1"
       step="0.1"
-      value="0"
-    />
+      value="0" />
     <span class="panning-value">0</span>
     <script>
       // We cannot initialize it now, we need to do it after some user
@@ -45,7 +44,7 @@
         // Create a MediaElementAudioSourceNode
         // Feed the HTMLMediaElement into it
         let source = new MediaElementAudioSourceNode(audioCtx, {
-          mediaElement: audioElt
+          mediaElement: audioElt,
         });
 
         // Create a stereo panner
