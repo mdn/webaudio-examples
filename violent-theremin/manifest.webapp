@@ -26,7 +26,6 @@
     }
   },
   "default_locale": "en",
-  "permissions": {
-  },
-  "orientation":"landscape"
+  "permissions": {},
+  "orientation": "landscape"
 }
