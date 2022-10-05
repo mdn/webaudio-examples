@@ -10,7 +10,7 @@
     <h1>Web Audio API examples: Output timestamp</h1>
     <button id="play">Play</button>
     <button id="stop" disabled="true">Stop</button>
-    <output><output/>
+    <output></output>
   </body>
   <script>
     // Define global variables
@@ -48,7 +48,7 @@
       if (!audioCtx) {
         audioCtx = new AudioContext();
       }
-      source = new AudioBufferSourceNode(audioCtx); 
+      source = new AudioBufferSourceNode(audioCtx);
       getData();
       source.start(0);
       playBtn.disabled = true;
