@@ -1,95 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
-
-    <title>createMediaStreamSource example</title>
-
-    <link rel="stylesheet" href="">
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Web Audio API examples: MediaStreamAudioSourceNode</title>
   </head>
 
   <body>
-    <h1>createMediaStreamSource example</h1>
-    <video controls>
-    </video>
-    <br>
-    <input type="range" min="1" max="40">
+    <h1>Web Audio API examples: MediaStreamAudioSourceNode</h1>
+    <video controls></video>
+    <br />
+    <label for="gain">Volume: </label>
+    <input id="gain" type="range" min="1" max="40" />
 
-    <pre></pre>
+    <p>Biquad filter frequency response for:</p>
+    <ul class="freq-response"></ul>
+    <script>
+      // Store useful UI elements
+      const video = document.querySelector("video");
+      const range = document.querySelector("#gain");
+      const freqResponseOutput = document.querySelector(".freq-response");
 
-    <p>Biquad filter frequency response for: </p>
-    <ul class="freq-response-output">
-    </ul>
-  </body>
-<script>
-const myAudio = document.querySelector('audio');
-const pre = document.querySelector('pre');
-const video = document.querySelector('video');
-const myScript = document.querySelector('script');
-const range = document.querySelector('input');
-const freqResponseOutput = document.querySelector('.freq-response-output');
-// create float32 arrays for getFrequencyResponse
-const myFrequencyArray = new Float32Array(5);
-myFrequencyArray[0] = 1000;
-myFrequencyArray[1] = 2000;
-myFrequencyArray[2] = 3000;
-myFrequencyArray[3] = 4000;
-myFrequencyArray[4] = 5000;
-const magResponseOutput = new Float32Array(5);
-const phaseResponseOutput = new Float32Array(5);
-// getUserMedia block - grab stream
-// put it into a MediaStreamAudioSourceNode
-// also output the visuals into a video element
-if (navigator.mediaDevices) {
-    console.log('getUserMedia supported.');
-    navigator.mediaDevices.getUserMedia ({audio: true, video: true})
-    .then(function(stream) {
-        video.srcObject = stream;
-        video.onloadedmetadata = function(e) {
+      // Create float32 arrays for getFrequencyResponse()
+      const frequencyArray = new Float32Array([1000, 2000, 3000, 4000, 5000]);
+      const magResponseOutput = new Float32Array(frequencyArray.length);
+      const phaseResponseOutput = new Float32Array(frequencyArray.length);
+
+      navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+          video.onloadedmetadata = (e) => {
             video.play();
             video.muted = true;
-        };
-        // Create a MediaStreamAudioSourceNode
-        // Feed the HTMLMediaElement into it
-        const audioCtx = new AudioContext();
-        const source = audioCtx.createMediaStreamSource(stream);
-        // Create a biquadfilter
-        const biquadFilter = audioCtx.createBiquadFilter();
-        biquadFilter.type = "lowshelf";
-        biquadFilter.frequency.value = 1000;
-        biquadFilter.gain.value = range.value;
-        // connect the AudioBufferSourceNode to the gainNode
-        // and the gainNode to the destination, so we can play the
-        // music and adjust the volume using the mouse cursor
-        source.connect(biquadFilter);
-        biquadFilter.connect(audioCtx.destination);
-        // Get new mouse pointer coordinates when mouse is moved
-        // then set new gain value
-        range.oninput = function() {
+          };
+
+          // Create a MediaStreamAudioSourceNode
+          // Feed the HTMLMediaElement into it
+          const audioCtx = new AudioContext();
+          const source = new MediaStreamAudioSourceNode(audioCtx, {
+            mediaStream: stream,
+          });
+
+          // Create a biquadfilter
+          const biquadFilter = new BiquadFilterNode(audioCtx, {
+            type: "lowshelf",
+            frequency: 1000,
+            gain: range.value,
+          });
+
+          // Chain the nodes so we can play the
+          // music and adjust the volume using the mouse cursor
+          source.connect(biquadFilter);
+          biquadFilter.connect(audioCtx.destination);
+
+          // Get new mouse pointer coordinates when mouse is moved
+          // then set new gain value
+          range.oninput = () => {
             biquadFilter.gain.value = range.value;
-        }
-        function calcFrequencyResponse() {
-            biquadFilter.getFrequencyResponse(myFrequencyArray,magResponseOutput,phaseResponseOutput);
-            for (i = 0; i <= myFrequencyArray.length-1;i++){
-                let listItem = document.createElement('li');
-                listItem.innerHTML = '<strong>' + myFrequencyArray[i] + 'Hz</strong>: Magnitude ' + magResponseOutput[i] + ', Phase ' + phaseResponseOutput[i] + ' radians.';
-                freqResponseOutput.appendChild(listItem);
-            }
-        }
-        calcFrequencyResponse();
-    })
-    .catch(function(err) {
-        console.log('The following gUM error occured: ' + err);
-    });
-} else {
-    console.log('getUserMedia not supported on your browser!');
-}
-// dump script to pre element
-pre.innerHTML = myScript.innerHTML;
-</script>
+          };
+
+          // Read frequency response:
+
+          // Get magnitude and phase associated with a frequency
+          biquadFilter.getFrequencyResponse(
+            frequencyArray,
+            magResponseOutput,
+            phaseResponseOutput
+          );
+
+          // Populate list
+          for (let i = 0; i < frequencyArray.length; i++) {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${frequencyArray[i]}Hz: Magnitude ${magResponseOutput[i]}, Phase ${phaseResponseOutput[i]}rad.`;
+            freqResponseOutput.appendChild(listItem);
+          }
+        })
+        .catch((err) => {
+          console.error(`The following error occurred: ${err}`);
+        });
+    </script>
+  </body>
 </html>
