@@ -81,22 +81,22 @@
   },
   {
     "name": "p0",
-    "color": "6e8bc1",
+    "color": "F9D0C4",
     "description": "Urgent. We will address this as soon as possible."
   },
   {
     "name": "p1",
-    "color": "6e8bc1",
+    "color": "FEF2C0",
     "description": "We will address this soon and will provide capacity from our team for it in the next few releases."
   },
   {
     "name": "p2",
-    "color": "6e8bc1",
+    "color": "C2E0C6",
     "description": "We want to address this but may have other higher priority items."
   },
   {
     "name": "p3",
-    "color": "6e8bc1",
+    "color": "BFDADC",
     "description": "We don't have visibility when this will be addressed."
   }
 ]
