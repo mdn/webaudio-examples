@@ -370,7 +370,7 @@
 
       // Create a buffer, plop in data, connect and play -> modify graph here if required
       function playSample(audioContext, audioBuffer, time) {
-        const sampleSource = new AudioBufferSourceNode(audioCtx, {
+        const sampleSource = new AudioBufferSourceNode(audioContext, {
           buffer: audioBuffer,
           playbackRate: playbackRate,
         });
