@@ -105,7 +105,7 @@ body {
 .master-controls {
   display: grid;
   grid-template-rows: repeat(2, auto);
-  grid-template-columns: repeat(2, 1fr) 12%;
+  grid-template-columns: repeat(2, 1fr);
   /*name our grid areas so they are more manipulative later*/
   grid-template-areas:
     "volin panin power"
@@ -154,7 +154,7 @@ body {
 }
 label[for="volume"] {
   grid-area: vollab;
-  margin-top: 15px;
+  margin-top: 1px;
 }
 .control-panner {
   grid-area: panin;
@@ -167,7 +167,7 @@ label[for="volume"] {
 }
 label[for="panner"] {
   grid-area: panlab;
-  margin-top: 15px;
+  margin-top: 1px;
 }
 @media screen and (max-width: 570px) {
   label[for="volume"],
@@ -202,7 +202,7 @@ label[for="panner"] {
     "back rewind play ff next";
 
   width: 26vw;
-  margin: 0px auto;
+  margin: -1px auto;
   background: var(--boxMain) no-repeat center center;
   background-image: radial-gradient(
       circle at 30%,
@@ -273,6 +273,7 @@ audio {
 input[type="range"] {
   -webkit-appearance: none;
   width: 30vw;
+  margin: 10px;
   background: transparent;
 }
 /* set min & max for different screen sizes */
