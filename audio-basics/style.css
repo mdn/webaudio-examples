@@ -154,7 +154,7 @@ body {
 }
 label[for="volume"] {
   grid-area: vollab;
-  margin-top: 1px;
+  margin-top: 15px;
 }
 .control-panner {
   grid-area: panin;
@@ -167,7 +167,7 @@ label[for="volume"] {
 }
 label[for="panner"] {
   grid-area: panlab;
-  margin-top: 1px;
+  margin-top: 15px;
 }
 @media screen and (max-width: 570px) {
   label[for="volume"],
@@ -202,7 +202,7 @@ label[for="panner"] {
     "back rewind play ff next";
 
   width: 26vw;
-  margin: -1px auto;
+  margin: 0px auto;
   background: var(--boxMain) no-repeat center center;
   background-image: radial-gradient(
       circle at 30%,
@@ -273,7 +273,6 @@ audio {
 input[type="range"] {
   -webkit-appearance: none;
   width: 30vw;
-  margin: 10px;
   background: transparent;
 }
 /* set min & max for different screen sizes */
