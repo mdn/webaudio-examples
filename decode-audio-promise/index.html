@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Web Audio API examples: decodeAudioData() Promise</title>
+  </head>
+
+  <body>
+    <h1>Web Audio API examples: decodeAudioData() Promise</h1>
+
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+
+    <h2>Set playback rate</h2>
+    <input
+      id="rate"
+      type="range"
+      min="0.25"
+      max="3"
+      step="0.05"
+      value="1"
+      disabled
+    />
+    <span id="rate-value">1.0</span>
+
+    <h2>Set loop start and loop end (loop minimum is 1 second)</h2>
+    <input
+      id="start"
+      type="range"
+      min="0"
+      max="20"
+      step="1"
+      value="0"
+      disabled
+    />
+    <span id="start-value">0</span>
+
+    <input
+      id="end"
+      type="range"
+      min="0"
+      max="20"
+      step="1"
+      value="0"
+      disabled
+    />
+    <span id="end-value">0</span>
+  </body>
+  <script>
+    window.addEventListener("DOMContentLoaded", loadIt, false);
+    let buffer, buttons, context, labels, loopers, sliders, source;
+    const start = 0; // indices into loopers array for readability
+    const end   = 1;
+    function loadIt() {
+      let elm;
+      labels  = {};
+      rate    = 1;
+      context = new AudioContext();
+      buttons = document.getElementsByTagName("button"); // not arrays, "array-like"
+      sliders = document.getElementsByTagName("input");
+      loopers = [sliders[1], sliders[2]];
+      for (elm of buttons)
+        elm.addEventListener("click", clickIt, false);
+      for (elm of sliders) {
+        elm.addEventListener("input", slideIt, false);
+        labels[elm.id] = elm.nextElementSibling;
+      }
+      fetchAudio("viper").then((buf) => {
+        let max = Math.floor(buf.duration); // in this case buf === global buffer
+        for (elm of loopers)
+          elm.setAttribute("max", max);
+        loopers[end].value = max;           // set loop end to end of audio
+        labels["end"].textContent = max;
+
+        for (elm of buttons)                // enable controls
+          elm.removeAttribute("disabled");
+        for (elm of sliders)
+          elm.removeAttribute("disabled");
+      });
+    }
+    // fetch() an audio track, decode it, and stash it in buffer
+    async function fetchAudio(name) {
+      try {
+        let max, rsvp;
+        rsvp   = await fetch(`${name}.mp3`);
+        buffer = await context.decodeAudioData(await rsvp.arrayBuffer());
+        return buffer; // returns a Promise, buffer is arg for .then((arg) => {})
+      }
+      catch(err) {
+        console.log(`Unable to fetch the audio file: ${name}\n\
+                     error: ${err.message}`);
+      }
+    }
+    function clickIt(evt) {
+      switch(evt.target.id) {
+        case "play":
+          if (!source) {
+            source = context.createBufferSource();
+            source.buffer = buffer;
+            source.playbackRate.value = sliders[0].value;
+            source.connect(context.destination);
+            source.loop = true;
+            source.loopStart = loopers[start].value;
+            source.loopEnd   = loopers[end].value;
+            source.start();
+          }
+          break;
+        case "stop":
+          if (source) {
+            source.stop();
+            source = null;
+          }
+      }
+    }
+    function slideIt(evt) {
+      let n;
+      let tar = evt.target;
+      switch(tar.id) {
+        case "rate":
+          if (source)
+            source.playbackRate.value = tar.value;
+          break;
+        case "start": // enforce reasonable loop parameters: min loop = 1sec
+          n = Number(loopers[end].value);
+          if (n <= Number(tar.value))
+            tar.value = n - 1;
+          if (source)
+            source.loopStart = tar.value;
+          break;
+        case "end":
+          n = Number(loopers[start].value);
+          if (n >= Number(tar.value))
+            tar.value = n + 1;
+          if (source)
+            source.loopEnd = tar.value;
+      }
+      labels[tar.id].textContent = tar.value;
+    }
+  </script>
+</html>
