@@ -54,6 +54,8 @@
     let source;
 
     const play = document.querySelector(".play");
+    play.setAttribute("disabled", "disabled");
+
     const stop = document.querySelector(".stop");
 
     const playbackControl = document.querySelector(".playback-rate-control");
@@ -73,6 +75,7 @@
           let max = Math.floor(buf.duration); // in this case buf === global buffer
           loopstartControl.setAttribute("max", max);
           loopendControl.setAttribute("max", max);
+          play.removeAttribute("disabled"); // buffer loaded, enable play button
       });
     }
 
