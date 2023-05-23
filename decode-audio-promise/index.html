@@ -81,7 +81,7 @@
     // We put the buffer into the source in play.onclick()
     async function fetchAudio(name) {
       try {
-        let rsvp = await fetch(`${name}.mp3`);
+        const rsvp = await fetch(`${name}.mp3`);
         buffer   = await audioCtx.decodeAudioData(await rsvp.arrayBuffer());
         return buffer; // returns a Promise, buffer is arg for .then((arg) => {})
       }
