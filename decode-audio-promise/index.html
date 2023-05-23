@@ -86,7 +86,7 @@
         return buffer; // returns a Promise, buffer is arg for .then((arg) => {})
       }
       catch(err) {
-        console.log(`Unable to fetch the audio file: ${name}
+        console.error(`Unable to fetch the audio file: ${name}
 error: ${err.message}`);
       }
     }
