@@ -10,115 +10,112 @@
   <body>
     <h1>Web Audio API examples: decodeAudioData()</h1>
 
-    <button class="play">Play</button>
-    <button class="stop">Stop</button>
+    <button id="play" disabled>Play</button>
+    <button id="stop">Stop</button>
 
     <h2>Set playback rate</h2>
     <input
-      class="playback-rate-control"
+      id="playback-rate-control"
       type="range"
       min="0.25"
       max="3"
       step="0.05"
       value="1"
-    />
-    <span class="playback-rate-value">1.0</span>
+      disabled />
+    <span id="playback-rate-value">1.0</span>
 
     <h2>Set loop start and loop end</h2>
     <input
-      class="loopstart-control"
+      id="loopstart-control"
       type="range"
       min="0"
       max="20"
       step="1"
       value="0"
-    />
-    <span class="loopstart-value">0</span>
+      disabled />
+    <span id="loopstart-value">0</span>
 
     <input
-      class="loopend-control"
+      id="loopend-control"
       type="range"
       min="0"
       max="20"
       step="1"
       value="0"
-    />
-    <span class="loopend-value">0</span>
+      disabled />
+    <span id="loopend-value">0</span>
   </body>
   <script>
+    window.addEventListener("DOMContentLoaded", loadPage, false);
+
     // define variables
     const audioCtx = new AudioContext();
     let source;
-    let songLength;
+    let buffer;
 
-    const play = document.querySelector(".play");
-    const stop = document.querySelector(".stop");
+    const play = document.getElementById("play");
+    const stop = document.getElementById("stop");
 
-    const playbackControl = document.querySelector(".playback-rate-control");
-    const playbackValue = document.querySelector(".playback-rate-value");
-    playbackControl.setAttribute("disabled", "disabled");
+    const playbackControl = document.getElementById("playback-rate-control");
+    const playbackValue = document.getElementById("playback-rate-value");
 
-    const loopstartControl = document.querySelector(".loopstart-control");
-    const loopstartValue = document.querySelector(".loopstart-value");
-    loopstartControl.setAttribute("disabled", "disabled");
+    const loopstartControl = document.getElementById("loopstart-control");
+    const loopstartValue = document.getElementById("loopstart-value");
 
-    const loopendControl = document.querySelector(".loopend-control");
-    const loopendValue = document.querySelector(".loopend-value");
-    loopendControl.setAttribute("disabled", "disabled");
+    const loopendControl = document.getElementById("loopend-control");
+    const loopendValue = document.getElementById("loopend-value");
 
-    // use XHR to load an audio track, and
-    // decodeAudioData to decode it and stick it in a buffer.
-    // Then we put the buffer into the source
+    function loadPage() {
+      getAudio("viper");
+    }
 
-    function getData() {
-      source = new AudioBufferSourceNode(audioCtx);
+    // use XHR to load an audio file and
+    // decodeAudioData to decode it and stick it in in global buffer variable.
+    // We put the buffer into the source in play.onclick().
+    function getAudio(name) {
       request = new XMLHttpRequest();
-
-      request.open("GET", "viper.mp3", true);
-
+      request.open("GET", `${name}.mp3`, true);
       request.responseType = "arraybuffer";
-
       request.onload = () => {
         let audioData = request.response;
-
         audioCtx.decodeAudioData(
           audioData,
-          (buffer) => {
-            songLength = buffer.duration;
-            source.buffer = buffer;
-            source.playbackRate.value = playbackControl.value;
-            source.connect(audioCtx.destination);
-            source.loop = true;
-
-            loopstartControl.setAttribute("max", Math.floor(songLength));
-            loopendControl.setAttribute("max", Math.floor(songLength));
+          (buf) => {
+            buffer = buf;
+            let max = Math.floor(buf.duration); // in this case buf === global buffer
+            loopstartControl.max = max;
+            loopendControl.max = max;
+            play.disabled = false;
           },
-          (e) => {
-            `Error with decoding audio data ${e.error}`;
+          (err) => {
+            console.error(
+              `Unable to get the audio file: ${name} Error: ${err.message}`
+            );
           }
         );
       };
-
       request.send();
     }
 
-    // wire up buttons to stop and play audio, and range slider control
-
     play.onclick = () => {
-      getData();
-      source.start(0);
-      play.setAttribute("disabled", "disabled");
-      playbackControl.removeAttribute("disabled");
-      loopstartControl.removeAttribute("disabled");
-      loopendControl.removeAttribute("disabled");
+      source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.playbackRate.value = playbackControl.value;
+      source.connect(audioCtx.destination);
+      source.loop = true;
+      source.start();
+      play.disabled = true;
+      playbackControl.disabled = false;
+      loopstartControl.disabled = false;
+      loopendControl.disabled = false;
     };
 
     stop.onclick = () => {
-      source.stop(0);
-      play.removeAttribute("disabled");
-      playbackControl.setAttribute("disabled", "disabled");
-      loopstartControl.setAttribute("disabled", "disabled");
-      loopendControl.setAttribute("disabled", "disabled");
+      source.stop();
+      play.disabled = false;
+      playbackControl.disabled = true;
+      loopstartControl.disabled = true;
+      loopendControl.disabled = true;
     };
 
     playbackControl.oninput = () => {
