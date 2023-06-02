@@ -82,7 +82,7 @@
           audioData,
           (buf) => {
             buffer = buf;
-            let max = Math.floor(buf.duration); // in this case buf === global buffer
+            const max = Math.floor(buf.duration); // in this case buf === global buffer
             loopstartControl.max = max;
             loopendControl.max = max;
             play.disabled = false;
