@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
 
-    <title>Web Audio API examples: decodeAudioData()</title>
+    <title>Web Audio API examples: decodeAudioData() with XHR</title>
   </head>
 
   <body>
-    <h1>Web Audio API examples: decodeAudioData()</h1>
+    <h1>Web Audio API examples: decodeAudioData() with XHR</h1>
 
     <button id="play" disabled>Play</button>
     <button id="stop">Stop</button>
@@ -50,8 +50,8 @@
 
     // define variables
     const audioCtx = new AudioContext();
-    let source;
     let buffer;
+    let source;
 
     const play = document.getElementById("play");
     const stop = document.getElementById("stop");
@@ -69,9 +69,11 @@
       getAudio("viper");
     }
 
-    // use XHR to load an audio file and
-    // decodeAudioData to decode it and stick it in in global buffer variable.
-    // We put the buffer into the source in play.onclick().
+    // getAudio() has no return value
+    // decoded AudioBuffer is buf argument to callback function
+    // it uses XHR to load an audio file
+    // it uses decodeAudioData to decode it into an AudioBuffer
+    // play.onclick() create single-use AudioBufferSourceNode
     function getAudio(name) {
       request = new XMLHttpRequest();
       request.open("GET", `${name}.mp3`, true);
@@ -81,11 +83,12 @@
         audioCtx.decodeAudioData(
           audioData,
           (buf) => {
+            // executes when buffer has been decoded
             buffer = buf;
-            const max = Math.floor(buf.duration); // in this case buf === global buffer
+            const max = Math.floor(buf.duration);
             loopstartControl.max = max;
             loopendControl.max = max;
-            play.disabled = false;
+            play.disabled = false; // buffer loaded, enable play button
           },
           (err) => {
             console.error(
