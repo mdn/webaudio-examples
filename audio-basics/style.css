@@ -105,7 +105,7 @@ body {
 .master-controls {
   display: grid;
   grid-template-rows: repeat(2, auto);
-  grid-template-columns: repeat(2, 1fr) 12%;
+  grid-template-columns: repeat(2, 1fr);
   /*name our grid areas so they are more manipulative later*/
   grid-template-areas:
     "volin panin power"
