@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Web Audio API examples: looping a track</title>
+
+    <script src="script.js" defer></script>
+  </head>
+
+  <body>
+    <h1>Web Audio API examples: looping a track</h1>
+
+    <button id="play" disabled>Play</button>
+    <button id="stop">Stop</button>
+
+    <h2>Set loop start and loop end</h2>
+    <input
+      id="loopstart-control"
+      type="range"
+      min="0"
+      max="20"
+      step="1"
+      value="0"
+      disabled />
+    <span id="loopstart-value">0</span>
+
+    <input
+      id="loopend-control"
+      type="range"
+      min="0"
+      max="20"
+      step="1"
+      value="0"
+      disabled />
+    <span id="loopend-value">0</span>
+  </body>
+</html>
