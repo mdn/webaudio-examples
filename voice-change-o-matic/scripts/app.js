@@ -2,7 +2,7 @@ const heading = document.querySelector("h1");
 heading.textContent = "CLICK HERE TO START";
 document.body.addEventListener("click", init);
 
-function init() {
+async function init() {
   heading.textContent = "Voice-change-O-matic";
   document.body.removeEventListener("click", init);
 
@@ -76,34 +76,19 @@ function init() {
     return curve;
   }
 
-  // Grab audio track via XHR for convolver node
-  let soundSource;
-  ajaxRequest = new XMLHttpRequest();
-
-  ajaxRequest.open(
-    "GET",
-    "https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg",
-    true
-  );
-
-  ajaxRequest.responseType = "arraybuffer";
-
-  ajaxRequest.onload = function () {
-    const audioData = ajaxRequest.response;
-
-    audioCtx.decodeAudioData(
-      audioData,
-      function (buffer) {
-        soundSource = audioCtx.createBufferSource();
-        convolver.buffer = buffer;
-      },
-      function (e) {
-        console.log("Error with decoding audio data" + e.err);
-      }
+  // Grab audio track via fetch() for convolver node
+  try {
+    const response = await fetch(
+      "https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg"
     );
-  };
-
-  ajaxRequest.send();
+    const arrayBuffer = await response.arrayBuffer();
+    const decodedAudio = await audioCtx.decodeAudioData(arrayBuffer);
+    convolver.buffer = decodedAudio;
+  } catch (error) {
+    console.error(
+      `Unable to fetch the audio file: ${name} Error: ${err.message}`
+    );
+  }
 
   // Set up canvas context for visualizer
   const canvas = document.querySelector(".visualizer");
@@ -307,26 +292,24 @@ function init() {
   }
 
   // Event listeners to change visualize and voice settings
-  visualSelect.onchange = function () {
+  visualSelect.addEventListener("change", () => {
     window.cancelAnimationFrame(drawVisual);
     visualize();
-  };
+  });
 
-  voiceSelect.onchange = function () {
+  voiceSelect.addEventListener("change", () => {
     voiceChange();
-  };
+  });
 
-  mute.onclick = voiceMute;
-
-  function voiceMute() {
+  mute.addEventListener("click", () => {
     if (mute.id === "") {
       gainNode.gain.value = 0;
       mute.id = "activated";
       mute.innerHTML = "Unmute";
     } else {
-      gainNode.gain.value = 0;
+      gainNode.gain.value = 1;
       mute.id = "";
       mute.innerHTML = "Mute";
     }
-  }
+  });
 }
