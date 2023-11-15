@@ -4,41 +4,28 @@ const playButton = document.querySelector("button");
 
 // Create AudioContext and buffer source
 let audioCtx;
-let source;
 
-function init() {
+async function init() {
   audioCtx = new AudioContext();
-  source = audioCtx.createBufferSource();
+  const source = audioCtx.createBufferSource();
 
   // Create a ScriptProcessorNode with a bufferSize of 4096 and a single input and output channel
   let scriptNode = audioCtx.createScriptProcessor(4096, 1, 1);
   console.log(scriptNode.bufferSize);
 
-  // load in an audio track via XHR and decodeAudioData
-
-  function getData() {
-    request = new XMLHttpRequest();
-    request.open("GET", "viper.ogg", true);
-    request.responseType = "arraybuffer";
-    request.onload = function () {
-      let audioData = request.response;
-
-      audioCtx.decodeAudioData(
-        audioData,
-        function (buffer) {
-          myBuffer = buffer;
-          source.buffer = myBuffer;
-        },
-        function (e) {
-          "Error with decoding audio data" + e.err;
-        }
-      );
-    };
-    request.send();
+  // load in an audio track using fetch() and decodeAudioData
+  try {
+    const response = await fetch("viper.ogg");
+    const arrayBuffer = await response.arrayBuffer();
+    source.buffer = await audioCtx.decodeAudioData(arrayBuffer);
+  } catch (err) {
+    console.error(
+      `Unable to fetch the audio file: ${name} Error: ${err.message}`
+    );
   }
 
   // Give the node a function to process audio events
-  scriptNode.onaudioprocess = function (audioProcessingEvent) {
+  scriptNode.addEventListener("audioprocess", (audioProcessingEvent) => {
     // The input buffer is the song we loaded earlier
     let inputBuffer = audioProcessingEvent.inputBuffer;
 
@@ -56,30 +43,25 @@ function init() {
         outputData[sample] = inputData[sample];
 
         // add noise to each output sample
-        outputData[sample] += (Math.random() * 2 - 1) * 0.2;
+        outputData[sample] += (Math.random() * 2 - 1) * 0.1;
       }
     }
-  };
-
-  getData();
+  });
 
   source.connect(scriptNode);
   scriptNode.connect(audioCtx.destination);
   source.start();
 
   // When the buffer source stops playing, disconnect everything
-  source.onended = function () {
+  source.addEventListener("ended", () => {
     source.disconnect(scriptNode);
     scriptNode.disconnect(audioCtx.destination);
-  };
+  });
 }
 
 // wire up play button
-playButton.onclick = function () {
+playButton.addEventListener("click", () => {
   if (!audioCtx) {
     init();
   }
-};
-
-//output the script into the pre element
-myPre.innerHTML = myScript.innerHTML;
+});
