@@ -1,5 +1,3 @@
-window.addEventListener("DOMContentLoaded", loadPage, false);
-
 // define variables
 const audioCtx = new AudioContext();
 let buffer;
@@ -50,6 +48,8 @@ play.onclick = () => {
   source.playbackRate.value = playbackControl.value;
   source.connect(audioCtx.destination);
   source.loop = true;
+  source.loopStart = loopstartControl.value;
+  source.loopEnd = loopendControl.value;
   source.start();
   play.disabled = true;
   playbackControl.disabled = false;
@@ -79,3 +79,5 @@ loopendControl.oninput = () => {
   source.loopEnd = loopendControl.value;
   loopendValue.textContent = loopendControl.value;
 };
+
+loadPage();

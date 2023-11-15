@@ -21,35 +21,22 @@ function loadPage() {
   getAudio("viper");
 }
 
-// getAudio() has no return value
-// decoded AudioBuffer is buf argument to callback function
-// it uses XHR to load an audio file
-// it uses decodeAudioData to decode it into an AudioBuffer
-// play.onclick() create single-use AudioBufferSourceNode
-function getAudio(name) {
-  request = new XMLHttpRequest();
-  request.open("GET", `${name}.mp3`, true);
-  request.responseType = "arraybuffer";
-  request.onload = () => {
-    let audioData = request.response;
-    audioCtx.decodeAudioData(
-      audioData,
-      (buf) => {
-        // executes when buffer has been decoded
-        buffer = buf;
-        const max = Math.floor(buf.duration);
-        loopstartControl.max = max;
-        loopendControl.max = max;
-        play.disabled = false; // buffer loaded, enable play button
-      },
-      (err) => {
-        console.error(
-          `Unable to get the audio file: ${name} Error: ${err.message}`
-        );
-      }
+async function getAudio(name) {
+  try {
+    const response = await fetch(`${name}.mp3`);
+    audioCtx.decodeAudioData(await response.arrayBuffer(), (buf) => {
+      // executes when buffer has been decoded
+      buffer = buf;
+      const max = Math.floor(buf.duration);
+      loopstartControl.max = max;
+      loopendControl.max = max;
+      play.disabled = false; // buffer loaded, enable play button
+    });
+  } catch (err) {
+    console.error(
+      `Unable to fetch the audio file: ${name} Error: ${err.message}`
     );
-  };
-  request.send();
+  }
 }
 
 play.onclick = () => {
@@ -58,6 +45,8 @@ play.onclick = () => {
   source.playbackRate.value = playbackControl.value;
   source.connect(audioCtx.destination);
   source.loop = true;
+  source.loopStart = loopstartControl.value;
+  source.loopEnd = loopendControl.value;
   source.start();
   play.disabled = true;
   playbackControl.disabled = false;
