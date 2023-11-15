@@ -10,8 +10,7 @@ async function init() {
   const source = audioCtx.createBufferSource();
 
   // Create a ScriptProcessorNode with a bufferSize of 4096 and a single input and output channel
-  let scriptNode = audioCtx.createScriptProcessor(4096, 1, 1);
-  console.log(scriptNode.bufferSize);
+  const scriptNode = audioCtx.createScriptProcessor(4096, 1, 1);
 
   // Load in an audio track using fetch() and decodeAudioData()
   try {
