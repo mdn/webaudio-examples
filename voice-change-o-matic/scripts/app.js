@@ -293,7 +293,7 @@ async function init() {
 
   // Event listeners to change visualize and voice settings
   visualSelect.addEventListener("change", () => {
-    window.cancelAnimationFrame(drawVisual);
+    cancelAnimationFrame(drawVisual);
     visualize();
   });
 

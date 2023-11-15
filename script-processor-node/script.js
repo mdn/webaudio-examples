@@ -13,7 +13,7 @@ async function init() {
   let scriptNode = audioCtx.createScriptProcessor(4096, 1, 1);
   console.log(scriptNode.bufferSize);
 
-  // load in an audio track using fetch() and decodeAudioData
+  // Load in an audio track using fetch() and decodeAudioData()
   try {
     const response = await fetch("viper.ogg");
     const arrayBuffer = await response.arrayBuffer();

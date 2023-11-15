@@ -11,14 +11,6 @@ const loopstartValue = document.getElementById("loopstart-value");
 const loopendControl = document.getElementById("loopend-control");
 const loopendValue = document.getElementById("loopend-value");
 
-async function loadAudio() {
-  buffer = await fetchAudio("rnb-lofi-melody-loop.wav");
-  const max = Math.floor(buffer.duration);
-  loopstartControl.setAttribute("max", max);
-  loopendControl.setAttribute("max", max);
-  play.disabled = false;
-}
-
 async function fetchAudio(name) {
   try {
     const response = await fetch(name);
@@ -28,6 +20,14 @@ async function fetchAudio(name) {
       `Unable to fetch the audio file: ${name} Error: ${err.message}`
     );
   }
+}
+
+async function loadAudio() {
+  buffer = await fetchAudio("rnb-lofi-melody-loop.wav");
+  const max = Math.floor(buffer.duration);
+  loopstartControl.setAttribute("max", max);
+  loopendControl.setAttribute("max", max);
+  play.disabled = false;
 }
 
 play.addEventListener("click", () => {

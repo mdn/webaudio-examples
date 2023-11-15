@@ -8,11 +8,6 @@ const stop = document.getElementById("stop");
 const playbackControl = document.getElementById("playback-rate-control");
 const playbackValue = document.getElementById("playback-rate-value");
 
-async function loadAudio() {
-  buffer = await fetchAudio("rnb-lofi-melody-loop.wav");
-  play.disabled = false;
-}
-
 async function fetchAudio(name) {
   try {
     const response = await fetch(name);
@@ -22,6 +17,11 @@ async function fetchAudio(name) {
       `Unable to fetch the audio file: ${name} Error: ${err.message}`
     );
   }
+}
+
+async function loadAudio() {
+  buffer = await fetchAudio("rnb-lofi-melody-loop.wav");
+  play.disabled = false;
 }
 
 play.addEventListener("click", () => {
