@@ -1,4 +1,4 @@
-const audioCtx = new AudioContext();
+let audioCtx;
 let buffer;
 let source;
 
@@ -24,7 +24,11 @@ async function loadAudio() {
   play.disabled = false;
 }
 
-play.addEventListener("click", () => {
+play.addEventListener("click", async () => {
+  if (!audioCtx) {
+    audioCtx = new AudioContext();
+    await loadAudio();
+  }
   source = audioCtx.createBufferSource();
   source.buffer = buffer;
   source.connect(audioCtx.destination);
@@ -32,12 +36,14 @@ play.addEventListener("click", () => {
   source.playbackRate.value = playbackControl.value;
   source.start();
   play.disabled = true;
+  stop.disabled = false;
   playbackControl.disabled = false;
 });
 
 stop.addEventListener("click", () => {
   source.stop();
   play.disabled = false;
+  stop.disabled = true;
   playbackControl.disabled = true;
 });
 
@@ -46,4 +52,3 @@ playbackControl.oninput = () => {
   playbackValue.textContent = playbackControl.value;
 };
 
-loadAudio();

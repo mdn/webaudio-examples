@@ -17,7 +17,7 @@ const loopendValue = document.getElementById("loopend-value");
 
 function loadPage() {
   fetchAudio("viper").then((buf) => {
-    // executes when buffer has been decoded
+    // Executes when buffer has been decoded
     buffer = buf;
     const max = Math.floor(buf.duration);
     loopstartControl.setAttribute("max", max);
@@ -26,14 +26,13 @@ function loadPage() {
   });
 }
 
-// fetchAudio() returns a Promise
-// decoded AudioBuffer is buf argument for Promise.then((buf) => {})
-// it uses fetch() to load an audio file
-// it uses decodeAudioData to decode it into an AudioBuffer
-// play.onclick() create single-use AudioBufferSourceNode
+// fetchAudio() returns a Promise.
+// The decoded AudioBuffer is then the buf argument: Promise.then((buf) => {})
 async function fetchAudio(name) {
   try {
+    // Load an audio file
     const rsvp = await fetch(`${name}.mp3`);
+    // Decode it
     return audioCtx.decodeAudioData(await rsvp.arrayBuffer());
   } catch (err) {
     console.error(
@@ -43,6 +42,7 @@ async function fetchAudio(name) {
 }
 
 play.onclick = () => {
+  // Create a new single-use AudioBufferSourceNode
   source = audioCtx.createBufferSource();
   source.buffer = buffer;
   source.playbackRate.value = playbackControl.value;

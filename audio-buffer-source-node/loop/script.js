@@ -1,4 +1,4 @@
-const audioCtx = new AudioContext();
+let audioCtx;
 let buffer;
 let source;
 
@@ -27,10 +27,13 @@ async function loadAudio() {
   const max = Math.floor(buffer.duration);
   loopstartControl.setAttribute("max", max);
   loopendControl.setAttribute("max", max);
-  play.disabled = false;
 }
 
-play.addEventListener("click", () => {
+play.addEventListener("click", async () => {
+  if (!audioCtx) {
+    audioCtx = new AudioContext();
+    await loadAudio();
+  }
   source = audioCtx.createBufferSource();
   source.buffer = buffer;
   source.connect(audioCtx.destination);
@@ -39,6 +42,7 @@ play.addEventListener("click", () => {
   source.loopEnd = loopendControl.value;
   source.start();
   play.disabled = true;
+  stop.disabled = false;
   loopstartControl.disabled = false;
   loopendControl.disabled = false;
 });
@@ -46,6 +50,7 @@ play.addEventListener("click", () => {
 stop.addEventListener("click", () => {
   source.stop();
   play.disabled = false;
+  stop.disabled = true;
   loopstartControl.disabled = true;
   loopendControl.disabled = true;
 });
@@ -60,4 +65,3 @@ loopendControl.addEventListener("input", () => {
   loopendValue.textContent = loopendControl.value;
 });
 
-loadAudio();

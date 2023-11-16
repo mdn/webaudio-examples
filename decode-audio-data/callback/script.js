@@ -1,10 +1,10 @@
-window.addEventListener("DOMContentLoaded", loadPage, false);
+addEventListener("DOMContentLoaded", loadPage, false);
 
-// define variables
 const audioCtx = new AudioContext();
 let buffer;
 let source;
 
+// Get UI elements
 const play = document.getElementById("play");
 const stop = document.getElementById("stop");
 
