@@ -11,22 +11,18 @@ const loopstartValue = document.getElementById("loopstart-value");
 const loopendControl = document.getElementById("loopend-control");
 const loopendValue = document.getElementById("loopend-value");
 
-async function fetchAudio(name) {
-  try {
-    const response = await fetch(name);
-    return audioCtx.decodeAudioData(await response.arrayBuffer());
-  } catch (err) {
-    console.error(
-      `Unable to fetch the audio file: ${name} Error: ${err.message}`
-    );
-  }
-}
-
 async function loadAudio() {
-  buffer = await fetchAudio("rnb-lofi-melody-loop.wav");
-  const max = Math.floor(buffer.duration);
-  loopstartControl.setAttribute("max", max);
-  loopendControl.setAttribute("max", max);
+  try {
+    // Load an audio file
+    const response = await fetch("rnb-lofi-melody-loop.wav");
+    // Decode it
+    buffer = await audioCtx.decodeAudioData(await response.arrayBuffer());
+    const max = Math.floor(buffer.duration);
+    loopstartControl.setAttribute("max", max);
+    loopendControl.setAttribute("max", max);
+  } catch (err) {
+    console.error(`Unable to fetch the audio file. Error: ${err.message}`);
+  }
 }
 
 play.addEventListener("click", async () => {
@@ -64,4 +60,3 @@ loopendControl.addEventListener("input", () => {
   source.loopEnd = loopendControl.value;
   loopendValue.textContent = loopendControl.value;
 });
-

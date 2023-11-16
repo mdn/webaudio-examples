@@ -10,8 +10,8 @@
   <body>
     <h1>Web Audio API examples: decodeAudioData() with callback</h1>
 
-    <button id="play" disabled>Play</button>
-    <button id="stop">Stop</button>
+    <button id="play">Play</button>
+    <button id="stop" disabled>Stop</button>
 
     <h2>Set playback rate</h2>
     <input
@@ -44,5 +44,10 @@
       value="0"
       disabled />
     <span id="loopend-value">0</span>
+
+    <p>
+      If the stop time is lower or equal to the start time, it'll loop over the
+      whole track.
+    </p>
   </body>
 </html>

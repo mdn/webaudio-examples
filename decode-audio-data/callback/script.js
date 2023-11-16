@@ -1,6 +1,4 @@
-addEventListener("DOMContentLoaded", loadPage, false);
-
-const audioCtx = new AudioContext();
+let audioCtx;
 let buffer;
 let source;
 
@@ -17,29 +15,7 @@ const loopstartValue = document.getElementById("loopstart-value");
 const loopendControl = document.getElementById("loopend-control");
 const loopendValue = document.getElementById("loopend-value");
 
-function loadPage() {
-  getAudio("viper");
-}
-
-async function getAudio(name) {
-  try {
-    const response = await fetch(`${name}.mp3`);
-    audioCtx.decodeAudioData(await response.arrayBuffer(), (buf) => {
-      // executes when buffer has been decoded
-      buffer = buf;
-      const max = Math.floor(buf.duration);
-      loopstartControl.max = max;
-      loopendControl.max = max;
-      play.disabled = false; // buffer loaded, enable play button
-    });
-  } catch (err) {
-    console.error(
-      `Unable to fetch the audio file: ${name} Error: ${err.message}`
-    );
-  }
-}
-
-play.onclick = () => {
+function playBuffer() {
   source = audioCtx.createBufferSource();
   source.buffer = buffer;
   source.playbackRate.value = playbackControl.value;
@@ -49,28 +25,55 @@ play.onclick = () => {
   source.loopEnd = loopendControl.value;
   source.start();
   play.disabled = true;
+  stop.disabled = false;
   playbackControl.disabled = false;
   loopstartControl.disabled = false;
   loopendControl.disabled = false;
-};
+}
 
-stop.onclick = () => {
+async function loadAudio() {
+  try {
+    const response = await fetch("viper.mp3");
+    audioCtx.decodeAudioData(await response.arrayBuffer(), (buf) => {
+      // executes when buffer has been decoded
+      buffer = buf;
+      const max = Math.floor(buf.duration);
+      loopstartControl.max = max;
+      loopendControl.max = max;
+      play.disabled = false; // buffer loaded, enable play button
+      playBuffer();
+    });
+  } catch (err) {
+    console.error(`Unable to fetch the audio file. Error: ${err.message}`);
+  }
+}
+
+play.addEventListener("click", async () => {
+  if (!audioCtx) {
+    audioCtx = new AudioContext();
+    await loadAudio();
+  } else {
+    playBuffer();
+  }
+});
+
+stop.addEventListener("click", () => {
   source.stop();
   play.disabled = false;
   playbackControl.disabled = true;
   loopstartControl.disabled = true;
   loopendControl.disabled = true;
-};
+});
 
-playbackControl.oninput = () => {
+playbackControl.addEventListener("input", () => {
   source.playbackRate.value = playbackControl.value;
   playbackValue.textContent = playbackControl.value;
-};
+});
 
-loopstartControl.oninput = () => {
+loopstartControl.addEventListener("input", () => {
   source.loopStart = loopstartControl.value;
   loopstartValue.textContent = loopstartControl.value;
-};
+});
 
 loopendControl.oninput = () => {
   source.loopEnd = loopendControl.value;
