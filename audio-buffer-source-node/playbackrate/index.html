@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Web Audio API examples: setting playback rate</title>
+
+    <script src="script.js" defer></script>
+  </head>
+
+  <body>
+    <h1>Web Audio API examples: setting playback rate</h1>
+
+    <button id="play">Play</button>
+    <button id="stop" disabled>Stop</button>
+
+    <h2>Set playback rate</h2>
+    <input
+      id="playback-rate-control"
+      type="range"
+      min="0.25"
+      max="3"
+      step="0.05"
+      value="1"
+      disabled />
+    <span id="playback-rate-value">1.0</span>  × the original rate.
+  </body>
+</html>

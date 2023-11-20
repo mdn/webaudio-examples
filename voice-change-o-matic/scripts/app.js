@@ -2,44 +2,11 @@ const heading = document.querySelector("h1");
 heading.textContent = "CLICK HERE TO START";
 document.body.addEventListener("click", init);
 
-function init() {
+async function init() {
   heading.textContent = "Voice-change-O-matic";
   document.body.removeEventListener("click", init);
 
-  // Older browsers might not implement mediaDevices at all, so we set an empty object first
-  if (navigator.mediaDevices === undefined) {
-    navigator.mediaDevices = {};
-  }
-
-  // Some browsers partially implement mediaDevices. We can't assign an object
-  // with getUserMedia as it would overwrite existing properties.
-  // Add the getUserMedia property if it's missing.
-  if (navigator.mediaDevices.getUserMedia === undefined) {
-    navigator.mediaDevices.getUserMedia = function (constraints) {
-      // First get ahold of the legacy getUserMedia, if present
-      const getUserMedia =
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia;
-
-      // Some browsers just don't implement it - return a rejected promise with an error
-      // to keep a consistent interface
-      if (!getUserMedia) {
-        return Promise.reject(
-          new Error("getUserMedia is not implemented in this browser")
-        );
-      }
-
-      // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
-      return new Promise(function (resolve, reject) {
-        getUserMedia.call(navigator, constraints, resolve, reject);
-      });
-    };
-  }
-
-  // Set up forked web audio context, for multiple browsers
-  // window. is needed otherwise Safari explodes
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const audioCtx = new AudioContext();
   const voiceSelect = document.getElementById("voice");
   let source;
   let stream;
@@ -76,34 +43,19 @@ function init() {
     return curve;
   }
 
-  // Grab audio track via XHR for convolver node
-  let soundSource;
-  ajaxRequest = new XMLHttpRequest();
-
-  ajaxRequest.open(
-    "GET",
-    "https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg",
-    true
-  );
-
-  ajaxRequest.responseType = "arraybuffer";
-
-  ajaxRequest.onload = function () {
-    const audioData = ajaxRequest.response;
-
-    audioCtx.decodeAudioData(
-      audioData,
-      function (buffer) {
-        soundSource = audioCtx.createBufferSource();
-        convolver.buffer = buffer;
-      },
-      function (e) {
-        console.log("Error with decoding audio data" + e.err);
-      }
+  // Grab audio track via fetch() for convolver node
+  try {
+    const response = await fetch(
+      "https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg"
     );
-  };
-
-  ajaxRequest.send();
+    const arrayBuffer = await response.arrayBuffer();
+    const decodedAudio = await audioCtx.decodeAudioData(arrayBuffer);
+    convolver.buffer = decodedAudio;
+  } catch (error) {
+    console.error(
+      `Unable to fetch the audio file: ${name} Error: ${err.message}`
+    );
+  }
 
   // Set up canvas context for visualizer
   const canvas = document.querySelector(".visualizer");
@@ -115,33 +67,28 @@ function init() {
   let drawVisual;
 
   // Main block for doing the audio recording
-  if (navigator.mediaDevices.getUserMedia) {
-    console.log("getUserMedia supported.");
-    const constraints = { audio: true };
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(function (stream) {
-        source = audioCtx.createMediaStreamSource(stream);
-        source.connect(distortion);
-        distortion.connect(biquadFilter);
-        biquadFilter.connect(gainNode);
-        convolver.connect(gainNode);
-        echoDelay.placeBetween(gainNode, analyser);
-        analyser.connect(audioCtx.destination);
+  const constraints = { audio: true };
+  navigator.mediaDevices
+    .getUserMedia(constraints)
+    .then((stream) => {
+      source = audioCtx.createMediaStreamSource(stream);
+      source.connect(distortion);
+      distortion.connect(biquadFilter);
+      biquadFilter.connect(gainNode);
+      convolver.connect(gainNode);
+      echoDelay.placeBetween(gainNode, analyser);
+      analyser.connect(audioCtx.destination);
 
-        visualize();
-        voiceChange();
-      })
-      .catch(function (err) {
-        console.log("The following gUM error occured: " + err);
-      });
-  } else {
-    console.log("getUserMedia not supported on your browser!");
-  }
+      visualize();
+      voiceChange();
+    })
+    .catch(function (err) {
+      console.error("The following gUM error occured: " + err);
+    });
 
   function visualize() {
-    WIDTH = canvas.width;
-    HEIGHT = canvas.height;
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
 
     const visualSetting = visualSelect.value;
     console.log(visualSetting);
@@ -157,7 +104,7 @@ function init() {
 
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-      const draw = function () {
+      const draw = () => {
         drawVisual = requestAnimationFrame(draw);
 
         analyser.getByteTimeDomainData(dataArray);
@@ -174,8 +121,8 @@ function init() {
         let x = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-          let v = dataArray[i] / 128.0;
-          let y = (v * HEIGHT) / 2;
+          const v = dataArray[i] / 128.0;
+          const y = (v * HEIGHT) / 2;
 
           if (i === 0) {
             canvasCtx.moveTo(x, y);
@@ -186,7 +133,7 @@ function init() {
           x += sliceWidth;
         }
 
-        canvasCtx.lineTo(canvas.width, canvas.height / 2);
+        canvasCtx.lineTo(WIDTH, HEIGHT / 2);
         canvasCtx.stroke();
       };
 
@@ -201,7 +148,7 @@ function init() {
 
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-      const drawAlt = function () {
+      const drawAlt = () => {
         drawVisual = requestAnimationFrame(drawAlt);
 
         analyser.getByteFrequencyData(dataArrayAlt);
@@ -210,11 +157,10 @@ function init() {
         canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
         const barWidth = (WIDTH / bufferLengthAlt) * 2.5;
-        let barHeight;
         let x = 0;
 
         for (let i = 0; i < bufferLengthAlt; i++) {
-          barHeight = dataArrayAlt[i];
+          const barHeight = dataArrayAlt[i];
 
           canvasCtx.fillStyle = "rgb(" + (barHeight + 100) + ",50,50)";
           canvasCtx.fillRect(
@@ -281,18 +227,17 @@ function init() {
     wetNode.gain.value = 0;
     filter.frequency.value = 1100;
     filter.type = "highpass";
-
     return {
-      apply: function () {
+      apply() {
         wetNode.gain.setValueAtTime(0.75, audioContext.currentTime);
       },
-      discard: function () {
+      discard() {
         wetNode.gain.setValueAtTime(0, audioContext.currentTime);
       },
-      isApplied: function () {
+      isApplied() {
         return wetNode.gain.value > 0;
       },
-      placeBetween: function (inputNode, outputNode) {
+      placeBetween(inputNode, outputNode) {
         inputNode.connect(delay);
         delay.connect(wetNode);
         wetNode.connect(filter);
@@ -307,26 +252,24 @@ function init() {
   }
 
   // Event listeners to change visualize and voice settings
-  visualSelect.onchange = function () {
-    window.cancelAnimationFrame(drawVisual);
+  visualSelect.addEventListener("change", () => {
+    cancelAnimationFrame(drawVisual);
     visualize();
-  };
+  });
 
-  voiceSelect.onchange = function () {
+  voiceSelect.addEventListener("change", () => {
     voiceChange();
-  };
+  });
 
-  mute.onclick = voiceMute;
-
-  function voiceMute() {
+  mute.addEventListener("click", () => {
     if (mute.id === "") {
       gainNode.gain.value = 0;
       mute.id = "activated";
       mute.innerHTML = "Unmute";
     } else {
-      gainNode.gain.value = 0;
+      gainNode.gain.value = 1;
       mute.id = "";
       mute.innerHTML = "Mute";
     }
-  }
+  });
 }
