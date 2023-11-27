@@ -304,7 +304,7 @@
       durControl.addEventListener(
         "input",
         (ev) => {
-          noiseDuration = ev.target.value;
+          noiseDuration = parseFloat(ev.target.value);
         },
         false
       );
