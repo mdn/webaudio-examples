@@ -12,7 +12,11 @@ cd audio-analyser
 python3 -m http.server
 ```
 
+> [!NOTE]
+> If you're using the built-in Python HTTP server, be sure to use at least [Python version `3.10.12`](https://www.python.org/downloads/release/python-31012/).
+
 Then navigate to `http://localhost:8000` in your browser.
+
 For more information on serving files locally using different languages or technologies, see [Running a simple local HTTP server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Tools_and_setup/set_up_a_local_testing_server#running_a_simple_local_http_server).
 
 ## Repository contents
