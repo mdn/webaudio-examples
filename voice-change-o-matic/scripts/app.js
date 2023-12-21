@@ -53,7 +53,7 @@ async function init() {
     convolver.buffer = decodedAudio;
   } catch (error) {
     console.error(
-      `Unable to fetch the audio file: ${name} Error: ${err.message}`
+      `Unable to fetch the audio file: ${name} Error: ${error.message}`
     );
   }
 
