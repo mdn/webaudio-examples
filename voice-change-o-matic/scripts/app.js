@@ -51,7 +51,7 @@ async function init() {
     const arrayBuffer = await response.arrayBuffer();
     const decodedAudio = await audioCtx.decodeAudioData(arrayBuffer);
     convolver.buffer = decodedAudio;
-  } catch (error) {
+  } catch (err) {
     console.error(
       `Unable to fetch the audio file: ${name} Error: ${err.message}`
     );
