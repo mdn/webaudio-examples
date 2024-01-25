@@ -5,12 +5,10 @@
     <title>Step Sequencer: MDModemnz</title>
     <meta
       name="description"
-      content="Making an instrument with the Web Audio API"
-    />
+      content="Making an instrument with the Web Audio API" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
@@ -29,8 +27,7 @@
           min="60"
           max="180"
           value="120"
-          step="1"
-        />
+          step="1" />
         <span id="bpmval">120</span>
         <input type="checkbox" id="playBtn" />
         <label for="playBtn">Play</label>
@@ -49,8 +46,7 @@
               min="0"
               max="1"
               value="0.2"
-              step="0.1"
-            />
+              step="0.1" />
             <label for="release">Rel</label>
             <input
               name="release"
@@ -59,8 +55,7 @@
               min="0"
               max="1"
               value="0.5"
-              step="0.1"
-            />
+              step="0.1" />
           </section>
 
           <section class="pads">
@@ -90,8 +85,7 @@
               min="660"
               max="1320"
               value="880"
-              step="1"
-            />
+              step="1" />
             <label for="lfo">LFO</label>
             <input
               name="lfo"
@@ -100,8 +94,7 @@
               min="20"
               max="40"
               value="30"
-              step="1"
-            />
+              step="1" />
           </section>
           <!--
 
@@ -110,13 +103,13 @@
             <input type="checkbox" id="v2n1" />
             <label for="v2n1">Voice 2, Note 1</label>
 
-            <input type="checkbox" id="v1n2" />
+            <input type="checkbox" id="v2n2" />
             <label for="v2n2">Voice 2, Note 2</label>
 
-            <input type="checkbox" id="v1n3" />
+            <input type="checkbox" id="v2n3" />
             <label for="v2n3">Voice 2, Note 3</label>
 
-            <input type="checkbox" id="v1n4" />
+            <input type="checkbox" id="v2n4" />
             <label for="v2n4">Voice 2, Note 4</label>
           </section>
         </section>
@@ -133,8 +126,7 @@
               min="0.25"
               max="1"
               value="1"
-              step="0.25"
-            />
+              step="0.25" />
             <label for="band">Band</label>
             <input
               name="band"
@@ -143,8 +135,7 @@
               min="400"
               max="1200"
               value="1000"
-              step="5"
-            />
+              step="5" />
           </section>
 
           <section class="pads">
@@ -174,8 +165,7 @@
               min="0.1"
               max="2"
               value="1"
-              step="0.1"
-            />
+              step="0.1" />
           </section>
           <!--
 
@@ -216,7 +206,7 @@
       attackControl.addEventListener(
         "input",
         (ev) => {
-          attackTime = parseInt(ev.target.value, 10);
+          attackTime = parseFloat(ev.target.value, 10);
         },
         false
       );
@@ -226,7 +216,7 @@
       releaseControl.addEventListener(
         "input",
         (ev) => {
-          releaseTime = parseInt(ev.target.value, 10);
+          releaseTime = parseFloat(ev.target.value, 10);
         },
         false
       );
@@ -260,7 +250,7 @@
       hzControl.addEventListener(
         "input",
         (ev) => {
-          pulseHz = parseInt(ev.target.value, 10);
+          pulseHz = parseFloat(ev.target.value, 10);
         },
         false
       );
@@ -270,7 +260,7 @@
       lfoControl.addEventListener(
         "input",
         (ev) => {
-          lfoHz = parseInt(ev.target.value, 10);
+          lfoHz = parseFloat(ev.target.value, 10);
         },
         false
       );
@@ -314,7 +304,7 @@
       bandControl.addEventListener(
         "input",
         (ev) => {
-          bandHz = parseInt(ev.target.value, 10);
+          bandHz = parseFloat(ev.target.value, 10);
         },
         false
       );
@@ -363,7 +353,7 @@
       rateControl.addEventListener(
         "input",
         (ev) => {
-          playbackRate = parseInt(ev.target.value, 10);
+          playbackRate = parseFloat(ev.target.value, 10);
         },
         false
       );
@@ -395,7 +385,7 @@
       bpmControl.addEventListener(
         "input",
         (ev) => {
-          tempo = parseInt(ev.target.value, 10);
+          tempo = parseFloat(ev.target.value, 10);
           bpmValEl.innerText = tempo;
         },
         false
@@ -449,7 +439,7 @@
       }
 
       // Draw function to update the UI, so we can see when the beat progress.
-      // This is a loop: it reschudele itself to redraw at the end.
+      // This is a loop: it reschedules itself to redraw at the end.
       let lastNoteDrawn = 3;
       function draw() {
         let drawNote = lastNoteDrawn;
