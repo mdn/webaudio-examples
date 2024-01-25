@@ -206,7 +206,7 @@
       attackControl.addEventListener(
         "input",
         (ev) => {
-          attackTime = parseFloat(ev.target.value, 10);
+          attackTime = parseFloat(ev.target.value);
         },
         false
       );
@@ -216,7 +216,7 @@
       releaseControl.addEventListener(
         "input",
         (ev) => {
-          releaseTime = parseFloat(ev.target.value, 10);
+          releaseTime = parseFloat(ev.target.value);
         },
         false
       );
@@ -250,7 +250,7 @@
       hzControl.addEventListener(
         "input",
         (ev) => {
-          pulseHz = parseFloat(ev.target.value, 10);
+          pulseHz = parseFloat(ev.target.value);
         },
         false
       );
@@ -260,7 +260,7 @@
       lfoControl.addEventListener(
         "input",
         (ev) => {
-          lfoHz = parseFloat(ev.target.value, 10);
+          lfoHz = parseFloat(ev.target.value);
         },
         false
       );
@@ -304,7 +304,7 @@
       bandControl.addEventListener(
         "input",
         (ev) => {
-          bandHz = parseFloat(ev.target.value, 10);
+          bandHz = parseFloat(ev.target.value);
         },
         false
       );
@@ -353,7 +353,7 @@
       rateControl.addEventListener(
         "input",
         (ev) => {
-          playbackRate = parseFloat(ev.target.value, 10);
+          playbackRate = parseFloat(ev.target.value);
         },
         false
       );
@@ -385,7 +385,7 @@
       bpmControl.addEventListener(
         "input",
         (ev) => {
-          tempo = parseFloat(ev.target.value, 10);
+          tempo = parseFloat(ev.target.value);
           bpmValEl.innerText = tempo;
         },
         false
