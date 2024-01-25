@@ -130,10 +130,10 @@
               name="duration"
               id="duration"
               type="range"
-              min="0"
-              max="2"
+              min="0.25"
+              max="1"
               value="1"
-              step="0.1"
+              step="0.25"
             />
             <label for="band">Band</label>
             <input
@@ -304,7 +304,7 @@
       durControl.addEventListener(
         "input",
         (ev) => {
-          noiseDuration = parseInt(ev.target.value, 10);
+          noiseDuration = parseFloat(ev.target.value);
         },
         false
       );
