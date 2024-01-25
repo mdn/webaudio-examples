@@ -216,7 +216,7 @@
       attackControl.addEventListener(
         "input",
         (ev) => {
-          attackTime = parseInt(ev.target.value, 10);
+          attackTime = parseFloat(ev.target.value);
         },
         false
       );
@@ -226,13 +226,12 @@
       releaseControl.addEventListener(
         "input",
         (ev) => {
-          releaseTime = parseInt(ev.target.value, 10);
+          releaseTime = parseFloat(ev.target.value);
         },
         false
       );
 
       // Expose attack time & release time
-      const sweepLength = 2;
       function playSweep(time) {
         const osc = new OscillatorNode(audioCtx, {
           frequency: 380,
@@ -246,12 +245,12 @@
         sweepEnv.gain.linearRampToValueAtTime(1, time + attackTime);
         sweepEnv.gain.linearRampToValueAtTime(
           0,
-          time + sweepLength - releaseTime
+          time + attackTime + releaseTime
         );
 
         osc.connect(sweepEnv).connect(audioCtx.destination);
         osc.start(time);
-        osc.stop(time + sweepLength);
+        osc.stop(time + attackTime + releaseTime);
       }
 
       // Expose frequency & frequency modulation
