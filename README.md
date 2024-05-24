@@ -55,7 +55,7 @@ The [create-media-stream-destination](https://github.com/mdn/webaudio-examples/t
 
 ### Decode audio data
 
-The [decode-audio-data](https://github.com/mdn/webaudio-examples/tree/main/decode-audio-data) directory contains a simple example demonstrating usage of the Web Audio API [`BaseAudioContext.decodeAudioData()`](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData) method. [View example live](http://mdn.github.io/webaudio-examples/decode-audio-data/).
+The [decode-audio-data](https://github.com/mdn/webaudio-examples/tree/main/decode-audio-data) directory contains a simple example demonstrating usage of the Web Audio API [`BaseAudioContext.decodeAudioData()`](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData) method. [View example live](http://mdn.github.io/webaudio-examples/decode-audio-data/promise).
 
 ### IIR filter node
 
