@@ -89,15 +89,9 @@ button:not(.start-message):active {
   align-items: center;
   background-color: transparent;
   cursor: pointer;
-  font-size: 50px;
+  font-size: 1.4rem;
   text-align: center;
   overflow: hidden;
-}
-
-.start-message {
-  position: absolute;
-  font-size: 1.4rem;
-  left: 5px;
 }
 
 .control-message {
