@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Web Audio API Mixer - Advanced</title>
+    <meta
+      name="description"
+      content="A way to make sure files have loaded before playing them" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <!--
+       Some browsers' autoplay policy requires that an AudioContext be initialized
+       during an input event in order to correctly synchronize.
+
+       So provide a simple button to get things started.
+  -->
+    <button
+      id="startbutton"
+      class="top-left-button"
+      aria-label="Start loading tracks">
+      Press to load tracks
+    </button>
+
+    <div class="wrapper">
+      <section id="tracks" role="region" aria-labelledby="tracks-title">
+        <ul role="list">
+          <li data-loading="true" role="listitem">
+            <a href="leadguitar.mp3" class="track" tabindex="0">Lead Guitar</a>
+            <input
+              type="range"
+              class="fader"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.8"
+              aria-label="Volume control for Lead Guitar" />
+            <p class="loading-text" aria-live="polite">Loading...</p>
+            <button
+              class="playbutton"
+              aria-describedby="guitar-play-label"
+              aria-pressed="false">
+              <span id="guitar-play-label">Play</span>
+            </button>
+            <button
+              class="solobutton"
+              aria-describedby="guitar-solo-label"
+              aria-pressed="false">
+              <span id="guitar-solo-label">Solo</span>
+            </button>
+          </li>
+          <li data-loading="true" role="listitem">
+            <a href="bassguitar.mp3" class="track" tabindex="0">Bass Guitar</a>
+            <input
+              type="range"
+              class="fader"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.8"
+              aria-label="Volume control for Bass Guitar" />
+            <p class="loading-text" aria-live="polite">Loading...</p>
+            <button
+              class="playbutton"
+              aria-describedby="bass-play-label"
+              aria-pressed="false">
+              <span id="bass-play-label">Play</span>
+            </button>
+            <button
+              class="solobutton"
+              aria-describedby="bass-solo-label"
+              aria-pressed="false">
+              <span id="bass-solo-label">Solo</span>
+            </button>
+          </li>
+          <li data-loading="true" role="listitem">
+            <a href="drums.mp3" class="track" tabindex="0">Drums</a>
+            <input
+              type="range"
+              class="fader"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.8"
+              aria-label="Volume control for Drums" />
+            <p class="loading-text" aria-live="polite">Loading...</p>
+            <button
+              class="playbutton"
+              aria-describedby="drums-play-label"
+              aria-pressed="false">
+              <span id="drums-play-label">Play</span>
+            </button>
+            <button
+              class="solobutton"
+              aria-describedby="drums-solo-label"
+              aria-pressed="false">
+              <span id="drums-solo-label">Solo</span>
+            </button>
+          </li>
+          <li data-loading="true" role="listitem">
+            <a href="horns.mp3" class="track" tabindex="0">Horns</a>
+            <input
+              type="range"
+              class="fader"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.8"
+              aria-label="Volume control for Horns" />
+            <p class="loading-text" aria-live="polite">Loading...</p>
+            <button
+              class="playbutton"
+              aria-describedby="horns-play-label"
+              aria-pressed="false">
+              <span id="horns-play-label">Play</span>
+            </button>
+            <button
+              class="solobutton"
+              aria-describedby="horns-solo-label"
+              aria-pressed="false">
+              <span id="horns-solo-label">Solo</span>
+            </button>
+          </li>
+          <li data-loading="true" role="listitem">
+            <a href="clav.mp3" class="track" tabindex="0">Clavi</a>
+            <input
+              type="range"
+              class="fader"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.8"
+              aria-label="Volume control for Clavi" />
+            <p class="loading-text" aria-live="polite">Loading...</p>
+            <button
+              class="playbutton"
+              aria-describedby="clavi-play-label"
+              aria-pressed="false">
+              <span id="clavi-play-label">Play</span>
+            </button>
+            <button
+              class="solobutton"
+              aria-describedby="clavi-solo-label"
+              aria-pressed="false">
+              <span id="clavi-solo-label">Solo</span>
+            </button>
+          </li>
+        </ul>
+        <p class="sourced">
+          All tracks sourced from <a href="http://jplayer.org/">jplayer.org</a>
+        </p>
+      </section>
+    </div>
+
+    <script>
+      let audioCtx = null;
+      let soloedButton = null;
+
+      // Provide a start button so demo can load tracks from an event handler for cross-browser compatibility
+      const startButton = document.querySelector("#startbutton");
+
+      // Select all list elements
+      const trackEls = document.querySelectorAll("li");
+
+      // Loading function for fetching the audio file and decode the data
+      async function getFile(filepath) {
+        const response = await fetch(filepath);
+        const arrayBuffer = await response.arrayBuffer();
+        return await audioCtx.decodeAudioData(arrayBuffer);
+      }
+
+      function createGainNode() {
+        const gainNode = audioCtx.createGain();
+        gainNode.connect(audioCtx.destination);
+        return gainNode;
+      }
+
+      // Create a buffer, plop in data, connect and play -> modify graph here if required
+      function playTrack(audioBuffer, gainNode, playButton) {
+        const source = audioCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(gainNode);
+        source.start();
+        playButton.classList.add("playing");
+        playButton.setAttribute("aria-pressed", "true");
+        source.onended = () => {
+          playButton.classList.remove("playing");
+          playButton.setAttribute("aria-pressed", "false");
+        };
+      }
+
+      function toggleSolo(button) {
+        if (soloedButton === button) {
+          button.classList.remove("active");
+          button.setAttribute("aria-pressed", "false");
+          soloedButton = null;
+        } else {
+          if (soloedButton) {
+            soloedButton.classList.remove("active");
+            soloedButton.setAttribute("aria-pressed", "false");
+          }
+          button.classList.add("active");
+          button.setAttribute("aria-pressed", "true");
+          soloedButton = button;
+        }
+        updateFadersAndMute();
+      }
+
+      function updateFadersAndMute() {
+        // Get children
+        trackEls.forEach((el) => {
+          const fader = el.querySelector(".fader");
+          // Retrieve the gain node
+          const gainNode = el.gainNode;
+          const isSoloed = el.contains(soloedButton);
+
+          if (soloedButton) {
+            // Mute non-soloed tracks
+            gainNode.gain.value = isSoloed ? fader.value : 0;
+            fader.classList.toggle("disabled", !isSoloed);
+          } else {
+            // Restore all tracks if no solo is active
+            gainNode.gain.value = fader.value;
+            fader.classList.remove("disabled");
+          }
+        });
+      }
+
+      startButton.addEventListener("click", () => {
+        if (audioCtx) return;
+        audioCtx = new AudioContext();
+        startButton.hidden = true;
+
+        trackEls.forEach((el) => {
+          const anchor = el.querySelector("a");
+          const playButton = el.querySelector(".playbutton");
+          const soloButton = el.querySelector(".solobutton");
+          const loadText = el.querySelector(".loading-text");
+          const fader = el.querySelector(".fader");
+
+          // Create a gain node
+          const gainNode = createGainNode();
+          // Store the gain node in the element
+          el.gainNode = gainNode;
+
+          fader.addEventListener("input", (e) => {
+            gainNode.gain.value = e.target.value;
+          });
+
+          getFile(anchor.href).then((track) => {
+            loadText.style.display = "none";
+            playButton.style.display = "inline-block";
+            soloButton.style.display = "inline-block";
+
+            playButton.addEventListener("click", () => {
+              if (audioCtx.state === "suspended") {
+                audioCtx.resume();
+              }
+              playTrack(track, gainNode, playButton);
+            });
+
+            soloButton.addEventListener("click", () => toggleSolo(soloButton));
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

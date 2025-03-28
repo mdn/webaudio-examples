@@ -1,0 +1,128 @@
+body {
+  background-color: #121212;
+  color: white;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #8cb4ff;
+}
+
+.top-left-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #4caf50;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.top-left-button:hover {
+  background-color: #45a049;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#tracks {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+ul {
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+li {
+  background-color: #1e1e1e;
+  padding: 20px;
+  padding-top: 30px;
+  border-radius: 8px;
+  width: 150px;
+  height: 370px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.track {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
+
+.playbutton {
+  background-color: #ff5050;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: none;
+}
+
+.playbutton:hover,
+.playbutton.playing {
+  background-color: #45a049;
+}
+
+.solobutton {
+  background-color: gray;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: none;
+}
+
+.solobutton.active {
+  background-color: yellow;
+}
+
+.fader {
+  -webkit-appearance: slider-vertical;
+  width: 30px;
+  height: 220px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.fader.disabled {
+  background-color: #555;
+  pointer-events: none;
+}
+
+.loading-text {
+  font-size: 14px;
+  color: #bbb;
+}
+
+.sourced {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+button:focus {
+  outline: 2px solid #2196f3;
+}

@@ -69,6 +69,10 @@ The [media-source-buffer](https://github.com/mdn/webaudio-examples/tree/main/med
 
 The [multi-track](https://github.com/mdn/webaudio-examples/tree/main/multi-track) directory contains an example of connecting separate independently-playable audio tracks to a single [`AudioDestinationNode`](https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode) interface. [Run the example live](http://mdn.github.io/webaudio-examples/multi-track/).
 
+### Multi track advanced
+
+The [multi-track-advanced](https://github.com/mdn/webaudio-examples/tree/main/multi-track-advanced) directory contains an enhanced version of the original multi-track example. This version introduces a [`GainNode`](https://developer.mozilla.org/en-US/docs/Web/API/GainNode) for each track, providing precise control over individual audio levels through volume faders. It also includes solo buttons, enabling the isolation of a specific track by muting all other tracks. [Run the example live](http://mdn.github.io/webaudio-examples/multi-track-advanced/).
+
 ### Offline audio context
 
 The [offline-audio-context](https://github.com/mdn/webaudio-examples/tree/main/offline-audio-context) directory contains a simple example to show how a Web Audio API [`OfflineAudioContext`](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext) interface can be used to rapidly process/render audio in the background to create a buffer, which can then be used in any way you please. For more information, see [https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext). [Run example live](http://mdn.github.io/webaudio-examples/offline-audio-context/).
