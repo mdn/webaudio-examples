@@ -3,20 +3,29 @@ const startMessage = document.querySelector(".start-message");
 let isAppInit = false;
 appContents.style.display = "none";
 
-window.addEventListener("keydown", init);
-window.addEventListener("click", init);
+startMessage.addEventListener("click", transitionScreen);
 
-function init() {
-  if (isAppInit) {
-    return;
-  }
-
-  appContents.style.display = "block";
-  document.body.removeChild(startMessage);
-
+function transitionScreen() {
   // create web audio api context
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioCtx = new AudioContext();
+
+  // remove start message button element and show app contents
+  appContents.style.display = "block";
+  document.body.removeChild(startMessage);
+
+  init(audioCtx);
+}
+
+/**
+ * Initializes the audio context and sets up the theremin functionality
+ *
+ * @param {AudioContext} audioCtx - The Web Audio API AudioContext used to generate and manipulate audio signals
+ */
+function init(audioCtx) {
+  if (isAppInit) {
+    return;
+  }
 
   // create Oscillator and gain node
   const oscillator = audioCtx.createOscillator();
@@ -49,6 +58,18 @@ function init() {
   // Mouse pointer coordinates
   let CurX;
   let CurY;
+
+  document.addEventListener("mousemove", updatePage);
+  document.addEventListener(
+    "touchmove",
+    (e) => {
+      // prevent scrolling
+      e.preventDefault();
+      // use first touch point for mouse coordinates
+      updatePage(e.touches[0]);
+    },
+    { passive: false }
+  );
 
   // Get new mouse pointer coordinates when mouse is moved
   // then set new gain and pitch values
