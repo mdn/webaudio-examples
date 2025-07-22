@@ -1,0 +1,61 @@
+html {
+  height: 100%;
+}
+
+body {
+  color: white;
+  background-color: black;
+  margin: 0;
+  overflow: hidden;
+}
+
+.float {
+  position: absolute;
+}
+
+img {
+  width: 100vw;
+  height: 100vh;
+}
+
+.star {
+  position: absolute;
+  left: 0px;
+  background-color: white;
+  border-radius: 50%;
+  animation-name: moveX;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.small {
+  top: 10px;
+  width: 3px;
+  height: 3px;
+  animation-duration: 5s;
+  background-color: gray;
+}
+
+.medium {
+  top: 50px;
+  width: 4px;
+  height: 4px;
+  animation-duration: 4s;
+}
+
+.big {
+  left: 0px;
+  top: 100px;
+  width: 5px;
+  height: 5px;
+  animation-duration: 3s;
+}
+
+@keyframes moveX {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-200px);
+  }
+}
