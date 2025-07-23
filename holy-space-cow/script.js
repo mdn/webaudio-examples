@@ -4,6 +4,7 @@
 
 const toggleButton = document.getElementById("toggle-btn");
 
+let soundStarted = false;
 let isPlaying = false;
 const audioContext = new AudioContext();
 // soundData is defined in assets.js
@@ -60,6 +61,11 @@ function base64ToArrayBuffer(base64) {
 }
 
 function toggleSound() {
+  if (!soundStarted) {
+    // Start playing only when user has interacted
+    mooSound.play();
+    soundStarted = true;
+  }
   isPlaying = !isPlaying;
   if (isPlaying) {
     toggleButton.innerHTML = "<h3>Stop sound!</h3>";
@@ -91,7 +97,6 @@ audioContext.decodeAudioData(
   }
 );
 
-mooSound.play();
 setInterval(updatePanValue, updateTime);
 
 for (let i = 0; i < 20; ++i) {
