@@ -50,7 +50,16 @@ img {
   height: 5px;
   animation-duration: 3s;
 }
-
+button {
+  font-weight: bold;
+  font-size: larger;
+  display: inline-block;
+}
+p {
+  font-family: sans-serif;
+  display: inline-block;
+  margin: 1rem;
+}
 @keyframes moveX {
   from {
     transform: translateX(100vw);
