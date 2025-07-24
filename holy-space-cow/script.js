@@ -68,10 +68,10 @@ function toggleSound() {
   }
   isPlaying = !isPlaying;
   if (isPlaying) {
-    toggleButton.innerHTML = "<h3>Stop sound!</h3>";
+    toggleButton.textContent = "Stop sound!";
   } else {
     gainNode.gain.value = 0;
-    toggleButton.innerHTML = "<h3>Start sound</h3>";
+    toggleButton.textContent = "Start sound";
   }
 }
 
