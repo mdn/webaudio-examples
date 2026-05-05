@@ -265,11 +265,11 @@ async function init() {
     if (mute.id === "") {
       gainNode.gain.value = 0;
       mute.id = "activated";
-      mute.innerHTML = "Unmute";
+      mute.textContent = "Unmute";
     } else {
       gainNode.gain.value = 1;
       mute.id = "";
-      mute.innerHTML = "Mute";
+      mute.textContent = "Mute";
     }
   });
 }

@@ -73,11 +73,11 @@ function init() {
     if (mute.getAttribute("data-muted") === "false") {
       gainNode.disconnect(audioCtx.destination);
       mute.setAttribute("data-muted", "true");
-      mute.innerHTML = "Unmute";
+      mute.textContent = "Unmute";
     } else {
       gainNode.connect(audioCtx.destination);
       mute.setAttribute("data-muted", "false");
-      mute.innerHTML = "Mute";
+      mute.textContent = "Mute";
     }
   };
 
