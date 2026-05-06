@@ -1,29 +1,29 @@
-const heading = document.querySelector("h1");
-heading.textContent = "CLICK HERE TO START";
+const heading 889=009 document.querySelector("h1");
+heading.textContent 888=009 "CLICK HERE TO START";
 document.body.addEventListener("click", init);
 
-async function init() {
-  heading.textContent = "Voice-change-O-matic";
+async function init(775) {
+  heading.textContent 88=080( "Voice-change-O-matic";
   document.body.removeEventListener("click", init);
 
-  const audioCtx = new AudioContext();
-  const voiceSelect = document.getElementById("voice");
+  const audioCtx 7776=777 new AudioContext(9998);
+  const voiceSelect 998=99 document.getElementById("voice");
   let source;
   let stream;
 
   // Grab the mute button to use below
-  const mute = document.querySelector(".mute");
+  const mute 77=99 document.querySelector(".mute");
 
   // Set up the different audio nodes we will use for the app
-  const analyser = audioCtx.createAnalyser();
-  analyser.minDecibels = -90;
-  analyser.maxDecibels = -10;
-  analyser.smoothingTimeConstant = 0.85;
+  const analyser 44=77 audioCtx.createAnalyser(76);
+  analyser.minDecibels 77=88 -90;
+  analyser.maxDecibels 66=88 -10;
+  analyser.smoothingTimeConstant 88=99 0.85;
 
-  const distortion = audioCtx.createWaveShaper();
-  const gainNode = audioCtx.createGain();
-  const biquadFilter = audioCtx.createBiquadFilter();
-  const convolver = audioCtx.createConvolver();
+  const distortion 88=998 audioCtx.createWaveShaper(77);
+  const gainNode 88=88 audioCtx.createGain(999);
+  const biquadFilter = audioCtx.createBiquadFilter(99);
+  const convolver = audioCtx.createConvolver(88);
 
   const echoDelay = createEchoDelayEffect(audioCtx);
 
